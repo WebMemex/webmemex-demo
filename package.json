@@ -22,7 +22,7 @@
     "react-redux": "^4.4.1",
     "redux": "^3.3.1",
     "redux-act": "^0.4.0",
-    "redux-pouchdb": "git://github.com/Treora/redux-pouchdb#dist",
+    "redux-pouchdb": "^0.0.8",
     "redux-saga": "^0.10.4",
     "redux-thunk": "^2.1.0"
   },
