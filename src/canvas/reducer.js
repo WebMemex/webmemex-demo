@@ -68,16 +68,11 @@ function centerItem(state, {itemId, animate}, {currentView}) {
     let winWidth = state.windowSize.width
     let winHeight = state.windowSize.height
 
-    // We first set the item width&height (TODO factor out of here)
-    let width = winWidth/2.5
-    let height = width*3/4
-
-    // Center the item
-    let x = currentView.scrollX + winWidth/2 - width/2
-    let y = currentView.scrollY + winHeight/2 - height/2
-
     let item = getItem(state, itemId)
-    let newItem = {...item, x, y, width, height, inTransition: animate, centered: true}
+    let x = currentView.scrollX + winWidth/2 - item.width/2
+    let y = currentView.scrollY + winHeight/2 - item.height/2
+    let newItem = {...item, x, y, inTransition: animate, centered: true}
+
     let visibleItems = {...state.visibleItems, [itemId]: newItem}
     return {...state, visibleItems, centeredItem: itemId}
 }
@@ -86,9 +81,16 @@ function centerDocWithFriends(state, {docId, targetDocIds, sourceDocIds, animate
     // Clean the canvas
     state = removeAllItems(state) // TODO flag as garbage, to fix reuse (and animate disappearance)
 
-    // Show doc in center
+    // Create the item for the doc
     state = createItem(state, {docId, reuse: true})
     let itemId = getItemIdForDocId(state, docId)
+
+    // Let it fill 40% of window width, fix width/height ratio to 4:3
+    let width = state.windowSize.width/2.5
+    let height = width*3/4
+    state = resizeItem(state, {itemId, width, height, animate})
+
+    // Center it
     state = centerItem(state, {itemId, animate}, {currentView})
 
     // Show its friends (linked items) left and right of it
