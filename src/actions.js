@@ -4,10 +4,12 @@ import { asUrl } from './utils'
 
 // Clean the canvas and show an empty item
 export function initCanvas() {
-    return function(dispatch) {
+    return function(dispatch, getState) {
         dispatch(canvas.removeAllItems())
-        let props = {x: 400, y: 300, width: 400, height: 50} // TODO center
+        let props = {x:100, y:100, width: 400, height: 50}
         dispatch(canvas.createItem({docId: 'addUrlForm', props}))
+        let itemId = canvas.getItemIdForDocId(getState().canvas, 'addUrlForm')
+        dispatch(canvas.centerItem({itemId}))
     }
 }
 
