@@ -13,5 +13,5 @@ export let addLink = createActionWithMetaArgs({
 })
 
 function generateIdentifier() {
-    return new Date().getTime()
+    return 'id_' + new Date().getTime().toString()
 }
