@@ -30,3 +30,8 @@ export function getDocWithText(state, text) {
     let docId = _.findKey(state.docs, doc => (doc.text===text))
     return docId
 }
+
+// A helper to read a value from an action.. should we just use thunks instead?
+export function readGeneratedId(action) {
+    return (action.meta.docId || action.meta.linkId)
+}
