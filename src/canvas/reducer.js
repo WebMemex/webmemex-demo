@@ -211,11 +211,13 @@ function updateWindowSize(state, {height, width}, {currentView}) {
     return state
 }
 
-function relocateItem(state, {itemId, dx, dy, animate}) {
+function relocateItem(state, {itemId, x, y, dx, dy, animate}) {
     let item = getItem(state, itemId)
-    let newX = item.x + dx
-    let newY = item.y + dy
-    let newItem = {...item, x: newX, y: newY, inTransition: animate}
+    if (x===undefined)
+        x = item.x + dx
+    if (y===undefined)
+        y = item.y + dy
+    let newItem = {...item, x, y, inTransition: animate}
     return {...state, visibleItems: {...state.visibleItems, [itemId]: newItem}}
 }
 
