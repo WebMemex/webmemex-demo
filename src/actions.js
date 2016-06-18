@@ -51,14 +51,7 @@ function findOrCreateDoc({userInput}) {
         // If it looks like a URL, we treat it like one.
         let url = asUrl(userInput)
         if (url) {
-            // Search if we have it already
-            docId = storage.getDocWithUrl(getState().storage, url)
-            // If not, create a new document
-            if (!docId) {
-                let action = storage.addUrl({url})
-                dispatch(action)
-                docId = storage.readGeneratedId(action)
-            }
+            docId = dispatch(storage.findOrAddUrl({url}))
         }
         else {
             // Search if we have the text as a note/tag
