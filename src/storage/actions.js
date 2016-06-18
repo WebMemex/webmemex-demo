@@ -1,6 +1,7 @@
+import _ from 'lodash'
 import { createAction } from 'redux-act'
 import { createActionWithMetaArgs } from '../utils'
-import { getDocWithUrl, readGeneratedId } from './selectors'
+import { getDocWithUrl, getDocWithText, readGeneratedId } from './selectors'
 
 export function findOrAddUrl({url}) {
     return function (dispatch, getState) {
@@ -13,6 +14,36 @@ export function findOrAddUrl({url}) {
             docId = readGeneratedId(action)
         }
         return docId
+    }
+}
+
+export function findOrAddNote({text}) {
+    return function (dispatch, getState) {
+        // Search if we have it already
+        let docId = getDocWithText(getState().storage, text) // XXX non-modular: We'd want to get state.storage from getState().
+        // If not, create a new document
+        if (!docId) {
+            let action = addNote({text})
+            dispatch(action)
+            docId = readGeneratedId(action)
+        }
+        return docId
+    }
+}
+
+export function findOrAddLink({source, target}) {
+    return function (dispatch, getState) {
+        // Search if we have it already
+        let linkId = _.findKey(getState().storage.links, // non-modular..
+            link => (link.source===source && link.target===target)
+        )
+        // If not, create a new link
+        if (!linkId) {
+            let action = addLink({source, target})
+            dispatch(action)
+            linkId = readGeneratedId(action)
+        }
+        return linkId
     }
 }
 
