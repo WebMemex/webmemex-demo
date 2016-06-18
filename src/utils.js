@@ -44,3 +44,13 @@ export function createActionWithMetaArgs(metaArgs) {
         payload => getMetaArgs(), // we pass 'meta' arguments to the reducer
     )
 }
+
+// Append a number to the desiredId when it is already in use
+export function ensureUnusedId(collection, desiredId) {
+    let id = desiredId
+    let i = 1
+    while (id in collection) {
+        id = desiredId + (i++).toString()
+    }
+    return id
+}

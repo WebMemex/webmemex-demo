@@ -3,6 +3,7 @@ import { createReducer } from 'redux-act'
 
 import * as actions from './actions'
 import { getItem, getItemIdForDocId } from './selectors'
+import { ensureUnusedId } from '../utils'
 
 const defaultState = {
     // Some unimportant initial sizes, which are updated when loaded.
@@ -40,13 +41,8 @@ function createItem(state, {docId, reuse=true, props}) {
     }
     if (itemId === undefined) {
         // Generate an unused identifier for the new item
-        // (a collision may have occurred if an item with docId later changed to show another doc)
-        const desiredItemId = 'view_'+docId
-        itemId = desiredItemId
-        let i = 1
-        while (itemId in state.visibleItems) {
-            itemId = desiredItemId + (i++)
-        }
+        let desiredItemId = 'view_'+docId
+        itemId = ensureUnusedId(state.visibleItems, desiredItemId)
     }
     let newItem = {
         ...props,

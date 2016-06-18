@@ -4,6 +4,7 @@ import { createReducer } from 'redux-act';
 
 import * as actions from './actions'
 import { getDoc } from './selectors'
+import { ensureUnusedId } from '../utils'
 
 let defaultState = {
     docs: {
@@ -17,11 +18,13 @@ let defaultState = {
 
 function addUrl(state, {url}, {docId}) {
     let newDoc = {url: url}
+    docId = ensureUnusedId(state.docs, docId)
     return {...state, docs: {...state.docs, [docId]: newDoc}}
 }
 
 function addNote(state, {text}, {docId}) {
     let newDoc = {text}
+    docId = ensureUnusedId(state.docs, docId)
     return {...state, docs: {...state.docs, [docId]: newDoc}}
 }
 
@@ -31,6 +34,7 @@ function deleteDoc(state, {docId}) {
 
 function addLink(state, {source, target}, {linkId}) {
     let newLink = {source, target}
+    linkId = ensureUnusedId(state.links, linkId)
     return {...state, links: {...state.links, [linkId]: newLink}}
 }
 
