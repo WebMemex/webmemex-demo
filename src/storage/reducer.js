@@ -29,7 +29,11 @@ function addNote(state, {text}, {docId}) {
 }
 
 function deleteDoc(state, {docId}) {
-    return {...state, docs: _.omit(state.docs, docId)}
+    // Remove doc
+    let docs = _.omit(state.docs, docId)
+    // Also remove links to and from doc
+    let links = _.omitBy(state.links, ({source, target}) => (source===docId || target===docId))
+    return {...state, docs, links}
 }
 
 function addLink(state, {source, target}, {linkId}) {
