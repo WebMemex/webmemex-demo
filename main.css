@@ -1,3 +1,11 @@
+@font-face {
+    /* By Christian Urff, from https://fontlibrary.org/en/font/grundschrift */
+    font-family: 'Grundschrift';
+    src: url('GrundschriftNormal.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html, body {
     height: 100%;
 }
@@ -77,7 +85,7 @@ svg#edges {
 .simple-item-text {
     margin: 0;
     font-size: 20px;
-    font-family: cursive;
+    font-family: Grundschrift, sans-serif;
 }
 
 
