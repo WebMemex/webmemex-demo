@@ -20,4 +20,9 @@ ReactDOM.render(
 // (delay to wait for redux-pouchdb to read storage state) // TODO neaten
 window.setTimeout(()=>store.dispatch(initCanvas()), 200)
 
-window.store=store // TESTING
+// TESTING
+window.store=store
+import storage from './storage'
+window.storage=storage
+import canvas from './canvas'
+window.canvas=canvas
