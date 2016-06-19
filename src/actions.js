@@ -11,6 +11,41 @@ export function initCanvas({animate}={}) {
         // Clean canvas
         dispatch(canvas.removeAllItems())
 
+        // Add and show welcome message + friends for demo purposes.
+        {
+            // Add and show a note to introduce
+            let docId0 = 'welcomeMessage'
+            {
+                const welcomeMessage = (
+                    'Hi! This is a read/write web browser. '
+                    + 'It lets you <i>create</i> notes and links, to organise the web your way. '
+                    + 'It is far from finished, but click this note to browse more info, '
+                    + 'or enter a URL or note in the bar below.'
+                )
+                // Store as note, specifying docId to overwrite any older one.
+                dispatch(storage.addNote({docId: docId0, text: welcomeMessage}))
+                // Display it
+                let props = {x: 50, y: 50, width: 500, height: 150}
+                dispatch(canvas.createItem({docId: docId0, props}))
+            }
+            // Create some more documents and links as initial content
+            {
+                let docId1 = dispatch(storage.findOrAddUrl({url: 'https://rwweb.org'}))
+                let docId1_1 = dispatch(storage.findOrAddUrl({url: 'https://www.w3.org/People/Berners-Lee/WorldWideWeb.html'}))
+                let docId1_2 = dispatch(storage.findOrAddUrl({url: 'https://www.w3.org/History/1989/proposal.html'}))
+                let docId1_3 = dispatch(storage.findOrAddUrl({url: 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/'}))
+                let docId2 = dispatch(storage.findOrAddUrl({url: 'https://www.youtube.com/embed/vKzYmDUydTw'}))
+                let docId3 = dispatch(storage.findOrAddUrl({url: 'http://iannotate.org'}))
+
+                dispatch(storage.findOrAddLink({source: docId0, target: docId1}))
+                dispatch(storage.findOrAddLink({source: docId1, target: docId1_1}))
+                dispatch(storage.findOrAddLink({source: docId1, target: docId1_2}))
+                dispatch(storage.findOrAddLink({source: docId1, target: docId1_3}))
+                dispatch(storage.findOrAddLink({source: docId0, target: docId2}))
+                dispatch(storage.findOrAddLink({source: docId2, target: docId3}))
+            }
+        }
+
         // Show empty item in center
         {
             let props = {x: 100, y: 100, width: 400, height: 55}
