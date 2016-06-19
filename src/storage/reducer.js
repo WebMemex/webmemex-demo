@@ -16,15 +16,15 @@ let defaultState = {
     },
 }
 
-function addUrl(state, {url}, {docId}) {
+function addUrl(state, {url}, {generatedId}) {
     let newDoc = {url: url}
-    docId = ensureUnusedId(state.docs, docId)
+    let docId = ensureUnusedId(state.docs, generatedId)
     return {...state, docs: {...state.docs, [docId]: newDoc}}
 }
 
-function addNote(state, {text}, {docId}) {
+function addNote(state, {text}, {generatedId}) {
     let newDoc = {text}
-    docId = ensureUnusedId(state.docs, docId)
+    let docId = ensureUnusedId(state.docs, generatedId)
     return {...state, docs: {...state.docs, [docId]: newDoc}}
 }
 
@@ -36,9 +36,9 @@ function deleteDoc(state, {docId}) {
     return {...state, docs, links}
 }
 
-function addLink(state, {source, target}, {linkId}) {
+function addLink(state, {source, target}, {generatedId}) {
     let newLink = {source, target}
-    linkId = ensureUnusedId(state.links, linkId)
+    let linkId = ensureUnusedId(state.links, generatedId)
     return {...state, links: {...state.links, [linkId]: newLink}}
 }
 

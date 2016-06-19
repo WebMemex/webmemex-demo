@@ -33,5 +33,5 @@ export function getDocWithText(state, text) {
 
 // A helper to read a value from an action.. should we just use thunks instead?
 export function readGeneratedId(action) {
-    return (action.meta.docId || action.meta.linkId)
+    return action.meta.generatedId
 }

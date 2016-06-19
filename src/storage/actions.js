@@ -48,14 +48,14 @@ export function findOrAddLink({source, target}) {
 }
 
 export let addUrl = createActionWithMetaArgs({
-    docId: generateIdentifier,
+    generatedId: generateIdentifier,
 })
 export let addNote = createActionWithMetaArgs({
-    docId: generateIdentifier,
+    generatedId: generateIdentifier,
 })
 export let deleteDoc = createAction()
 export let addLink = createActionWithMetaArgs({
-    linkId: generateIdentifier,
+    generatedId: generateIdentifier,
 })
 
 function generateIdentifier() {
