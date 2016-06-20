@@ -45,6 +45,14 @@ let ItemContainer = React.createClass({
         //this.makeResizable() // impractical and buggy (bug in interactjs?)
         this.makeScalable()
         this.makeTappable()
+
+        // disable dragging/scaling/resizing actions when focussed
+        let element = this.refs['item-container']
+        interact(element).actionChecker((pointer, event, action) => {
+            if (this.props.focussed)
+                return false
+            return action
+        })
     },
 
     makeDraggable() {
