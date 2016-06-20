@@ -108,9 +108,12 @@ let ItemContainer = React.createClass({
 
     makeTappable() {
         let element = this.refs['item-container']
-        interact(element).on('tap', event => this.props.tap({
-            itemId: this.props.itemId,
-        }))
+        interact(element).on('tap', event => {
+            this.props.tap({
+                itemId: this.props.itemId,
+            })
+            event.stopPropagation()
+        })
     },
 
 })

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import interact from 'interact.js'
 
 import AnimatedItemContainer from './AnimatedItemContainer'
 import Edge from './Edge'
@@ -16,12 +17,17 @@ let Canvas = React.createClass({
                 this.props.unfocus()
             }
         })
+
+        interact(this.refs['canvas']).on('tap', event => {
+            this.props.unfocus()
+            event.stopPropagation()
+        })
     },
 
     render() {
          let {ItemComponent, canvasSize, visibleItems, edges, unfocus} = this.props
          return (
-            <div id='canvas' style={canvasSize} onClick={unfocus}>
+            <div ref='canvas' id='canvas' style={canvasSize}>
                 <svg id='edges'>
                     {Object.keys(edges).map(edgeId => (
                         <Edge edgeId={edgeId} {...edges[edgeId]} key={edgeId} />
