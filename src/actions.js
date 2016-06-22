@@ -105,3 +105,9 @@ export function handleTap({itemId}) {
         }
     }
 }
+
+export function handleDraggedOut({itemId, dir}) {
+    return function (dispatch, getState) {
+        // TODO remove document
+    }
+}

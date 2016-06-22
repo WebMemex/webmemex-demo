@@ -4,7 +4,7 @@ import interact from 'interact.js'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import { relocateItem, resizeItem, scaleItem, focusItem, signalItemTapped } from '../actions'
+import { relocateItem, resizeItem, scaleItem, focusItem, signalItemTapped, signalItemDraggedOut } from '../actions'
 import { getItem } from '../selectors'
 import { hasProps } from '../../utils'
 
@@ -61,14 +61,23 @@ let ItemContainer = React.createClass({
             restrict: {
                 restriction: 'parent',
                 // 90% of the element can be dragged out of the canvas.
-                elementRect: { top: 0.9, left: 0.9, bottom: 0.1, right: 0.1 }
+                elementRect: { top: 0.9, left: 0.9, bottom: 0.1, right: 0.0 }
             },
-            onmove: (event) => this.props.relocate({
-                itemId: this.props.itemId,
-                dx: event.dx,
-                dy: event.dy,
-                animate: false,
-            })
+            onmove: (event) => {
+                this.props.relocate({
+                    itemId: this.props.itemId,
+                    dx: event.dx,
+                    dy: event.dy,
+                    animate: false,
+                })
+                if (this.props.x > this.props.canvasSize.width - 10) {
+                    // Item was dragged out of canvas, notify app
+                    this.props.draggedOut({
+                        itemId: this.props.itemId,
+                        dir: 'right'
+                    })
+                }
+            }
         })
     },
 
@@ -142,6 +151,7 @@ function mapStateToProps(state, ownProps) {
         ...item,
         // For animation, let (interpolated) props override state values
         ...ownProps,
+        canvasSize: state.canvasSize,
     }
 }
 
@@ -152,6 +162,7 @@ function mapDispatchToProps(dispatch) {
         scale: scaleItem,
         focus: focusItem,
         tap: signalItemTapped,
+        draggedOut: signalItemDraggedOut,
     }, dispatch)
 }
 

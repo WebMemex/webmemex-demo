@@ -30,6 +30,7 @@ export let unfocus = createAction()
 // Actions not listened to by the canvas module itself
 
 export let signalItemTapped = createAction()
+export let signalItemDraggedOut = createAction()
 
 // Utils
 
