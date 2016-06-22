@@ -1,3 +1,6 @@
+# Note: This is the demo branch
+This is the version that is published on [webmemex.org](http://webmemex.org). It is rebased onto master every now and then, and adds only a few deployment-specific things, such as a welcoming message.
+
 ## WebMemex ##
 
 A web browser that lets you save and organise the pages you visit.
