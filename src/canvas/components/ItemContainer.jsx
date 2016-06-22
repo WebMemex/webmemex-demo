@@ -33,7 +33,6 @@ let ItemContainer = React.createClass({
             >
                 <ItemComponent
                     docId={this.props.docId}
-                    interactionEvents={this.interactionEvents}
                     canvasItemId={this.props.itemId}
                 />
             </div>
