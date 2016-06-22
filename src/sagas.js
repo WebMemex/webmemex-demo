@@ -11,12 +11,21 @@ const hookedActions = {
     [canvas.signalItemTapped.getType()]: handleTap,
 }
 
-// A saga that simply listens and triggers the action pairs defined above.
-export function* actionListener() {
-    for (let sourceAction in hookedActions) {
-        let actionHandler = hookedActions[sourceAction]
+let sagas = []
+
+// Create a saga for each pair of action+handler
+for (let sourceAction in hookedActions) {
+    let actionHandler = hookedActions[sourceAction]
+    sagas.push(bindHandler(sourceAction, actionHandler))
+}
+
+// A saga that simply listens to one type of action and triggers its assigned handler.
+function bindHandler(sourceAction, actionHandler) {
+    return function* actionListener() {
         yield* takeEvery(sourceAction, function* (actionObject) {
             yield put(actionHandler(actionObject.payload))
         })
     }
 }
+
+export default sagas

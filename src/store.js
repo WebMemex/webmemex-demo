@@ -5,7 +5,7 @@ import { persistentStore } from 'redux-pouchdb'
 import createSagaMiddleware from 'redux-saga'
 
 import rootReducer from './reducer'
-import * as sagas from './sagas'
+import sagas from './sagas'
 
 // Creates the redux store for application state
 // (both the persistent storage and the canvas state)
