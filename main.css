@@ -80,14 +80,13 @@ svg#edges {
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
-}
-
-.simple-item-text {
-    margin: 0;
     font-size: 20px;
     font-family: Grundschrift, sans-serif;
 }
 
+.simple-item:focus {
+    outline: none;
+}
 
 .item-iframe-wrapper-container {
     position:'relative';
