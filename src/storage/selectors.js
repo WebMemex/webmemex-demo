@@ -32,6 +32,7 @@ export function getDocWithText(state, text) {
 }
 
 // A helper to read a value from an action.. should we just use thunks instead?
+// FIXME this fails if the reducer changed the generated id. Need other solution.
 export function readGeneratedId(action) {
     return action.meta.generatedId
 }
