@@ -30,6 +30,12 @@ function addNote(state, {docId, text}, {generatedId}) {
     return {...state, docs: {...state.docs, [docId]: newDoc}}
 }
 
+function updateNoteText(state, {docId, text}) {
+    let doc = getDoc(state, docId)
+    let newDoc = {...doc, text}
+    return {...state, docs: {...state.docs, [docId]: newDoc}}
+}
+
 function deleteDoc(state, {docId}) {
     // Remove doc
     let docs = _.omit(state.docs, docId)
@@ -49,6 +55,7 @@ let reducer = createReducer(
     {
         [actions.addUrl]: addUrl,
         [actions.addNote]: addNote,
+        [actions.updateNoteText]: updateNoteText,
         [actions.deleteDoc]: deleteDoc,
         [actions.addLink]: addLink,
     },

@@ -53,10 +53,12 @@ export let addUrl = createActionWithMetaArgs({
 export let addNote = createActionWithMetaArgs({
     generatedId: generateIdentifier,
 })
+export let updateNoteText = createAction()
 export let deleteDoc = createAction()
 export let addLink = createActionWithMetaArgs({
     generatedId: generateIdentifier,
 })
+
 
 function generateIdentifier() {
     return 'id_' + new Date().getTime().toString()
