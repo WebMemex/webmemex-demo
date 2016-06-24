@@ -20,9 +20,9 @@ let StemItem = React.createClass({
         if (this.props.docId == 'addUrlForm') {
             return <AddUrlForm {...this.props} />
         }
-        else if (this.props.text)
+        else if (this.props.text !== undefined)
             return <SimpleItem {...this.props} />
-        else if (this.props.url)
+        else if (this.props.url !== undefined)
             return <IFrameItem {...this.props} />
         else
             return <i>Empty item? docId={this.props.docId}, canvasItemId={this.props.canvasItemId}</i>
