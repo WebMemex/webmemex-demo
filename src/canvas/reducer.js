@@ -182,14 +182,25 @@ function showEdge(state, {linkId, sourceItemId, targetItemId}) {
 }
 
 function hideItem(state, {itemId}) {
+    // Make shallow copy of state
+    state = {...state}
+
     // Hide the item
-    let visibleItems = _.omit(state.visibleItems, itemId)
+    state.visibleItems = _.omit(state.visibleItems, itemId)
+
+    // Clean up state
+    if (state.centeredItem === itemId)
+        state.centeredItem = undefined
+    if (state.focussedItem === itemId)
+        state.focussedItem = undefined
+
     // Hide edges to/from the item
-    let edges = _.omitBy(
+    state.edges = _.omitBy(
         state.edges,
-        edge => (edge.sourceItemId==itemId || edge.targetItemId==itemId)
+        edge => (edge.sourceItemId===itemId || edge.targetItemId===itemId)
     )
-    return {...state, visibleItems, edges}
+
+    return state
 }
 
 function updateWindowSize(state, {height, width}, {currentView}) {
