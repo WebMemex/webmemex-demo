@@ -51,6 +51,20 @@ function addLink(state, {linkId, source, target}, {generatedId}) {
     return {...state, links: {...state.links, [linkId]: newLink}}
 }
 
+// Delete a link. Pass either a linkId, or two docIds.
+function deleteLink(state, {linkId, doc1, doc2}) {
+    let links
+    if (linkId===undefined) {
+        links = _.omitBy(state.links, ({source, target}) => (
+            (source===doc1 && target===doc2) || (source===doc2 && target===doc1)
+        ))
+    }
+    else {
+        links = _.omit(state.links, linkId)
+    }
+    return {...state, links}
+}
+
 let reducer = createReducer(
     {
         [actions.addUrl]: addUrl,
@@ -58,6 +72,7 @@ let reducer = createReducer(
         [actions.updateNoteText]: updateNoteText,
         [actions.deleteDoc]: deleteDoc,
         [actions.addLink]: addLink,
+        [actions.deleteLink]: deleteLink,
     },
     defaultState
 )

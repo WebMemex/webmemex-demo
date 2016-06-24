@@ -7,6 +7,17 @@ export function getDoc(state, docId) {
     return doc
 }
 
+export function hasFriends(state, docId) {
+    // Return true if doc has any links to/from other docs
+    if (_.find(state.links, link =>
+        (link.source===docId || link.target===docId)
+        && !(link.source==link.target) // self-links are not really friends..
+    ))
+        return true
+    else
+        return false
+}
+
 export function getFriends(state, docId) {
     // Return all docs linking to, and all items linked from the given doc
     let allLinks = state.links

@@ -58,6 +58,7 @@ export let deleteDoc = createAction()
 export let addLink = createActionWithMetaArgs({
     generatedId: generateIdentifier,
 })
+export let deleteLink = createAction()
 
 
 function generateIdentifier() {
