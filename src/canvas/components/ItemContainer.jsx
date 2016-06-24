@@ -61,21 +61,30 @@ let ItemContainer = React.createClass({
             inertia: true,
             restrict: {
                 restriction: 'parent',
-                // 90% of the element can be dragged out of the canvas.
-                elementRect: { top: 0.9, left: 0.9, bottom: 0.1, right: 0.0 }
+                // Element can be dragged out of the canvas at left and right,
+                // and mostly dragged out at top and bottom.
+                elementRect: { top: 0.8, left: 1.0, bottom: 0.2, right: 0.0 }
             },
             onmove: (event) => {
-                this.props.relocate({
-                    itemId: this.props.itemId,
-                    dx: event.dx,
-                    dy: event.dy,
-                    animate: false,
-                })
-                if (this.props.x > this.props.canvasSize.width - 10) {
-                    // Item was dragged out of canvas, notify app
+                // Ignore spurious events if item is already removed
+                if (element.parentElement === null) return
+
+                // Check if item is dragged out of canvas to left or right side
+                if (this.props.x >= this.props.canvasSize.width-1
+                    || this.props.x + this.props.width <= 1
+                ) {
+                    // Item was dragged out of canvas, notify app (to remove it)
                     this.props.draggedOut({
                         itemId: this.props.itemId,
-                        dir: 'right'
+                        dir: (this.props.x<=0) ? 'left' : 'right',
+                    })
+                }
+                else {
+                    this.props.relocate({
+                        itemId: this.props.itemId,
+                        dx: event.dx,
+                        dy: event.dy,
+                        animate: false,
                     })
                 }
             }

@@ -108,6 +108,25 @@ export function handleTap({itemId}) {
 
 export function handleDraggedOut({itemId, dir}) {
     return function (dispatch, getState) {
-        // TODO remove document
+        let item = canvas.getItem(getState().canvas, itemId)
+        let docId = item.docId
+
+        // Hide the item from the canvas
+        dispatch(canvas.hideItem({itemId}))
+
+        if (dir==='left' || dir==='right') { // No difference for now
+            // Delete link between jettisoned doc and centered doc
+            let centeredItem = canvas.getCenteredItem(getState().canvas)
+            if (centeredItem!==undefined) {
+                dispatch(storage.deleteLink({
+                    doc1: centeredItem.docId,
+                    doc2: docId,
+                }))
+            }
+            // Delete jettisoned doc completely if it is left unconnected
+            if (!storage.hasFriends(getState().storage, docId)) {
+                dispatch(storage.deleteDoc({docId}))
+            }
+        }
     }
 }
