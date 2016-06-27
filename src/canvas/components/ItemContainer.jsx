@@ -20,6 +20,23 @@ let ItemContainer = React.createClass({
             width: width,
             height: height,
         }
+        if (this.props.beingDragged) {
+            // Give visual feedback when dragging out of canvas
+            if (x < 0 || x > (canvasWidth - width)) {
+                let proportionOutside = 1-linearRolloffFunction({
+                    lowerBound: 0-width,
+                    upperBound: canvasWidth,
+                    fadeRegion: width
+                })(x)
+                let scale = 1-0.5*proportionOutside
+                let angle = 30 * proportionOutside * ((x<0) ? -1 : 1)
+                style = {
+                    ...style,
+                    opacity: 1-0.5*proportionOutside,
+                    transform: `scale(${scale}) rotate(${angle}deg)`,
+                }
+            }
+        }
 
         let className = classNames(
             'item-container',
@@ -61,18 +78,30 @@ let ItemContainer = React.createClass({
         interact(element).draggable({
             inertia: true,
             restrict: {
-                restriction: 'parent',
-                // Element can be dragged out of the canvas at left and right,
-                // and mostly dragged out at top and bottom.
-                elementRect: { top: 0.8, left: 1.0, bottom: 0.2, right: 0.0 }
+                restriction: 'parent', // restrict to parent = canvas
+                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }, // complete item should be within canvas
+                endOnly: true, // return to within canvas only after releasing
+            },
+            onstart: () => {
+                // Ignore spurious events if item is already removed
+                if (element.parentElement === null) return
+
+                this.props.setItemDragged({itemId: this.props.itemId, value: true})
+            },
+            onend: () => {
+                // Ignore spurious events if item is already removed
+                if (element.parentElement === null) return
+
+                this.props.setItemDragged({itemId: this.props.itemId, value: false})
             },
             onmove: (event) => {
                 // Ignore spurious events if item is already removed
                 if (element.parentElement === null) return
 
                 // Check if item is dragged out of canvas to left or right side
-                if (this.props.x >= this.props.canvasSize.width-1
-                    || this.props.x + this.props.width <= 1
+                const minVisible = this.props.width/5
+                if (this.props.canvasSize.width - this.props.x <= minVisible
+                    || this.props.x + this.props.width <= minVisible
                 ) {
                     // Item was dragged out of canvas, notify app (to remove it)
                     this.props.draggedOut({
@@ -172,9 +201,21 @@ function mapDispatchToProps(dispatch) {
         resize: actions.resizeItem,
         scale: actions.scaleItem,
         focus: actions.focusItem,
+        setItemDragged: actions.setItemDragged,
         tap: actions.signalItemTapped,
         draggedOut: actions.signalItemDraggedOut,
     }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemContainer)
+
+function linearRolloffFunction({lowerBound, upperBound, fadeRegion}) {
+    return function calculateOutput(input) {
+        if (lowerBound+fadeRegion <= input && input <= upperBound-fadeRegion)
+            return 1
+        if (input < lowerBound+fadeRegion)
+            return Math.max(0, (input - lowerBound) / fadeRegion)
+        else // (input > upperBound-fadeRegion)
+            return Math.max(0, (upperBound - input) / fadeRegion)
+    }
+}

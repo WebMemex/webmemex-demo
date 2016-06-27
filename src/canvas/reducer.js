@@ -311,6 +311,13 @@ function unfocus(state, {animate}) {
     return {...state, visibleItems, focussedItem: undefined}
 }
 
+function setItemDragged(state, {itemId, value}) {
+    let item = getItem(state, itemId)
+    let newItem = {...item, beingDragged: value}
+    let visibleItems = {...state.visibleItems, [itemId]: newItem}
+    return {...state, visibleItems}
+}
+
 export default createReducer(
     {
         [actions.createItem]: createItem,
@@ -328,6 +335,7 @@ export default createReducer(
         [actions.scaleItem]: scaleItem,
         [actions.focusItem]: focusItem,
         [actions.unfocus]: unfocus,
+        [actions.setItemDragged]: setItemDragged,
     },
     defaultState
 )

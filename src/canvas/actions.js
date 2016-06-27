@@ -26,6 +26,7 @@ export let focusItem = createActionWithMetaArgs({
     currentView: getCurrentView,
 })
 export let unfocus = createAction()
+export let setItemDragged = createAction()
 
 // Actions not listened to by the canvas module itself
 
