@@ -4,7 +4,7 @@ import interact from 'interact.js'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import { relocateItem, resizeItem, scaleItem, focusItem, signalItemTapped, signalItemDraggedOut } from '../actions'
+import * as actions from '../actions'
 import { getItem } from '../selectors'
 import { hasProps } from '../../utils'
 
@@ -13,13 +13,14 @@ let ItemContainer = React.createClass({
     shouldComponentUpdate: hasProps('itemId'),
 
     render() {
-        let ItemComponent = this.props.ItemComponent
+        const { x, y, width, height, canvasSize: {width: canvasWidth} } = this.props
         let style = {
-            left: this.props.x,
-            top: this.props.y,
-            width: this.props.width,
-            height: this.props.height,
+            left: x,
+            top: y,
+            width: width,
+            height: height,
         }
+
         let className = classNames(
             'item-container',
             this.props.classes,
@@ -31,7 +32,7 @@ let ItemContainer = React.createClass({
                 className={className}
                 style={{...style}}
             >
-                <ItemComponent
+                <this.props.ItemComponent
                     docId={this.props.docId}
                     canvasItemId={this.props.itemId}
                 />
@@ -167,12 +168,12 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        relocate: relocateItem,
-        resize: resizeItem,
-        scale: scaleItem,
-        focus: focusItem,
-        tap: signalItemTapped,
-        draggedOut: signalItemDraggedOut,
+        relocate: actions.relocateItem,
+        resize: actions.resizeItem,
+        scale: actions.scaleItem,
+        focus: actions.focusItem,
+        tap: actions.signalItemTapped,
+        draggedOut: actions.signalItemDraggedOut,
     }, dispatch)
 }
 
