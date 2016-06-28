@@ -22,10 +22,10 @@ export let updateWindowSize = createActionWithMetaArgs({
 export let relocateItem = createAction()
 export let resizeItem = createAction()
 export let scaleItem = createAction()
-export let focusItem = createActionWithMetaArgs({
+export let expandItem = createActionWithMetaArgs({
     currentView: getCurrentView,
 })
-export let unfocus = createAction()
+export let unexpand = createAction()
 export let setItemDragged = createAction()
 
 // Actions not listened to by the canvas module itself

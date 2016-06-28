@@ -10,7 +10,7 @@ let IFrameItem = React.createClass({
         let scale = Math.min(canvasItemHeight / minFramePageHeight,
                              canvasItemWidth / minFramePageWidth)
 
-        let focussed = this.props.canvasItem.focussed
+        let expanded = this.props.canvasItem.expanded
 
         let wrapperStyle = {
             height: canvasItemHeight,
@@ -27,11 +27,11 @@ let IFrameItem = React.createClass({
                     <iframe
                         className='item-iframe'
                         src={this.props.url}
-                        // scrolling={focussed ? 'auto' : 'no'} // BUG in chromium? Scrollbar does not appear
+                        // scrolling={expanded ? 'auto' : 'no'} // BUG in chromium? Scrollbar does not appear
                         scrolling = 'auto'
                         seamless
                     ></iframe>
-                    { !focussed ? <div className='item-iframe-overlay'></div> : null}
+                    { !expanded ? <div className='item-iframe-overlay'></div> : null}
                 </div>
             </div>
         )

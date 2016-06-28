@@ -55,7 +55,7 @@ function mapStateToProps(state, {docId, canvasItemId}) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        focusItem: canvas.focusItem,
+        expandItem: canvas.expandItem,
         drawStar,
     }, dispatch)
 }

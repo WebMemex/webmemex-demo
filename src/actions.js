@@ -96,9 +96,9 @@ export function handleTap({itemId}) {
         if (item.docId === 'addUrlForm')
             return
         if (item.centered) {
-            // Only focus/expand iframe items (TODO make simple type test)
+            // Only expand iframe items (TODO make simple type test)
             if (storage.getDoc(getState().storage, item.docId).url)
-                dispatch(canvas.focusItem({itemId, animate: true}))
+                dispatch(canvas.expandItem({itemId, animate: true}))
         }
         else {
             dispatch(drawStar({docId: item.docId}))

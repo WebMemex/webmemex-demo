@@ -56,7 +56,7 @@ svg#edges {
     box-shadow: 3px 3px 10px #888;
 }
 
-.item-container.focussed {
+.item-container.expanded {
     z-index: 1;
 }
 

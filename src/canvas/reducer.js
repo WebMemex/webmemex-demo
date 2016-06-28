@@ -23,7 +23,7 @@ const defaultState = {
     edges: {
         // [edgeId]: {linkId, sourceItemId, targetItemId}
     },
-    focussedItem: undefined, // itemId
+    expandedItem: undefined, // itemId
     centeredItem: undefined, // itemId
 }
 
@@ -191,8 +191,8 @@ function hideItem(state, {itemId}) {
     // Clean up state
     if (state.centeredItem === itemId)
         state.centeredItem = undefined
-    if (state.focussedItem === itemId)
-        state.focussedItem = undefined
+    if (state.expandedItem === itemId)
+        state.expandedItem = undefined
 
     // Hide edges to/from the item
     state.edges = _.omitBy(
@@ -211,9 +211,9 @@ function updateWindowSize(state, {height, width}, {currentView}) {
         width: newWindowSize.width,
     }
     state = {...state, windowSize: newWindowSize, canvasSize: newCanvasSize}
-    // Update focussed (full-window) item, if any.
-    if (state.focussedItem) { // TODO this should not be here.. how to make it implicitly reactive?
-        state = focusItem(state, {itemId: state.focussedItem, animate: false}, {currentView})
+    // Update expanded item, if any.
+    if (state.expandedItem) { // TODO this should not be here.. how to make it implicitly reactive?
+        state = expandItem(state, {itemId: state.expandedItem, animate: false}, {currentView})
     }
     return state
 }
@@ -268,12 +268,12 @@ function scaleItem(state, {itemId, dscale, origin, animate}) {
     return {...state, visibleItems: {...state.visibleItems, [itemId]: newItem}}
 }
 
-function focusItem(state, {itemId, animate}, {currentView}) {
-    if (state.focussedItem) {
-        state = unfocus(state, {animate})
+function expandItem(state, {itemId, animate}, {currentView}) {
+    if (state.expandedItem) {
+        state = unexpand(state, {animate})
     }
 
-    // Remember previous position, to restore when unfocussing
+    // Remember previous position, to restore when unexpanding
     let item = getItem(state, itemId)
     let oldPosition = {
         width: item.width,
@@ -293,12 +293,12 @@ function focusItem(state, {itemId, animate}, {currentView}) {
     let x = scrollX + state.windowSize.width/2 - width/2
     let y = scrollY + state.windowSize.height/2 - height/2
 
-    let newItem = {...item, x, y, width, height, oldPosition, focussed: true, inTransition: animate}
-    return {...state, visibleItems: {...state.visibleItems, [itemId]: newItem}, focussedItem: itemId}
+    let newItem = {...item, x, y, width, height, oldPosition, expanded: true, inTransition: animate}
+    return {...state, visibleItems: {...state.visibleItems, [itemId]: newItem}, expandedItem: itemId}
 }
 
-function unfocus(state, {animate}) {
-    let itemId = state.focussedItem
+function unexpand(state, {animate}) {
+    let itemId = state.expandedItem
     if (itemId === undefined) {
         return state
     }
@@ -306,9 +306,9 @@ function unfocus(state, {animate}) {
 
     // Return to previously stored position
     let newItem = {...item, ...item.oldPosition, oldPosition:undefined,
-        focussed: false, inTransition: animate}
+        expanded: false, inTransition: animate}
     let visibleItems = {...state.visibleItems, [itemId]: newItem}
-    return {...state, visibleItems, focussedItem: undefined}
+    return {...state, visibleItems, expandedItem: undefined}
 }
 
 function setItemDragged(state, {itemId, value}) {
@@ -333,8 +333,8 @@ export default createReducer(
         [actions.relocateItem]: relocateItem,
         [actions.resizeItem]: resizeItem,
         [actions.scaleItem]: scaleItem,
-        [actions.focusItem]: focusItem,
-        [actions.unfocus]: unfocus,
+        [actions.expandItem]: expandItem,
+        [actions.unexpand]: unexpand,
         [actions.setItemDragged]: setItemDragged,
     },
     defaultState

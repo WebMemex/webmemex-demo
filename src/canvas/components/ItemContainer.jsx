@@ -41,7 +41,7 @@ let ItemContainer = React.createClass({
         let className = classNames(
             'item-container',
             this.props.classes,
-            {'focussed': this.props.focussed}
+            {'expanded': this.props.expanded}
         )
         return (
             <div
@@ -63,11 +63,11 @@ let ItemContainer = React.createClass({
         this.makeScalable()
         this.makeTappable()
 
-        // disable dragging/scaling/resizing actions when focussed
+        // disable dragging/scaling/resizing actions when expanded
         let element = this.refs['item-container']
         interact(element).actionChecker((pointer, event, action) => {
             // Also disable when centered; it prevents clicking a note. (FIXME)
-            if (this.props.focussed || this.props.centered)
+            if (this.props.expanded || this.props.centered)
                 return false
             return action
         })
@@ -200,7 +200,7 @@ function mapDispatchToProps(dispatch) {
         relocate: actions.relocateItem,
         resize: actions.resizeItem,
         scale: actions.scaleItem,
-        focus: actions.focusItem,
+        expand: actions.expandItem,
         setItemDragged: actions.setItemDragged,
         tap: actions.signalItemTapped,
         draggedOut: actions.signalItemDraggedOut,

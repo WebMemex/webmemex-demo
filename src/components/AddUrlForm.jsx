@@ -7,7 +7,7 @@ import { navigateTo } from '../actions'
 let AddUrlForm = React.createClass({
 
     componentDidMount() {
-        // Focus input element for user convenience
+        // focus input element for user convenience
         this.refs.urlInput.focus()
     },
 
