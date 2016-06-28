@@ -1,6 +1,6 @@
 import React from 'react'
 
-let IFrameItem = React.createClass({
+let Webpage = React.createClass({
 
     render() {
         let canvasItemHeight = this.props.canvasItem.height
@@ -22,20 +22,20 @@ let IFrameItem = React.createClass({
             transform: 'scale('+scale+')',
         }
         return (
-            <div className='item-iframe-wrapper-container' style={wrapperStyle}>
-                <div className='item-iframe-scaling-container' style={scalingStyle}>
+            <div className='webpage-iframe-wrapper-container' style={wrapperStyle}>
+                <div className='webpage-iframe-scaling-container' style={scalingStyle}>
                     <iframe
-                        className='item-iframe'
+                        className='webpage-iframe'
                         src={this.props.url}
                         // scrolling={expanded ? 'auto' : 'no'} // BUG in chromium? Scrollbar does not appear
                         scrolling = 'auto'
                         seamless
                     ></iframe>
-                    { !expanded ? <div className='item-iframe-overlay'></div> : null}
+                    { !expanded ? <div className='webpage-iframe-overlay'></div> : null}
                 </div>
             </div>
         )
     }
 })
 
-export default IFrameItem
+export default Webpage

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { navigateTo } from '../actions'
 
-let AddUrlForm = React.createClass({
+let EmptyItem = React.createClass({
 
     componentDidMount() {
         // focus input element for user convenience
@@ -21,7 +21,7 @@ let AddUrlForm = React.createClass({
             }
         }
         return (
-            <form className='add-url-form' onSubmit={submitForm}>
+            <form className='emptyItem' onSubmit={submitForm}>
                 <input ref='urlInput' type='text' placeholder='.....'></input>
             </form>
         )
@@ -40,4 +40,4 @@ function mapDispatchToProps(dispatch, {canvasItemId}) {
     }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddUrlForm)
+export default connect(mapStateToProps, mapDispatchToProps)(EmptyItem)

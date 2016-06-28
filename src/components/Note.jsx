@@ -5,7 +5,7 @@ import ContentEditable from 'react-contenteditable'
 
 import storage from '../storage'
 
-let SimpleItem = React.createClass({
+let Note = React.createClass({
 
     render() {
         // Only enable editing of the centered item (for now)
@@ -17,7 +17,7 @@ let SimpleItem = React.createClass({
                 html={html}
                 disabled={!this.editingEnabled}
                 onChange={event => this.props.handleChange(event.target.value)}
-                className='simple-item'
+                className='note'
                 userIsKing
             />
         )
@@ -50,4 +50,4 @@ function mapDispatchToProps(dispatch, {docId}) {
     }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SimpleItem)
+export default connect(mapStateToProps, mapDispatchToProps)(Note)

@@ -60,12 +60,12 @@ svg#edges {
     z-index: 1;
 }
 
-.add-url-form {
+.emptyItem {
     display: flex;
     margin-top: 10px;
 }
 
-.add-url-form > input[type=text] {
+.emptyItem > input[type=text] {
     flex-grow: 0.7;
     border: 0px;
     outline: none;
@@ -74,7 +74,7 @@ svg#edges {
 }
 
 
-.simple-item {
+.note {
     background-color: #FFD;
     width: 100%;
     height: 100%;
@@ -84,25 +84,25 @@ svg#edges {
     font-family: Grundschrift, sans-serif;
 }
 
-.simple-item:focus {
+.note:focus {
     outline: none;
 }
 
-.item-iframe-wrapper-container {
+.webpage-iframe-wrapper-container {
     position:'relative';
     overflow: 'hidden';
 }
 
-.item-iframe-scaling-container {
+.webpage-iframe-scaling-container {
     transform-origin: 0 0;
 }
 
-.item-iframe {
+.webpage-iframe {
     width: 100%;
     height: 100%;
 }
 
-.item-iframe-overlay {
+.webpage-iframe-overlay {
     position: absolute;
     width: 100%;
     height: 100%;

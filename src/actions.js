@@ -11,8 +11,8 @@ export function initCanvas() {
         // Show empty item in center
         {
             let props = {x: 100, y: 100, width: 400, height: 50}
-            dispatch(canvas.createItem({docId: 'addUrlForm', props}))
-            let itemId = canvas.getItemIdForDocId(getState().canvas, 'addUrlForm')
+            dispatch(canvas.createItem({docId: 'emptyItem', props}))
+            let itemId = canvas.getItemIdForDocId(getState().canvas, 'emptyItem')
             dispatch(canvas.centerItem({itemId}))
         }
 
@@ -28,7 +28,7 @@ export function drawStar({docId, itemId}) {
             docId = canvas.getItem(state.canvas, itemId).docId
         }
         let {targetDocIds, sourceDocIds} = storage.getFriends(state.storage, docId)
-        targetDocIds.push('addUrlForm')
+        targetDocIds.push('emptyItem')
         dispatch(canvas.centerDocWithFriends({docId, targetDocIds, sourceDocIds, animate: true}))
     }
 }
@@ -93,7 +93,7 @@ function linkToCenteredItem({docId}) {
 export function handleTap({itemId}) {
     return function (dispatch, getState) {
         let item = canvas.getItem(getState().canvas, itemId)
-        if (item.docId === 'addUrlForm')
+        if (item.docId === 'emptyItem')
             return
         if (item.centered) {
             // Only expand iframe items (TODO make simple type test)

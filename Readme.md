@@ -30,7 +30,7 @@ The code is designed somewhat modular, and could be seen as three repos in one: 
 ##### Top level app ([`src`](src))
 * Sets up the app (see `main.html`, `main.jsx`): renders the canvas into the page, creates a Redux store (see `store.js`), connects the modules to the store (`reducer.js`).
 * Specifies the more high level behaviour (see `actions.js`), practically meaning all the logic that involves both the UI and the storage and can thus not be put in either module.
-* Its React components (`src/components/*`) specify how to display the 'documents' from the storage in the items on the canvas: the notes (`SimpleItem.jsx`), webpages (`IFrameItem.jsx`) and also the special empty item for navigating (`addUrlForm.jsx`).
+* Its React components (`src/components/*`) specify how to display the 'documents' from the storage in the items on the canvas: the notes (`Note.jsx`), webpages (`Webpage.jsx`) and also the special empty item for navigating (`EmptyItem.jsx`).
 
 ##### Canvas UI ([`src/canvas`](src/canvas))
 * Implements the user interface, a 2d 'canvas' (*not* related to the html `<canvas>` element) with any amount of items and possibly with edges between them.
