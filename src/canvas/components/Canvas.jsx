@@ -4,7 +4,7 @@ import interact from 'interact.js'
 
 import AnimatedItemContainer from './AnimatedItemContainer'
 import Edge from './Edge'
-import { updateWindowSize, unexpand } from '../actions'
+import { updateWindowSize, unexpand, unfocus } from '../actions'
 
 let Canvas = React.createClass({
 
@@ -14,11 +14,13 @@ let Canvas = React.createClass({
 
         window.addEventListener('keydown', (event)=>{
             if (event.keyCode==27) {
+                this.props.unfocus()
                 this.props.unexpand()
             }
         })
 
         interact(this.refs['canvas']).on('tap', event => {
+            this.props.unfocus()
             this.props.unexpand()
             event.stopPropagation()
         })
@@ -64,10 +66,12 @@ function mapDispatchToProps(dispatch) {
     }))
 
     let dispatchUnexpand = () => dispatch(unexpand({animate: true}))
+    let dispatchUnfocus = () => dispatch(unfocus())
 
     return {
         updateWindowSize: dispatchUpdateWindowSize,
         unexpand: dispatchUnexpand,
+        unfocus: dispatchUnfocus,
     }
 }
 

@@ -66,8 +66,7 @@ let ItemContainer = React.createClass({
         // disable dragging/scaling/resizing actions when expanded
         let element = this.refs['item-container']
         interact(element).actionChecker((pointer, event, action) => {
-            // Also disable when centered; it prevents clicking a note. (FIXME)
-            if (this.props.expanded || this.props.centered)
+            if (this.props.expanded)
                 return false
             return action
         })

@@ -25,6 +25,7 @@ const defaultState = {
     },
     expandedItem: undefined, // itemId
     centeredItem: undefined, // itemId
+    focussedItem: undefined, // itemId
 }
 
 const ITEM_MIN_WIDTH = 100
@@ -224,6 +225,8 @@ function hideItem(state, {itemId}) {
         state.centeredItem = undefined
     if (state.expandedItem === itemId)
         state.expandedItem = undefined
+    if (state.focussedItem === itemId)
+        state.focussedItem = undefined
 
     // Hide edges to/from the item
     state.edges = _.omitBy(
@@ -349,6 +352,28 @@ function setItemDragged(state, {itemId, value}) {
     return {...state, visibleItems}
 }
 
+function focusItem(state, {itemId}) {
+    if (state.focussedItem) {
+        state = unfocus(state)
+    }
+    let item = getItem(state, itemId)
+    let newItem = {...item, focussed: true}
+    let visibleItems = {...state.visibleItems, [itemId]: newItem}
+    return {...state, visibleItems, focussedItem: itemId}
+}
+
+function unfocus(state) {
+    let itemId = state.focussedItem
+    if (itemId === undefined) {
+        return state
+    }
+    let item = getItem(state, itemId)
+    let newItem = {...item, focussed: false}
+    let visibleItems = {...state.visibleItems, [itemId]: newItem}
+    return {...state, visibleItems, focussedItem: undefined}
+}
+
+
 export default createReducer(
     {
         [actions.createItemWithId]: createItemWithId,
@@ -366,6 +391,8 @@ export default createReducer(
         [actions.scaleItem]: scaleItem,
         [actions.expandItem]: expandItem,
         [actions.unexpand]: unexpand,
+        [actions.focusItem]: focusItem,
+        [actions.unfocus]: unfocus,
         [actions.setItemDragged]: setItemDragged,
     },
     defaultState

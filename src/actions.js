@@ -13,6 +13,7 @@ export function initCanvas() {
             let props = {x: 100, y: 100, width: 400, height: 50}
             let itemId = dispatch(canvas.createItem({docId: 'emptyItem', props}))
             dispatch(canvas.centerItem({itemId}))
+            dispatch(canvas.focusItem({itemId}))
         }
 
     }
@@ -36,6 +37,7 @@ export function navigateTo({itemId, userInput}) {
     return function (dispatch, getState) {
         dispatch(populateEmptyItem({itemId, userInput}))
         dispatch(drawStar({itemId}))
+        dispatch(canvas.focusItem({itemId}))
     }
 }
 
@@ -91,6 +93,9 @@ function linkToCenteredItem({docId}) {
 
 export function handleTap({itemId}) {
     return function (dispatch, getState) {
+        // Focus on the item
+        dispatch(canvas.focusItem({itemId}))
+
         let item = canvas.getItem(getState().canvas, itemId)
         if (item.docId === 'emptyItem')
             return
@@ -114,7 +119,7 @@ export function handleDraggedOut({itemId, dir}) {
         dispatch(canvas.hideItem({itemId}))
 
         if (dir==='left' || dir==='right') { // No difference for now
-            // Delete link between jettisoned doc and centered doc
+            // Delete link between jettisoned doc and centered doc // TODO generalise: delete visible links
             let centeredItem = canvas.getCenteredItem(getState().canvas)
             if (centeredItem!==undefined) {
                 dispatch(storage.deleteLink({

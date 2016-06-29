@@ -6,11 +6,6 @@ import { navigateTo } from '../actions'
 
 let EmptyItem = React.createClass({
 
-    componentDidMount() {
-        // focus input element for user convenience
-        this.refs.urlInput.focus()
-    },
-
     render() {
         const submitForm = event => {
             event.preventDefault()
@@ -25,7 +20,25 @@ let EmptyItem = React.createClass({
                 <input ref='urlInput' type='text' placeholder='.....'></input>
             </form>
         )
-    }
+    },
+
+    // Apply focus upon mount or update if props tell us to
+    componentDidMount() {
+        if (this.props.canvasItem.focussed) {
+            this.refs.urlInput.focus()
+        }
+    },
+    componentDidUpdate(oldProps) {
+        if (!oldProps.canvasItem.focussed
+           && this.props.canvasItem.focussed) {
+               this.refs.urlInput.focus()
+        }
+        else if (oldProps.canvasItem.focussed
+           && !this.props.canvasItem.focussed) {
+            this.refs.urlInput.blur()
+       }
+    },
+
 })
 
 

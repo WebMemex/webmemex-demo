@@ -23,16 +23,20 @@ let Note = React.createClass({
         )
     },
 
-    // When the item is centered, let the editable div grab keyboard input
+    // Apply focus upon mount or update if props tell us to
     componentDidMount() {
-        if (this.props.canvasItem.centered) {
+        if (this.props.canvasItem.focussed) {
             this.refs['content'].htmlEl.focus()
         }
     },
     componentDidUpdate(oldProps) {
-        if (!oldProps.canvasItem.centered
-           && this.props.canvasItem.centered) {
+        if (!oldProps.canvasItem.focussed
+           && this.props.canvasItem.focussed) {
             this.refs['content'].htmlEl.focus()
+        }
+        else if (oldProps.canvasItem.focussed
+           && !this.props.canvasItem.focussed) {
+            this.refs['content'].htmlEl.blur()
         }
     },
 

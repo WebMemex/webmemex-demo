@@ -40,6 +40,8 @@ export let expandItem = createActionWithMetaArgs({
 })
 export let unexpand = createAction()
 export let setItemDragged = createAction()
+export let focusItem = createAction()
+export let unfocus = createAction()
 
 // Actions not listened to by the canvas module itself
 
