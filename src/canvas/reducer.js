@@ -2,8 +2,8 @@ import _ from 'lodash'
 import { createReducer } from 'redux-act'
 
 import * as actions from './actions'
-import { getItem, getItemIdForDocId } from './selectors'
-import { ensureUnusedId } from '../utils'
+import { getItem } from './selectors'
+import { reuseOrGenerateItemId } from './utils'
 
 const defaultState = {
     // Some unimportant initial sizes, which are updated when loaded.
@@ -30,16 +30,15 @@ const defaultState = {
 const ITEM_MIN_WIDTH = 100
 const ITEM_MIN_HEIGHT = 20
 
+// Note: this function is almost like a reducer, but it also returns a value.
+// It is equivalent to actions.createItem, but for usage within other reducers.
 function createItem(state, {docId, props}) {
-    // Try reuse an item that is flagged for removal (mainly to animate moving)
-    let itemId = _.findKey(state.visibleItems, item => (
-        item.flaggedForRemoval && item.docId == docId
-    ))
-    // Else, pick an identifier to create a new item
-    if (itemId === undefined) {
-        let desiredItemId = 'view_'+docId
-        itemId = ensureUnusedId(state.visibleItems, desiredItemId)
-    }
+    let itemId = reuseOrGenerateItemId(state, {docId})
+    state = createItemWithId(state, {itemId, docId, props})
+    return {state, itemId}
+}
+
+function createItemWithId(state, {itemId, docId, props}) {
     let newItem = {
         ...props,
         docId,
@@ -47,7 +46,6 @@ function createItem(state, {docId, props}) {
     }
     let visibleItems = {...state.visibleItems, [itemId]: newItem}
     return {...state, visibleItems}
-    // TODO we should return itemId.. rethink the reducer pattern?
 }
 
 function changeDoc(state, {itemId, docId}) {
@@ -70,15 +68,24 @@ function centerItem(state, {itemId, animate}, {currentView}) {
     return {...state, visibleItems, centeredItem: itemId}
 }
 
-function centerDocWithFriends(state, {docId, targetDocIds, sourceDocIds, animate}, {currentView}) {
+function centerDocWithFriends(state, {docId, itemId, targetDocIds, sourceDocIds, animate}, {currentView}) {
     // Flag all items, so items not reused will be removed further below.
     state = flagAllItemsForRemoval(state)
     // Do not keep old edges, remove them.
     state = {...state, edges: {}}
-
-    // Create the item for the doc
-    state = createItem(state, {docId})
-    let itemId = getItemIdForDocId(state, docId)
+    if (itemId !== undefined) {
+        // Caller specified which item should be in the center. Prevent removal.
+        let item = getItem(state, itemId)
+        item = {...item, flaggedForRemoval: undefined}
+        let visibleItems = {...state.visibleItems, [itemId]: item}
+        state = {...state, visibleItems}
+    }
+    else {
+        // No item was passed, create a new item for the doc
+        let {state: newState, itemId: newItemId} = createItem(state, {docId})
+        state = newState
+        itemId = newItemId
+    }
 
     // Let it fill 40% of window width, fix width/height ratio to 4:3
     let width = state.windowSize.width/2.5
@@ -151,9 +158,9 @@ function showItemFriends(state, {itemId, friendDocIds, friendItemIds, side='righ
     if (friendItemIds === undefined) {
         friendItemIds = []
         friendDocIds.forEach((friendDocId) => {
-            if (friendDocId === getItem(state, itemId).docId) return // hacky fix for self-links
-            state = createItem(state, {docId: friendDocId})
-            friendItemIds.push(getItemIdForDocId(state, friendDocId))
+            let {state: newState, itemId: friendItemId} = createItem(state, {docId: friendDocId})
+            state = newState
+            friendItemIds.push(friendItemId)
         })
     }
 
@@ -344,7 +351,7 @@ function setItemDragged(state, {itemId, value}) {
 
 export default createReducer(
     {
-        [actions.createItem]: createItem,
+        [actions.createItemWithId]: createItemWithId,
         [actions.changeDoc]: changeDoc,
         [actions.centerItem]: centerItem,
         [actions.centerDocWithFriends]: centerDocWithFriends,

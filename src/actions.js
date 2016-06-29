@@ -11,8 +11,7 @@ export function initCanvas() {
         // Show empty item in center
         {
             let props = {x: 100, y: 100, width: 400, height: 50}
-            dispatch(canvas.createItem({docId: 'emptyItem', props}))
-            let itemId = canvas.getItemIdForDocId(getState().canvas, 'emptyItem')
+            let itemId = dispatch(canvas.createItem({docId: 'emptyItem', props}))
             dispatch(canvas.centerItem({itemId}))
         }
 
@@ -29,7 +28,7 @@ export function drawStar({docId, itemId}) {
         }
         let {targetDocIds, sourceDocIds} = storage.getFriends(state.storage, docId)
         targetDocIds.push('emptyItem')
-        dispatch(canvas.centerDocWithFriends({docId, targetDocIds, sourceDocIds, animate: true}))
+        dispatch(canvas.centerDocWithFriends({docId, itemId, targetDocIds, sourceDocIds, animate: true}))
     }
 }
 
@@ -101,7 +100,7 @@ export function handleTap({itemId}) {
                 dispatch(canvas.expandItem({itemId, animate: true}))
         }
         else {
-            dispatch(drawStar({docId: item.docId}))
+            dispatch(drawStar({itemId}))
         }
     }
 }

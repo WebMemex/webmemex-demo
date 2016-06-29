@@ -7,13 +7,6 @@ export function getItem(state, itemId) {
     return item
 }
 
-export function getItemIdForDocId(state, docId) {
-    let itemId = _.findKey(state.visibleItems, item => (item.docId == docId))
-    if (itemId===undefined)
-        throw new Error("No item with docId " + docId)
-    return itemId
-}
-
 export function getCenteredItem(state) {
     let currentItem = state.centeredItem
     if (!currentItem) {

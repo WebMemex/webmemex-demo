@@ -1,9 +1,22 @@
 import { createAction } from 'redux-act'
 import { createActionWithMetaArgs } from '../utils'
 
+import { reuseOrGenerateItemId } from './utils'
+
 // Actions processed by the canvas reducer
 
-export let createItem = createAction()
+export let createItem = function ({docId, props}) {
+    // We use a thunk here rather than putting this logic in the reducer, solely
+    // to be able to return the chosen itemId to the caller. TODO fix Redux..?
+    return function(dispatch, getState) {
+        let state = getState().canvas  // XXX non-modular: We'd want to get state.canvas from getState().
+        let itemId = reuseOrGenerateItemId(state, {docId})
+        dispatch(createItemWithId({itemId, docId, props}))
+        return itemId
+    }
+}
+
+export let createItemWithId = createAction()
 export let changeDoc = createAction()
 export let centerItem = createActionWithMetaArgs({
     currentView: getCurrentView,
