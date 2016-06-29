@@ -30,23 +30,20 @@ const defaultState = {
 const ITEM_MIN_WIDTH = 100
 const ITEM_MIN_HEIGHT = 20
 
-function createItem(state, {docId, reuse=true, props}) {
-    let itemId = undefined
-    if (reuse) {
-        // If the doc is already shown in some item, take that one
-        try {
-            itemId = getItemIdForDocId(state, docId)
-        }
-        catch (err) {}
-    }
+function createItem(state, {docId, props}) {
+    // Try reuse an item that is flagged for removal (mainly to animate moving)
+    let itemId = _.findKey(state.visibleItems, item => (
+        item.flaggedForRemoval && item.docId == docId
+    ))
+    // Else, pick an identifier to create a new item
     if (itemId === undefined) {
-        // Generate an unused identifier for the new item
         let desiredItemId = 'view_'+docId
         itemId = ensureUnusedId(state.visibleItems, desiredItemId)
     }
     let newItem = {
         ...props,
         docId,
+        flaggedForRemoval: undefined,
     }
     let visibleItems = {...state.visibleItems, [itemId]: newItem}
     return {...state, visibleItems}
@@ -74,11 +71,13 @@ function centerItem(state, {itemId, animate}, {currentView}) {
 }
 
 function centerDocWithFriends(state, {docId, targetDocIds, sourceDocIds, animate}, {currentView}) {
-    // Clean the canvas
-    state = removeAllItems(state) // TODO flag as garbage, to fix reuse (and animate disappearance)
+    // Flag all items, so items not reused will be removed further below.
+    state = flagAllItemsForRemoval(state)
+    // Do not keep old edges, remove them.
+    state = {...state, edges: {}}
 
     // Create the item for the doc
-    state = createItem(state, {docId, reuse: true})
+    state = createItem(state, {docId})
     let itemId = getItemIdForDocId(state, docId)
 
     // Let it fill 40% of window width, fix width/height ratio to 4:3
@@ -103,11 +102,36 @@ function centerDocWithFriends(state, {docId, targetDocIds, sourceDocIds, animate
         animate,
     }, {currentView})
 
+    // Remove the items that have not been reused.
+    state = removeFlaggedItems(state)
+
     return {...state}
 }
 
+function flagAllItemsForRemoval(state) {
+    let visibleItems = _.mapValues(state.visibleItems,
+                                   item => ({...item, flaggedForRemoval: true}))
+    state = {...state, visibleItems}
+    return state
+}
+
+function removeFlaggedItems(state) {
+    let flaggedItems = _.pickBy(state.visibleItems,
+                                item => item.flaggedForRemoval)
+    _.forOwn(flaggedItems, (item, itemId) => {
+        state = hideItem(state, {itemId})
+    })
+    return state
+}
+
 function removeAllItems(state) {
-    state = {...state, visibleItems: {}, edges: {}}
+    state = {...state,
+        visibleItems: {},
+        edges: {},
+        expandedItem: undefined,
+        centeredItem: undefined,
+        focussedItem: undefined,
+    }
     return state
 }
 
@@ -128,7 +152,7 @@ function showItemFriends(state, {itemId, friendDocIds, friendItemIds, side='righ
         friendItemIds = []
         friendDocIds.forEach((friendDocId) => {
             if (friendDocId === getItem(state, itemId).docId) return // hacky fix for self-links
-            state = createItem(state, {docId: friendDocId, reuse: true})
+            state = createItem(state, {docId: friendDocId})
             friendItemIds.push(getItemIdForDocId(state, friendDocId))
         })
     }
