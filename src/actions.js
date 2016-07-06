@@ -80,6 +80,7 @@ function linkToCenteredItem({docId}) {
         let centeredItem = canvas.getCenteredItem(getState().canvas)
         if (centeredItem) {
             let centeredDoc = centeredItem.docId
+            if (centeredDoc === docId) return
             let action = storage.addLink({source: centeredDoc, target: docId})
             dispatch(action)
 
