@@ -59,8 +59,8 @@ function populateEmptyItem({itemId, userInput}) {
         let docId = dispatch(findOrCreateDoc({userInput}))
         // Show the document in the given item
         dispatch(canvas.changeDoc({itemId, docId}))
-        // Link the new item to the currently centered one, if any.
-        dispatch(linkToCenteredItem({docId, itemId})) // TODO rewrite: link doc to any items connected to the empty item
+        // Link the new doc to any items it has edges to
+        dispatch(linkToConnectedItems({itemId, docId}))
     }
 }
 
@@ -86,21 +86,22 @@ function findOrCreateDoc({userInput}) {
     }
 }
 
-function linkToCenteredItem({docId}) {
+function linkToConnectedItems({itemId, docId}) {
     return function(dispatch, getState) {
-        // Get currently centered item
-        let centeredItem = canvas.getCenteredItem(getState().canvas)
-        if (centeredItem) {
-            let centeredDoc = centeredItem.docId
-            if (centeredDoc === docId) return
-            let action = storage.addLink({source: centeredDoc, target: docId})
-            dispatch(action)
+        let connectedItemIds = canvas.getConnectedItemIds(getState().canvas, itemId)
+        connectedItemIds.forEach(connectedItemId => {
+            let item = canvas.getItem(getState().canvas, itemId)
+            let connectedItem = canvas.getItem(getState().canvas, connectedItemId)
 
-            // TODO Edge should appear automatically when a link is added..
-            // (not needed now, while linkToCenteredItem is followed by drawStar, and edge to empty item is already drawn)
-            //let linkId = storage.readGeneratedId(action)
-            //dispatch(canvas.showEdge({linkId, sourceItemId: centeredItemId, targetItemId: itemId}))
-        }
+            // Determine which is item is left and which right
+            let docIsLeft = (item.x+item.width/2) < (connectedItem.x+connectedItem.width/2)
+
+            // Create the link
+            dispatch(storage.findOrAddLink({
+                source: docIsLeft ? docId : connectedItem.docId,
+                target: docIsLeft ? connectedItem.docId : docId,
+            }))
+        })
     }
 }
 
