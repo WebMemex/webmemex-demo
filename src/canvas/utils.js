@@ -7,7 +7,7 @@ import { ensureUnusedId } from '../utils'
 export function reuseOrGenerateItemId(state, {docId}) {
     // Try reuse an item that is flagged for removal (mainly to animate moving)
     let itemId = _.findKey(state.visibleItems, item => (
-        item.flaggedForRemoval && item.docId == docId
+        item.docId == docId && item.flaggedForRemoval
     ))
     // Else, pick an identifier to create a new item
     if (itemId === undefined) {

@@ -88,8 +88,8 @@ function centerDocWithFriends(state, {docId, itemId, targetDocIds, sourceDocIds,
         itemId = newItemId
     }
 
-    // Let it fill 40% of window width, fix width/height ratio to 4:3
-    let width = state.windowSize.width/2.5
+    // Let it fill 1/3 of window width, fix width/height ratio to 4:3
+    let width = state.windowSize.width/3
     let height = width*3/4
     state = resizeItem(state, {itemId, width, height, animate})
 

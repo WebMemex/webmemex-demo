@@ -30,6 +30,18 @@ export function drawStar({docId, itemId}) {
         let {targetDocIds, sourceDocIds} = storage.getFriends(state.storage, docId)
         targetDocIds.push('emptyItem')
         dispatch(canvas.centerDocWithFriends({docId, itemId, targetDocIds, sourceDocIds, animate: true}))
+
+        // Show second level friends
+        targetDocIds.forEach(docId => {
+            let itemId = canvas.getItemIdForDocId(getState().canvas, docId)
+            let {targetDocIds, sourceDocIds} = storage.getFriends(getState().storage, docId)
+            dispatch(canvas.showItemFriends({itemId, friendDocIds: targetDocIds, side: 'right', animate:true}))
+        })
+        sourceDocIds.forEach(docId => {
+            let itemId = canvas.getItemIdForDocId(getState().canvas, docId)
+            let {targetDocIds, sourceDocIds} = storage.getFriends(getState().storage, docId)
+            dispatch(canvas.showItemFriends({itemId, friendDocIds: sourceDocIds, side: 'left', animate:true}))
+        })
     }
 }
 

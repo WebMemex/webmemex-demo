@@ -7,6 +7,13 @@ export function getItem(state, itemId) {
     return item
 }
 
+export function getItemIdForDocId(state, docId) {
+    let itemId = _.findKey(state.visibleItems, item => (item.docId === docId))
+    if (!itemId)
+        throw new Error('No item with docId ' + docId + ' found in state.')
+    return itemId
+}
+
 export function getCenteredItem(state) {
     let currentItem = state.centeredItem
     if (!currentItem) {
