@@ -23,3 +23,18 @@ export function getCenteredItem(state) {
         return getItem(state, currentItem)
     }
 }
+
+export function getConnectedItemIds(state, itemId) {
+    return _(state.edges)
+        .pickBy(edge => (edge.sourceItemId === itemId || edge.targetItemId === itemId))
+        .map(edge => edge.sourceItemId === itemId ? edge.targetItemId : edge.sourceItemId)
+        .value()
+}
+
+export function getVisibleLinksOfItem(state, itemId) {
+    return (_(state.edges)
+        .pickBy(edge => (edge.sourceItemId === itemId || edge.targetItemId === itemId))
+        .map('linkId')
+        .value()
+    )
+}

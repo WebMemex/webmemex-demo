@@ -154,22 +154,26 @@ export function handleDraggedOut({itemId, dir}) {
         let item = canvas.getItem(getState().canvas, itemId)
         let docId = item.docId
 
-        // Hide the item from the canvas
-        dispatch(canvas.hideItem({itemId}))
-
         if (dir==='left' || dir==='right') { // No difference for now
-            // Delete link between jettisoned doc and centered doc // TODO generalise: delete visible links
-            let centeredItem = canvas.getCenteredItem(getState().canvas)
-            if (centeredItem!==undefined) {
+
+            // Remove the item's _visible_ links from storage
+            let connectedItemIds = canvas.getConnectedItemIds(getState().canvas, itemId)
+            connectedItemIds.forEach(connectedItemId => {
+                let connectedDocId = canvas.getItem(getState().canvas, connectedItemId).docId
                 dispatch(storage.deleteLink({
-                    doc1: centeredItem.docId,
+                    doc1: connectedDocId,
                     doc2: docId,
                 }))
-            }
+            })
+
+            // Hide the item from the canvas
+            dispatch(canvas.hideItem({itemId}))
+
             // Delete jettisoned doc completely if it is left unconnected
             if (!storage.hasFriends(getState().storage, docId)) {
                 dispatch(storage.deleteDoc({docId}))
             }
         }
+
     }
 }
