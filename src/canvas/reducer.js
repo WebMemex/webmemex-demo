@@ -154,7 +154,7 @@ function pruneEdges(state) {
     return {...state, edges}
 }
 
-function showItemFriends(state, {itemId, friendDocIds, friendItemIds, side='right', animate}, {currentView}) {
+function showItemFriends(state, {itemId, friendDocIds, friendItemIds, side='right', animate}) {
     // If we were passed the docIds, show the docs and get the resulting itemIds
     if (friendItemIds === undefined) {
         friendItemIds = []
