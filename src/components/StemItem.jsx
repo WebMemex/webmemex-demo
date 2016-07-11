@@ -35,7 +35,7 @@ function mapStateToProps(state, {docId, canvasItemId}) {
     let doc = {}
     // Get the document from storage unless docId is not a real doc.
     const specialDocIds = ['emptyItem']
-    if (!_.includes(specialDocIds, docId)) {
+    if (!_.includes(specialDocIds, docId) && docId !== undefined) {
         doc = storage.getDoc(state.storage, docId)
     }
 
