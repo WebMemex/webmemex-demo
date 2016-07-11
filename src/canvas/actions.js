@@ -47,6 +47,7 @@ export let unfocus = createAction()
 
 export let signalItemTapped = createAction()
 export let signalItemDraggedOut = createAction()
+export let signalDropOnCanvas = createAction()
 
 // Utils
 

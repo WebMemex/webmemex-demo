@@ -28,6 +28,13 @@ export function asUrl(input) {
     }
 }
 
+export function textToHtml(text) {
+    return text.replace(/&/g, '&amp;')
+               .replace(/</g, '&lt;')
+               .replace(/>/g, '&gt;')
+               .replace(/\n/g, '<br>')
+}
+
 // Wrap redux-act's createAction to reduce code repetition
 // (perhaps redux-act is still not opinionated enough)
 import { createAction } from 'redux-act'

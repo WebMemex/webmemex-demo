@@ -1,6 +1,6 @@
 import canvas from './canvas'
 import storage from './storage'
-import { asUrl } from './utils'
+import { asUrl, textToHtml } from './utils'
 
 // Clean the canvas and show an empty item
 export function initCanvas() {
@@ -88,6 +88,32 @@ function linkToCenteredItem({docId}) {
             // (not needed now, while linkToCenteredItem is followed by drawStar, and edge to empty item is already drawn)
             //let linkId = storage.readGeneratedId(action)
             //dispatch(canvas.showEdge({linkId, sourceItemId: centeredItemId, targetItemId: itemId}))
+        }
+    }
+}
+
+export function handleDropOnCanvas({x, y, event}) {
+    return function (dispatch, getState) {
+        let html = event.dataTransfer.getData('text/html')
+        let text = event.dataTransfer.getData('text')
+        let url = event.dataTransfer.getData('URL') || asUrl(text)
+        let docId
+        if (url) {
+            docId = dispatch(storage.findOrAddUrl({url}))
+        }
+        else if (html) {
+            html = html.replace(String.fromCharCode(0), '') // work around some bug/feature(?) of Chromium
+            docId = dispatch(storage.findOrAddNote({text: html}))
+        }
+        else if (text) {
+            let html = textToHtml(text)
+            docId = dispatch(storage.findOrAddNote({text: html}))
+        }
+        if (docId) {
+            let width = 200
+            let height = 150
+            let props = {x: x-width/2, y: y-height/2, width, height}
+            let itemId = dispatch(canvas.createItem({docId, props}))
         }
     }
 }

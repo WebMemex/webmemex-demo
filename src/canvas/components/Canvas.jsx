@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import interact from 'interact.js'
 
 import AnimatedItemContainer from './AnimatedItemContainer'
 import Edge from './Edge'
-import { updateWindowSize, unexpand, unfocus } from '../actions'
+import { updateWindowSize, unexpand, unfocus, signalDropOnCanvas } from '../actions'
 
 let Canvas = React.createClass({
 
@@ -24,6 +25,8 @@ let Canvas = React.createClass({
             this.props.unexpand()
             event.stopPropagation()
         })
+
+        this.enableDrop()
     },
 
     render() {
@@ -46,7 +49,18 @@ let Canvas = React.createClass({
                 }
             </div>
         )
-    }
+    },
+
+    enableDrop() {
+        this.refs['canvas'].ondragover = event => event.preventDefault()
+        this.refs['canvas'].ondrop = event => {
+            event.stopPropagation()
+            event.preventDefault()
+            let x = event.clientX // TODO compute coordinates relative to canvas
+            let y = event.clientY
+            this.props.handleDrop({x, y, event})
+        }
+    },
 })
 
 
@@ -66,12 +80,14 @@ function mapDispatchToProps(dispatch) {
     }))
 
     let dispatchUnexpand = () => dispatch(unexpand({animate: true}))
-    let dispatchUnfocus = () => dispatch(unfocus())
 
     return {
         updateWindowSize: dispatchUpdateWindowSize,
         unexpand: dispatchUnexpand,
-        unfocus: dispatchUnfocus,
+        ...bindActionCreators({
+            unfocus,
+            handleDrop: signalDropOnCanvas,
+        }, dispatch)
     }
 }
 
