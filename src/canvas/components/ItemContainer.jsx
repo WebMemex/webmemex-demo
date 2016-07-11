@@ -52,6 +52,8 @@ let ItemContainer = React.createClass({
                 <this.props.ItemComponent
                     docId={this.props.docId}
                     canvasItemId={this.props.itemId}
+                    width={this.props.width}
+                    height={this.props.height}
                 />
             </div>
         )

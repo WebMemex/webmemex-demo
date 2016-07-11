@@ -3,8 +3,8 @@ import React from 'react'
 let Webpage = React.createClass({
 
     render() {
-        let canvasItemHeight = this.props.canvasItem.height
-        let canvasItemWidth = this.props.canvasItem.width
+        let canvasItemHeight = this.props.height
+        let canvasItemWidth = this.props.width
         let minFramePageHeight = Math.max(canvasItemHeight, 600)
         let minFramePageWidth = Math.max(canvasItemWidth, 800)
         let scale = Math.min(canvasItemHeight / minFramePageHeight,
