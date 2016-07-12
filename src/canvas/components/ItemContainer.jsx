@@ -37,6 +37,12 @@ let ItemContainer = React.createClass({
                 }
             }
         }
+        if (this.props.activeDropTarget) {
+            style = {
+                ...style,
+                border: '5px #ccc solid',
+            }
+        }
 
         let className = classNames(
             'item-container',
@@ -177,6 +183,7 @@ let ItemContainer = React.createClass({
 
     makeDropTarget() {
         let element = this.refs['item-container']
+        let itemId = this.props.itemId
         interact(element).dropzone({
             accept: '.item-container',
             ondrop: event => {
@@ -185,9 +192,21 @@ let ItemContainer = React.createClass({
 
                 let droppedItemId = event.relatedTarget.getAttribute('data-itemid')
                 this.props.receivedDrop({
-                    itemId: this.props.itemId,
+                    itemId,
                     droppedItemId,
                 })
+            },
+            ondragenter: event => {
+                this.props.setProps({itemId, props: {activeDropTarget: true}})
+            },
+            ondragleave: event => {
+                this.props.setProps({itemId, props: {activeDropTarget: false}})
+            },
+            ondropdeactivate: event => {
+                // Ignore spurious events if item is already removed
+                if (element.parentElement === null) return
+
+                this.props.setProps({itemId, props: {activeDropTarget: false}})
             },
         })
     },
@@ -225,6 +244,7 @@ function mapDispatchToProps(dispatch) {
         tap: actions.signalItemTapped,
         draggedOut: actions.signalItemDraggedOut,
         receivedDrop: actions.signalReceivedDrop,
+        setProps: actions.setProps,
     }, dispatch)
 }
 

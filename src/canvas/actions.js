@@ -43,6 +43,7 @@ export let setItemDragged = createAction()
 export let focusItem = createAction()
 export let unfocusItem = createAction()
 export let unfocus = createAction()
+export let setProps = createAction()
 
 // Actions not listened to by the canvas module itself
 
