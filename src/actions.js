@@ -178,3 +178,23 @@ export function handleDraggedOut({itemId, dir}) {
 
     }
 }
+
+export function handleReceivedDrop({itemId, droppedItemId}) {
+    return function (dispatch, getState) {
+        let item = canvas.getItem(getState().canvas, itemId)
+        let droppedItem = canvas.getItem(getState().canvas, droppedItemId)
+
+        // Create link in storage
+        let linkId = dispatch(storage.findOrAddLink({
+            source: item.docId,
+            target: droppedItem.docId,
+        }))
+
+        // Display edge
+        dispatch(canvas.showEdge({
+            linkId,
+            sourceItemId: itemId,
+            targetItemId: droppedItemId
+        }))
+    }
+}

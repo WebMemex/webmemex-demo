@@ -48,6 +48,7 @@ let ItemContainer = React.createClass({
                 ref='item-container'
                 className={className}
                 style={{...style}}
+                data-itemid={this.props.itemId} // for drag&drop
             >
                 <this.props.ItemComponent
                     docId={this.props.docId}
@@ -64,6 +65,7 @@ let ItemContainer = React.createClass({
         //this.makeResizable() // impractical and buggy (bug in interactjs?)
         this.makeScalable()
         this.makeTappable()
+        this.makeDropTarget()
 
         // disable dragging/scaling/resizing actions when expanded
         let element = this.refs['item-container']
@@ -173,6 +175,23 @@ let ItemContainer = React.createClass({
         })
     },
 
+    makeDropTarget() {
+        let element = this.refs['item-container']
+        interact(element).dropzone({
+            accept: '.item-container',
+            ondrop: event => {
+                // Ignore spurious events if item is already removed
+                if (element.parentElement === null) return
+
+                let droppedItemId = event.relatedTarget.getAttribute('data-itemid')
+                this.props.receivedDrop({
+                    itemId: this.props.itemId,
+                    droppedItemId,
+                })
+            },
+        })
+    },
+
 })
 
 
@@ -205,6 +224,7 @@ function mapDispatchToProps(dispatch) {
         setItemDragged: actions.setItemDragged,
         tap: actions.signalItemTapped,
         draggedOut: actions.signalItemDraggedOut,
+        receivedDrop: actions.signalReceivedDrop,
     }, dispatch)
 }
 
