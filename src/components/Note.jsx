@@ -35,10 +35,10 @@ let Note = React.createClass({
     updateBrowserFocus() {
         // Make browser state reflect application state.
         let el = this.refs['content'].htmlEl
-        if (this.props.canvasItem.focussed && document.activeElement !== el) {
+        if (this.props.focussed && document.activeElement !== el) {
             el.focus()
         }
-        if (!this.props.canvasItem.focussed && document.activeElement === el) {
+        if (!this.props.focussed && document.activeElement === el) {
             el.blur()
         }
     }

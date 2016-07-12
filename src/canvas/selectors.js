@@ -38,3 +38,7 @@ export function getVisibleLinksOfItem(state, itemId) {
         .value()
     )
 }
+
+export function isFocussed(state, itemId) {
+    return (state.focussedItem === itemId)
+}

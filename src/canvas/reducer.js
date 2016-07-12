@@ -353,31 +353,14 @@ function setItemDragged(state, {itemId, value}) {
 }
 
 function focusItem(state, {itemId}) {
-    if (state.focussedItem) {
-        state = unfocus(state)
-    }
-    let item = getItem(state, itemId)
-    let newItem = {...item, focussed: true}
-    let visibleItems = {...state.visibleItems, [itemId]: newItem}
-    return {...state, visibleItems, focussedItem: itemId}
+    return {...state, focussedItem: itemId}
 }
 
-function unfocusItem(state, {itemId}) {
-    if (state.focussedItem === itemId) {
-        state = unfocus(state)
+function unfocus(state, {itemId}) {
+    if (itemId === undefined || state.focussedItem === itemId) {
+        state = {...state, focussedItem: undefined}
     }
     return state
-}
-
-function unfocus(state) {
-    let itemId = state.focussedItem
-    if (itemId === undefined) {
-        return state
-    }
-    let item = getItem(state, itemId)
-    let newItem = {...item, focussed: false}
-    let visibleItems = {...state.visibleItems, [itemId]: newItem}
-    return {...state, visibleItems, focussedItem: undefined}
 }
 
 
@@ -399,7 +382,6 @@ export default createReducer(
         [actions.expandItem]: expandItem,
         [actions.unexpand]: unexpand,
         [actions.focusItem]: focusItem,
-        [actions.unfocusItem]: unfocusItem,
         [actions.unfocus]: unfocus,
         [actions.setItemDragged]: setItemDragged,
     },

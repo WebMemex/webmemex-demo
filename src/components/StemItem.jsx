@@ -47,15 +47,18 @@ function mapStateToProps(state, {docId, canvasItemId}) {
         return {} // we must be phasing out, prevent updating.
     }
 
+    let focussed = canvas.isFocussed(state.canvas, canvasItemId)
+
     return {
         ...doc,
         canvasItem,
+        focussed,
     }
 }
 
 function mapDispatchToProps(dispatch, {canvasItemId}) {
     return {
-        blur: () => dispatch(canvas.unfocusItem({itemId: canvasItemId})),
+        blur: () => dispatch(canvas.unfocus({itemId: canvasItemId})),
         focus: () => dispatch(canvas.focusItem({itemId: canvasItemId})),
         ...bindActionCreators({
             expandItem: canvas.expandItem,
