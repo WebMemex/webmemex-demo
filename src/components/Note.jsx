@@ -19,26 +19,29 @@ let Note = React.createClass({
                 onChange={event => this.props.handleChange(event.target.value)}
                 className='note'
                 userIsKing
+                onBlur={event => this.props.blur()}
+                onFocus={event => this.props.focus()}
             />
         )
     },
 
-    // Apply focus upon mount or update if props tell us to
     componentDidMount() {
-        if (this.props.canvasItem.focussed) {
-            this.refs['content'].htmlEl.focus()
-        }
+        this.updateBrowserFocus()
     },
     componentDidUpdate(oldProps) {
-        if (!oldProps.canvasItem.focussed
-           && this.props.canvasItem.focussed) {
-            this.refs['content'].htmlEl.focus()
-        }
-        else if (oldProps.canvasItem.focussed
-           && !this.props.canvasItem.focussed) {
-            this.refs['content'].htmlEl.blur()
-        }
+        this.updateBrowserFocus()
     },
+
+    updateBrowserFocus() {
+        // Make browser state reflect application state.
+        let el = this.refs['content'].htmlEl
+        if (this.props.canvasItem.focussed && document.activeElement !== el) {
+            el.focus()
+        }
+        if (!this.props.canvasItem.focussed && document.activeElement === el) {
+            el.blur()
+        }
+    }
 
 })
 

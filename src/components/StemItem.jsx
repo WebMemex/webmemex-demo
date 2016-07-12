@@ -53,11 +53,15 @@ function mapStateToProps(state, {docId, canvasItemId}) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        expandItem: canvas.expandItem,
-        drawStar,
-    }, dispatch)
+function mapDispatchToProps(dispatch, {canvasItemId}) {
+    return {
+        blur: () => dispatch(canvas.unfocusItem({itemId: canvasItemId})),
+        focus: () => dispatch(canvas.focusItem({itemId: canvasItemId})),
+        ...bindActionCreators({
+            expandItem: canvas.expandItem,
+            drawStar,
+        }, dispatch)
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(StemItem)

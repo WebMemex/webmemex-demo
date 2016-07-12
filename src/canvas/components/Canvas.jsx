@@ -15,13 +15,11 @@ let Canvas = React.createClass({
 
         window.addEventListener('keydown', (event)=>{
             if (event.keyCode==27) {
-                this.props.unfocus()
                 this.props.unexpand()
             }
         })
 
         interact(this.refs['canvas']).on('tap', event => {
-            this.props.unfocus()
             this.props.unexpand()
             event.stopPropagation()
         })

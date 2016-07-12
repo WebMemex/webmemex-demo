@@ -362,6 +362,13 @@ function focusItem(state, {itemId}) {
     return {...state, visibleItems, focussedItem: itemId}
 }
 
+function unfocusItem(state, {itemId}) {
+    if (state.focussedItem === itemId) {
+        state = unfocus(state)
+    }
+    return state
+}
+
 function unfocus(state) {
     let itemId = state.focussedItem
     if (itemId === undefined) {
@@ -392,6 +399,7 @@ export default createReducer(
         [actions.expandItem]: expandItem,
         [actions.unexpand]: unexpand,
         [actions.focusItem]: focusItem,
+        [actions.unfocusItem]: unfocusItem,
         [actions.unfocus]: unfocus,
         [actions.setItemDragged]: setItemDragged,
     },

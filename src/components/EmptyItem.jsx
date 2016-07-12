@@ -17,27 +17,34 @@ let EmptyItem = React.createClass({
         }
         return (
             <form className='emptyItem' onSubmit={submitForm}>
-                <input ref='urlInput' type='text' placeholder='.....'></input>
+                <input
+                    ref='urlInput'
+                    type='text'
+                    placeholder='.....'
+                    onFocus={() => this.props.focus()}
+                    onBlur={() => this.props.blur()}
+                ></input>
             </form>
         )
     },
 
-    // Apply focus upon mount or update if props tell us to
     componentDidMount() {
-        if (this.props.canvasItem.focussed) {
-            this.refs.urlInput.focus()
-        }
+        this.updateBrowserFocus()
     },
     componentDidUpdate(oldProps) {
-        if (!oldProps.canvasItem.focussed
-           && this.props.canvasItem.focussed) {
-               this.refs.urlInput.focus()
-        }
-        else if (oldProps.canvasItem.focussed
-           && !this.props.canvasItem.focussed) {
-            this.refs.urlInput.blur()
-       }
+        this.updateBrowserFocus()
     },
+
+    updateBrowserFocus() {
+        // Make browser state reflect application state.
+        let el = this.refs['urlInput']
+        if (this.props.canvasItem.focussed && document.activeElement !== el) {
+            el.focus()
+        }
+        if (!this.props.canvasItem.focussed && document.activeElement === el) {
+            el.blur()
+        }
+    }
 
 })
 
