@@ -38,7 +38,7 @@ export function getDocWithUrl(state, url) {
 }
 
 export function getDocWithText(state, text) {
-    let docId = _.findKey(state.docs, doc => (doc.text===text))
+    let docId = _.findKey(state.docs, doc => (doc.text && doc.text.toLowerCase()===text.toLowerCase()))
     return docId
 }
 
