@@ -1,3 +1,5 @@
+import { createAction } from 'redux-act'
+
 import canvas from './canvas'
 import storage from './storage'
 import { asUrl, textToHtml } from './utils'
@@ -178,3 +180,23 @@ export function handleDraggedOut({itemId, dir}) {
 
     }
 }
+
+export function updateAutoComplete({value, itemId}) {
+    return function(dispatch, getState) {
+        let suggestions
+        if (value.length < 3)
+            suggestions = []
+        else
+            suggestions = dispatch(chooseAutoCompleteSuggestions({value}))
+        dispatch(setAutoCompleteSuggestions({itemId, suggestions}))
+    }
+}
+
+function chooseAutoCompleteSuggestions({value}) {
+    return function (dispatch, getState) {
+        let suggestions = storage.autoCompleteSearch(getState().storage, {text: value})
+        return suggestions
+    }
+}
+
+export let setAutoCompleteSuggestions = createAction()

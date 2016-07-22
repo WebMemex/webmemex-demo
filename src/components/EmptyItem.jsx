@@ -2,7 +2,8 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import { navigateTo } from '../actions'
+import { navigateTo, updateAutoComplete } from '../actions'
+import { getAutoCompleteSuggestions } from '../selectors'
 
 let EmptyItem = React.createClass({
 
@@ -16,15 +17,28 @@ let EmptyItem = React.createClass({
             }
         }
         return (
-            <form className='emptyItem' onSubmit={submitForm}>
-                <input
-                    ref='urlInput'
-                    type='text'
-                    placeholder='.....'
-                    onFocus={() => this.props.focus()}
-                    onBlur={() => this.props.blur()}
-                ></input>
-            </form>
+            <div className='emptyItem'>
+                <form className='emptyItemForm' onSubmit={submitForm}>
+                    <input
+                        ref='urlInput'
+                        type='text'
+                        placeholder='.....'
+                        onFocus={() => this.props.focus()}
+                        onBlur={() => this.props.blur()}
+                        onChange={(e) => this.props.changed(e.target.value)}
+                    ></input>
+                </form>
+                <ul className='autoCompleteSuggestionList'>
+                    {this.props.suggestions.map(suggestion =>
+                        <li
+                            className='autoCompleteSuggestion'
+                            key={suggestion}
+                            dangerouslySetInnerHTML={{__html: suggestion}}
+                        >
+                        </li>
+                    )}
+                </ul>
+            </div>
         )
     },
 
@@ -49,13 +63,16 @@ let EmptyItem = React.createClass({
 })
 
 
-function mapStateToProps(state) {
+function mapStateToProps(state, {canvasItemId}) {
+    let suggestions = getAutoCompleteSuggestions(state, canvasItemId)
     return {
+        suggestions,
     }
 }
 
 function mapDispatchToProps(dispatch, {canvasItemId}) {
     return bindActionCreators({
+        changed: value => updateAutoComplete({itemId: canvasItemId, value}),
         submitForm: userInput => navigateTo({userInput, itemId: canvasItemId})
     }, dispatch)
 }

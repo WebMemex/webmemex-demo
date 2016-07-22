@@ -60,12 +60,12 @@ svg#edges {
     z-index: 1;
 }
 
-.emptyItem {
+.emptyItemForm {
     display: flex;
     margin-top: 10px;
 }
 
-.emptyItem > input[type=text] {
+.emptyItemForm > input[type=text] {
     flex-grow: 0.7;
     border: 0px;
     outline: none;
@@ -73,6 +73,8 @@ svg#edges {
     font-family: mono;
 }
 
+.emptyItem .autoCompleteSuggestion {
+}
 
 .note {
     background-color: #FFD;

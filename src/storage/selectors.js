@@ -47,3 +47,55 @@ export function getDocWithText(state, text) {
 export function readGeneratedId(action) {
     return action.meta.generatedId
 }
+
+export function autoCompleteSearch(state, {text, maxSuggestions=5}) {
+    let lowText = text.toLowerCase()
+    let words = lowText.split(' ')
+    let stripUrl = url => url.replace('http://', '').replace('https://','')
+    let strippedUrl = stripUrl(lowText)
+
+    let urlStartsWith = url => (
+        stripUrl(url).startsWith(strippedUrl)
+    )
+    let urlContains = url => (
+        url.indexOf(lowText) > -1
+    )
+    let urlContainsAllWords = url => (
+        words.every(word => url.toLowerCase().indexOf(word) > -1)
+    )
+    let caseSensitiveStartsWith = docText => (
+        docText.startsWith(text)
+    )
+    let caseInsensitiveStartsWith = docText => (
+        docText.toLowerCase().startsWith(lowText)
+    )
+    let containsWholeText = docText => (
+        docText.toLowerCase().indexOf(lowText) > -1
+    )
+    let constainsAllWords = docText => (
+        words.every(word => docText.toLowerCase().indexOf(word) > -1)
+    )
+
+    let urlMatchers = [
+        urlStartsWith,
+        urlContains,
+        urlContainsAllWords,
+    ]
+    let textMatchers = [
+        caseSensitiveStartsWith,
+        caseInsensitiveStartsWith,
+        containsWholeText,
+        constainsAllWords,
+    ]
+    let suggestions = []
+    for (let i=0; i<urlMatchers.length && suggestions.length < maxSuggestions; i++) {
+        let matches = _(state.docs).map(doc=>doc.url).filter().filter(urlMatchers[i]).value()
+        suggestions = _.uniq(suggestions.concat(matches))
+    }
+    for (let i=0; i<textMatchers.length && suggestions.length < maxSuggestions; i++) {
+        let matches = _(state.docs).map(doc=>doc.text).filter().filter(textMatchers[i]).value()
+        suggestions = _.uniq(suggestions.concat(matches))
+    }
+    suggestions.slice(maxSuggestions)
+    return suggestions
+}
