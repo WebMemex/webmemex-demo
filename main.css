@@ -52,7 +52,6 @@ svg#edges {
     border-radius: 10px;
     background-color: white;
     position: absolute;
-    overflow: hidden;
     box-shadow: 3px 3px 10px #888;
 }
 
@@ -60,21 +59,65 @@ svg#edges {
     z-index: 1;
 }
 
-.emptyItem {
-    display: flex;
-    margin-top: 10px;
+.emptyItemForm {
+    margin-top: 15px;
 }
 
-.emptyItem > input[type=text] {
-    flex-grow: 0.7;
-    border: 0px;
+.emptyItemForm .emptyItemInput {
+    width: 90%;
+    margin-left: 5%;
+    box-sizing: border-box;
+    border: none;
     outline: none;
-    padding: 5px 5px 5px 10px;
     font-family: mono;
 }
 
+.emptyItemForm ul.react-autosuggest__suggestions-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    list-style: none;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion {
+    margin-top: 1px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    box-shadow: 3px 3px 10px #888;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion:last-child {
+    border-radius: 0 0 7px 7px;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion--focused {
+    background-color: #eef;
+    border: 1px solid #99f;
+}
+
+.autosuggestion {
+    padding: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.autosuggestion_note {
+    background-color: #ffd;
+    font-family: Grundschrift, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion--focused .autosuggestion_note {
+    background-color: #ff6;
+}
+
+.autosuggestion_url {
+    font-family: monospace;
+}
 
 .note {
+    overflow: hidden;
     background-color: #FFD;
     width: 100%;
     height: 100%;
@@ -89,8 +132,8 @@ svg#edges {
 }
 
 .webpage-iframe-wrapper-container {
-    position:'relative';
-    overflow: 'hidden';
+    position: relative;
+    overflow: hidden;
 }
 
 .webpage-iframe-scaling-container {

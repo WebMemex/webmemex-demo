@@ -1,30 +1,55 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import Autosuggest from 'react-autosuggest'
 
-import { navigateTo } from '../actions'
+import { navigateTo, updateAutoSuggest, setEmptyItemValue } from '../actions'
+import { getEmptyItemState, getAutoSuggestSuggestions } from '../selectors'
 
 let EmptyItem = React.createClass({
 
     render() {
         const submitForm = event => {
             event.preventDefault()
-            let value = this.refs['urlInput'].value.trim()
-            this.refs['urlInput'].value = ''
-            if (value) {
-                this.props.submitForm(value)
+            let inputValue = this.props.inputValue.trim()
+            if (inputValue) {
+                this.props.submitForm(inputValue)
             }
         }
+
+        const inputProps = {
+            value: this.props.inputValue,
+            type: 'text',
+            placeholder: '.....',
+            className: 'emptyItemInput',
+            onFocus: () => this.props.focus(),
+            onBlur: () => this.props.blur(),
+            onChange: (e, {newValue}) => this.props.changed(newValue),
+        }
+        const suggestions = this.props.suggestions
+        const renderSuggestion = suggestion => {
+            let html = suggestion.inputValueCompletion
+            let classes = `autosuggestion autosuggestion_${suggestion.type}`
+            return <div className={classes} dangerouslySetInnerHTML={{__html: html}} />
+        }
+        const getSuggestionValue = s => s.inputValueCompletion
+        const onSuggestionSelected = (event, {suggestion}) => {
+            event.preventDefault()
+            this.props.pickSuggestion(suggestion.docId)
+        }
         return (
-            <form className='emptyItem' onSubmit={submitForm}>
-                <input
-                    ref='urlInput'
-                    type='text'
-                    placeholder='.....'
-                    onFocus={() => this.props.focus()}
-                    onBlur={() => this.props.blur()}
-                ></input>
-            </form>
+            <div className='emptyItem'>
+                <form ref='form' className='emptyItemForm' onSubmit={submitForm}>
+                    <Autosuggest
+                        suggestions={suggestions}
+                        onSuggestionsUpdateRequested={this.props.updateAutoSuggest}
+                        onSuggestionSelected={onSuggestionSelected}
+                        getSuggestionValue={getSuggestionValue}
+                        renderSuggestion={renderSuggestion}
+                        inputProps={inputProps}
+                    />
+                </form>
+            </div>
         )
     },
 
@@ -37,7 +62,7 @@ let EmptyItem = React.createClass({
 
     updateBrowserFocus() {
         // Make browser state reflect application state.
-        let el = this.refs['urlInput']
+        let el = this.refs['form'].getElementsByClassName('emptyItemInput')[0]
         if (this.props.focussed && document.activeElement !== el) {
             el.focus()
         }
@@ -49,15 +74,33 @@ let EmptyItem = React.createClass({
 })
 
 
-function mapStateToProps(state) {
+function mapStateToProps(state, {canvasItemId}) {
+    let itemState = getEmptyItemState(state, canvasItemId)
+    let inputValue = itemState !== undefined ? itemState.inputValue : ''
+    let suggestions = itemState !== undefined
+        ? getAutoSuggestSuggestions(state, itemState.inputValueForSuggestions)
+        : []
     return {
+        suggestions,
+        inputValue
     }
 }
 
 function mapDispatchToProps(dispatch, {canvasItemId}) {
-    return bindActionCreators({
-        submitForm: userInput => navigateTo({userInput, itemId: canvasItemId})
-    }, dispatch)
+    return {
+        submitForm: userInput => {
+            dispatch(setEmptyItemValue({inputValue: '', itemId: canvasItemId}))
+            dispatch(navigateTo({userInput, itemId: canvasItemId}))
+        },
+        pickSuggestion: docId => {
+            dispatch(setEmptyItemValue({inputValue: '', itemId: canvasItemId}))
+            dispatch(navigateTo({docId, itemId: canvasItemId}))
+        },
+        ...bindActionCreators({
+            changed: inputValue => setEmptyItemValue({inputValue, itemId: canvasItemId}),
+            updateAutoSuggest: () => updateAutoSuggest({itemId: canvasItemId})
+        }, dispatch)
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmptyItem)

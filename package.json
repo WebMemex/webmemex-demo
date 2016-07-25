@@ -17,6 +17,7 @@
     "lodash": "^4.11.1",
     "pouchdb": "^5.3.1",
     "react": "^0.14.8",
+    "react-autosuggest": "^3.8.0",
     "react-contenteditable": "git://github.com/Treora/react-contenteditable#userIsKing",
     "react-dom": "^0.14.8",
     "react-motion": "^0.4.3",

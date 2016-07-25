@@ -47,3 +47,63 @@ export function getDocWithText(state, text) {
 export function readGeneratedId(action) {
     return action.meta.generatedId
 }
+
+export function autoSuggestSearch(state, {inputValue, maxSuggestions=5}) {
+    let lowText = inputValue.toLowerCase()
+    let words = lowText.split(' ')
+    let stripUrl = url => url.replace('http://', '').replace('https://','')
+    let strippedUrl = stripUrl(lowText)
+
+    let urlStartsWith = url => (
+        stripUrl(url).startsWith(strippedUrl)
+    )
+    let urlContains = url => (
+        url.indexOf(lowText) > -1
+    )
+    let urlContainsAllWords = url => (
+        words.every(word => url.toLowerCase().indexOf(word) > -1)
+    )
+    let caseSensitiveStartsWith = docText => (
+        docText.startsWith(inputValue)
+    )
+    let caseInsensitiveStartsWith = docText => (
+        docText.toLowerCase().startsWith(lowText)
+    )
+    let containsWholeText = docText => (
+        docText.toLowerCase().indexOf(lowText) > -1
+    )
+    let constainsAllWords = docText => (
+        words.every(word => docText.toLowerCase().indexOf(word) > -1)
+    )
+
+    let urlMatchers = [
+        urlStartsWith,
+        urlContains,
+        urlContainsAllWords,
+    ]
+    let textMatchers = [
+        caseSensitiveStartsWith,
+        caseInsensitiveStartsWith,
+        containsWholeText,
+        constainsAllWords,
+    ]
+    let suggestions = []
+    for (let i=0; i<urlMatchers.length && suggestions.length < maxSuggestions; i++) {
+        let matches = _(state.docs)
+            .pickBy(doc=>doc.url)
+            .pickBy(doc=>urlMatchers[i](doc.url))
+            .map((doc, docId) => ({docId, type: 'url', inputValueCompletion: doc.url}))
+            .value()
+        suggestions = _.uniqBy(suggestions.concat(matches), s=>s.docId)
+    }
+    for (let i=0; i<textMatchers.length && suggestions.length < maxSuggestions; i++) {
+        let matches = _(state.docs)
+            .pickBy(doc=>doc.text)
+            .pickBy(doc=>textMatchers[i](doc.text))
+            .map((doc, docId) => ({docId, type: 'note', inputValueCompletion: doc.text}))
+            .value()
+        suggestions = _.uniqBy(suggestions.concat(matches), s=>s.docId)
+    }
+    suggestions.splice(maxSuggestions)
+    return suggestions
+}

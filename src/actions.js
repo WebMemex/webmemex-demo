@@ -1,5 +1,8 @@
+import { createAction } from 'redux-act'
+
 import canvas from './canvas'
 import storage from './storage'
+import { getEmptyItemState } from './selectors'
 import { asUrl, textToHtml } from './utils'
 
 // Clean the canvas and show an empty item
@@ -45,18 +48,21 @@ export function drawStar({docId, itemId}) {
     }
 }
 
-export function navigateTo({itemId, userInput}) {
+// Pass either docId or userInput
+export function navigateTo({itemId, docId, userInput}) {
     return function (dispatch, getState) {
-        dispatch(populateEmptyItem({itemId, userInput}))
+        dispatch(populateEmptyItem({itemId, docId, userInput}))
         dispatch(drawStar({itemId}))
         dispatch(canvas.focusItem({itemId}))
     }
 }
 
-function populateEmptyItem({itemId, userInput}) {
+function populateEmptyItem({itemId, docId, userInput}) {
     return function (dispatch, getState) {
-        // Find or create the entered webpage/note
-        let docId = dispatch(findOrCreateDoc({userInput}))
+        if (docId===undefined) {
+            // Find or create the entered webpage/note
+            docId = dispatch(findOrCreateDoc({userInput}))
+        }
         // Show the document in the given item
         dispatch(canvas.changeDoc({itemId, docId}))
         // Link the new doc to any items it has edges to
@@ -178,3 +184,19 @@ export function handleDraggedOut({itemId, dir}) {
 
     }
 }
+
+export function updateAutoSuggest({itemId}) {
+    return function(dispatch, getState) {
+        // Tell UI to show suggestions for the current input
+        dispatch(updateEmptyItemSuggestions({itemId}))
+        // Let store search for suggestions
+        let inputValue = getEmptyItemState(getState(), itemId).inputValue
+        let suggestions = storage.autoSuggestSearch(getState().storage, {inputValue})
+        // Update list of suggestions for this user input
+        dispatch(setAutoSuggestSuggestions({inputValue, suggestions}))
+    }
+}
+
+export let setAutoSuggestSuggestions = createAction()
+export let setEmptyItemValue = createAction()
+export let updateEmptyItemSuggestions = createAction()
