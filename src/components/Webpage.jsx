@@ -30,6 +30,8 @@ let Webpage = React.createClass({
                         // scrolling={expanded ? 'auto' : 'no'} // BUG in chromium? Scrollbar does not appear
                         scrolling = 'auto'
                         seamless
+                        referrerpolicy='no-referrer'
+                        sandbox='allow-scripts allow-same-origin'
                     ></iframe>
                     { !expanded ? <div className='webpage-iframe-overlay'></div> : null}
                 </div>
