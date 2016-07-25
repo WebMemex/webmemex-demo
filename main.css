@@ -79,13 +79,9 @@ svg#edges {
 }
 
 .emptyItemForm li.react-autosuggest__suggestion {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding: 5px;
     margin-top: 1px;
     background-color: #fff;
+    border: 1px solid transparent;
     box-shadow: 3px 3px 10px #888;
 }
 
@@ -94,7 +90,30 @@ svg#edges {
 }
 
 .emptyItemForm li.react-autosuggest__suggestion--focused {
-    background-color: #ffe;
+    background-color: #eef;
+    border: 1px solid #99f;
+}
+
+.autosuggestion {
+    padding: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.autosuggestion_note {
+    background-color: #ffd;
+    font-family: Grundschrift, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion--focused .autosuggestion_note {
+    background-color: #ff6;
+}
+
+.autosuggestion_url {
+    font-family: monospace;
 }
 
 .note {

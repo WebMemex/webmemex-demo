@@ -27,13 +27,15 @@ let EmptyItem = React.createClass({
             onChange: (e, {newValue}) => this.props.changed(newValue),
         }
         const suggestions = this.props.suggestions
-        const renderSuggestion = suggestion => (
-            <span dangerouslySetInnerHTML={{__html: suggestion}} />
-        )
-        const getSuggestionValue = s => s
-        const onSuggestionSelected = (event, {suggestionValue}) => {
+        const renderSuggestion = suggestion => {
+            let html = suggestion.inputValueCompletion
+            let classes = `autosuggestion autosuggestion_${suggestion.type}`
+            return <div className={classes} dangerouslySetInnerHTML={{__html: html}} />
+        }
+        const getSuggestionValue = s => s.inputValueCompletion
+        const onSuggestionSelected = (event, {suggestion}) => {
             event.preventDefault()
-            this.props.submitForm(suggestionValue)
+            this.props.pickSuggestion(suggestion.docId)
         }
         return (
             <div className='emptyItem'>
@@ -89,6 +91,10 @@ function mapDispatchToProps(dispatch, {canvasItemId}) {
         submitForm: userInput => {
             dispatch(setEmptyItemValue({inputValue: '', itemId: canvasItemId}))
             dispatch(navigateTo({userInput, itemId: canvasItemId}))
+        },
+        pickSuggestion: docId => {
+            dispatch(setEmptyItemValue({inputValue: '', itemId: canvasItemId}))
+            dispatch(navigateTo({docId, itemId: canvasItemId}))
         },
         ...bindActionCreators({
             changed: inputValue => setEmptyItemValue({inputValue, itemId: canvasItemId}),

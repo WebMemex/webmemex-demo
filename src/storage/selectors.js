@@ -89,12 +89,20 @@ export function autoSuggestSearch(state, {inputValue, maxSuggestions=5}) {
     ]
     let suggestions = []
     for (let i=0; i<urlMatchers.length && suggestions.length < maxSuggestions; i++) {
-        let matches = _(state.docs).map(doc=>doc.url).filter().filter(urlMatchers[i]).value()
-        suggestions = _.uniq(suggestions.concat(matches))
+        let matches = _(state.docs)
+            .pickBy(doc=>doc.url)
+            .pickBy(doc=>urlMatchers[i](doc.url))
+            .map((doc, docId) => ({docId, type: 'url', inputValueCompletion: doc.url}))
+            .value()
+        suggestions = _.uniqBy(suggestions.concat(matches), s=>s.docId)
     }
     for (let i=0; i<textMatchers.length && suggestions.length < maxSuggestions; i++) {
-        let matches = _(state.docs).map(doc=>doc.text).filter().filter(textMatchers[i]).value()
-        suggestions = _.uniq(suggestions.concat(matches))
+        let matches = _(state.docs)
+            .pickBy(doc=>doc.text)
+            .pickBy(doc=>textMatchers[i](doc.text))
+            .map((doc, docId) => ({docId, type: 'note', inputValueCompletion: doc.text}))
+            .value()
+        suggestions = _.uniqBy(suggestions.concat(matches), s=>s.docId)
     }
     suggestions.splice(maxSuggestions)
     return suggestions

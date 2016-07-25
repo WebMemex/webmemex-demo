@@ -48,18 +48,21 @@ export function drawStar({docId, itemId}) {
     }
 }
 
-export function navigateTo({itemId, userInput}) {
+// Pass either docId or userInput
+export function navigateTo({itemId, docId, userInput}) {
     return function (dispatch, getState) {
-        dispatch(populateEmptyItem({itemId, userInput}))
+        dispatch(populateEmptyItem({itemId, docId, userInput}))
         dispatch(drawStar({itemId}))
         dispatch(canvas.focusItem({itemId}))
     }
 }
 
-function populateEmptyItem({itemId, userInput}) {
+function populateEmptyItem({itemId, docId, userInput}) {
     return function (dispatch, getState) {
-        // Find or create the entered webpage/note
-        let docId = dispatch(findOrCreateDoc({userInput}))
+        if (docId===undefined) {
+            // Find or create the entered webpage/note
+            docId = dispatch(findOrCreateDoc({userInput}))
+        }
         // Show the document in the given item
         dispatch(canvas.changeDoc({itemId, docId}))
         // Link the new doc to any items it has edges to
