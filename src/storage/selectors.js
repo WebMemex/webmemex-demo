@@ -48,8 +48,8 @@ export function readGeneratedId(action) {
     return action.meta.generatedId
 }
 
-export function autoCompleteSearch(state, {text, maxSuggestions=5}) {
-    let lowText = text.toLowerCase()
+export function autoSuggestSearch(state, {inputValue, maxSuggestions=5}) {
+    let lowText = inputValue.toLowerCase()
     let words = lowText.split(' ')
     let stripUrl = url => url.replace('http://', '').replace('https://','')
     let strippedUrl = stripUrl(lowText)
@@ -64,7 +64,7 @@ export function autoCompleteSearch(state, {text, maxSuggestions=5}) {
         words.every(word => url.toLowerCase().indexOf(word) > -1)
     )
     let caseSensitiveStartsWith = docText => (
-        docText.startsWith(text)
+        docText.startsWith(inputValue)
     )
     let caseInsensitiveStartsWith = docText => (
         docText.toLowerCase().startsWith(lowText)
@@ -96,6 +96,6 @@ export function autoCompleteSearch(state, {text, maxSuggestions=5}) {
         let matches = _(state.docs).map(doc=>doc.text).filter().filter(textMatchers[i]).value()
         suggestions = _.uniq(suggestions.concat(matches))
     }
-    suggestions.slice(maxSuggestions)
+    suggestions.splice(maxSuggestions)
     return suggestions
 }

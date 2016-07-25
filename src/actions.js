@@ -2,6 +2,7 @@ import { createAction } from 'redux-act'
 
 import canvas from './canvas'
 import storage from './storage'
+import { getEmptyItemState } from './selectors'
 import { asUrl, textToHtml } from './utils'
 
 // Clean the canvas and show an empty item
@@ -181,22 +182,18 @@ export function handleDraggedOut({itemId, dir}) {
     }
 }
 
-export function updateAutoComplete({value, itemId}) {
+export function updateAutoSuggest({itemId}) {
     return function(dispatch, getState) {
-        let suggestions
-        if (value.length < 3)
-            suggestions = []
-        else
-            suggestions = dispatch(chooseAutoCompleteSuggestions({value}))
-        dispatch(setAutoCompleteSuggestions({itemId, suggestions}))
+        // Tell UI to show suggestions for the current input
+        dispatch(updateEmptyItemSuggestions({itemId}))
+        // Let store search for suggestions
+        let inputValue = getEmptyItemState(getState(), itemId).inputValue
+        let suggestions = storage.autoSuggestSearch(getState().storage, {inputValue})
+        // Update list of suggestions for this user input
+        dispatch(setAutoSuggestSuggestions({inputValue, suggestions}))
     }
 }
 
-function chooseAutoCompleteSuggestions({value}) {
-    return function (dispatch, getState) {
-        let suggestions = storage.autoCompleteSearch(getState().storage, {text: value})
-        return suggestions
-    }
-}
-
-export let setAutoCompleteSuggestions = createAction()
+export let setAutoSuggestSuggestions = createAction()
+export let setEmptyItemValue = createAction()
+export let updateEmptyItemSuggestions = createAction()

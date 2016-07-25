@@ -1,7 +1,12 @@
-export function getAutoCompleteSuggestions(state, itemId) {
-    let autoCompletion = state.volatile.autoCompletions[itemId]
-    if (autoCompletion) {
-        return autoCompletion.suggestions
+export function getEmptyItemState(state, itemId) {
+    let itemState = state.volatile.emptyItems[itemId]
+    return itemState
+}
+
+export function getAutoSuggestSuggestions(state, inputValue) {
+    let autoSuggestion = state.volatile.autoSuggestions[inputValue]
+    if (autoSuggestion) {
+        return autoSuggestion.suggestions
     }
     return []
 }

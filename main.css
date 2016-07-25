@@ -52,7 +52,6 @@ svg#edges {
     border-radius: 10px;
     background-color: white;
     position: absolute;
-    overflow: hidden;
     box-shadow: 3px 3px 10px #888;
 }
 
@@ -61,22 +60,45 @@ svg#edges {
 }
 
 .emptyItemForm {
-    display: flex;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
-.emptyItemForm > input[type=text] {
-    flex-grow: 0.7;
-    border: 0px;
+.emptyItemForm .emptyItemInput {
+    width: 90%;
+    margin-left: 5%;
+    box-sizing: border-box;
+    border: none;
     outline: none;
-    padding: 5px 5px 5px 10px;
     font-family: mono;
 }
 
-.emptyItem .autoCompleteSuggestion {
+.emptyItemForm ul.react-autosuggest__suggestions-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    list-style: none;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 5px;
+    margin-top: 1px;
+    background-color: #fff;
+    box-shadow: 3px 3px 10px #888;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion:last-child {
+    border-radius: 0 0 7px 7px;
+}
+
+.emptyItemForm li.react-autosuggest__suggestion--focused {
+    background-color: #ffe;
 }
 
 .note {
+    overflow: hidden;
     background-color: #FFD;
     width: 100%;
     height: 100%;
@@ -91,8 +113,8 @@ svg#edges {
 }
 
 .webpage-iframe-wrapper-container {
-    position:'relative';
-    overflow: 'hidden';
+    position: relative;
+    overflow: hidden;
 }
 
 .webpage-iframe-scaling-container {
