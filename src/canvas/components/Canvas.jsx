@@ -5,7 +5,7 @@ import interact from 'interact.js'
 
 import AnimatedItemContainer from './AnimatedItemContainer'
 import Edge from './Edge'
-import { updateWindowSize, unexpand, unfocus, signalDropOnCanvas } from '../actions'
+import * as actions from '../actions'
 
 let Canvas = React.createClass({
 
@@ -21,6 +21,7 @@ let Canvas = React.createClass({
 
         interact(this.refs['canvas']).on('tap', event => {
             this.props.unexpand()
+            this.props.handleTap({x: event.pageX, y: event.pageY})
             event.stopPropagation()
         })
 
@@ -72,19 +73,20 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    let dispatchUpdateWindowSize = () => dispatch(updateWindowSize({
+    let dispatchUpdateWindowSize = () => dispatch(actions.updateWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
     }))
 
-    let dispatchUnexpand = () => dispatch(unexpand({animate: true}))
+    let dispatchUnexpand = () => dispatch(actions.unexpand({animate: true}))
 
     return {
         updateWindowSize: dispatchUpdateWindowSize,
         unexpand: dispatchUnexpand,
         ...bindActionCreators({
-            unfocus,
-            handleDrop: signalDropOnCanvas,
+            unfocus: actions.unfocus,
+            handleDrop: actions.signalDropOnCanvas,
+            handleTap: actions.signalCanvasTapped,
         }, dispatch)
     }
 }

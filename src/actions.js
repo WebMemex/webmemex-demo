@@ -137,7 +137,22 @@ export function handleDropOnCanvas({x, y, event}) {
     }
 }
 
-export function handleTap({itemId}) {
+export function handleTapCanvas({x, y}) {
+    return function (dispatch, getState) {
+        let width = 300
+        let height = 50
+        let props = {
+            x: x-width/2,
+            y: y-height/2,
+            width,
+            height,
+        }
+        let itemId = dispatch(canvas.createItem({docId: 'emptyItem', props}))
+        dispatch(canvas.focusItem({itemId}))
+    }
+}
+
+export function handleTapItem({itemId}) {
     return function (dispatch, getState) {
         // Focus on the item
         dispatch(canvas.focusItem({itemId}))
