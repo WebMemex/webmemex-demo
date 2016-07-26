@@ -274,6 +274,26 @@ function resizeItem(state, {itemId, width, height, dwidth, dheight, animate}) {
     return {...state, visibleItems: {...state.visibleItems, [itemId]: newItem}}
 }
 
+function setItemRatio(state, {itemId, ratio, keepFixed, animate}) {
+    let item = getItem(state, itemId)
+    let width = item.width
+    let height = item.height
+    if (keepFixed===undefined) {
+        // Keep surface area constant
+        let area = item.width * item.height
+        width = Math.sqrt(area * ratio)
+        height = width / ratio
+    }
+    else if (keepFixed==='height') {
+        width = item.height * ratio
+    }
+    else if (keepFixed==='width') {
+        height = item.width / ratio
+    }
+
+    return resizeItem(state, {itemId, width, height, animate})
+}
+
 function scaleItem(state, {itemId, dscale, origin, animate}) {
     let item = getItem(state, itemId)
     let oldWidth = item.width
@@ -378,6 +398,7 @@ export default createReducer(
         [actions.updateWindowSize]: updateWindowSize,
         [actions.relocateItem]: relocateItem,
         [actions.resizeItem]: resizeItem,
+        [actions.setItemRatio]: setItemRatio,
         [actions.scaleItem]: scaleItem,
         [actions.expandItem]: expandItem,
         [actions.unexpand]: unexpand,

@@ -34,6 +34,7 @@ export let updateWindowSize = createActionWithMetaArgs({
 })
 export let relocateItem = createAction()
 export let resizeItem = createAction()
+export let setItemRatio = createAction()
 export let scaleItem = createAction()
 export let expandItem = createActionWithMetaArgs({
     currentView: getCurrentView,

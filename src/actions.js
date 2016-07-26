@@ -52,7 +52,11 @@ export function drawStar({docId, itemId}) {
 export function navigateTo({itemId, docId, userInput}) {
     return function (dispatch, getState) {
         dispatch(populateEmptyItem({itemId, docId, userInput}))
-        dispatch(drawStar({itemId}))
+        if (canvas.getItem(getState().canvas, itemId).centered)
+            dispatch(drawStar({itemId}))
+        else {
+            dispatch(canvas.setItemRatio({itemId, ratio: 4/3, keepFixed: 'width', animate: true}))
+        }
         dispatch(canvas.focusItem({itemId}))
     }
 }
