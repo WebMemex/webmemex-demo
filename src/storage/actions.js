@@ -59,6 +59,7 @@ export let addLink = createActionWithMetaArgs({
     generatedId: generateIdentifier,
 })
 export let deleteLink = createAction()
+export let importFromDump = createAction()
 
 
 function generateIdentifier() {

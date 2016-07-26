@@ -26,3 +26,5 @@ import storage from './storage'
 window.storage=storage
 import canvas from './canvas'
 window.canvas=canvas
+
+import './backuptools'

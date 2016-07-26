@@ -65,6 +65,16 @@ function deleteLink(state, {linkId, doc1, doc2}) {
     return {...state, links}
 }
 
+function importFromDump(state, {storageDump, deleteCurrent=false}) {
+    if (deleteCurrent===true) {
+        return storageDump
+    }
+    else {
+        let stateCopy = _.cloneDeep(state) // Because _.merge mutates it.
+        return _.merge(stateCopy, storageDump)
+    }
+}
+
 let reducer = createReducer(
     {
         [actions.addUrl]: addUrl,
@@ -73,6 +83,7 @@ let reducer = createReducer(
         [actions.deleteDoc]: deleteDoc,
         [actions.addLink]: addLink,
         [actions.deleteLink]: deleteLink,
+        [actions.importFromDump]: importFromDump,
     },
     defaultState
 )
