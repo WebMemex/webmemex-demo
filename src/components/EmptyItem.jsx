@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Autosuggest from 'react-autosuggest'
 
-import { navigateTo, updateAutoSuggest, setEmptyItemValue } from '../actions'
+import * as actions from '../actions'
 import { getEmptyItemState, getAutoSuggestSuggestions } from '../selectors'
 
 let EmptyItem = React.createClass({
@@ -23,7 +23,11 @@ let EmptyItem = React.createClass({
             placeholder: '.....',
             className: 'emptyItemInput',
             onFocus: () => this.props.focus(),
-            onBlur: () => this.props.blur(),
+            onBlur: () => {
+                this.props.blur()
+                if (this.props.hideOnBlur)
+                    this.props.hide()
+            },
             onChange: (e, {newValue}) => this.props.changed(newValue),
         }
         const suggestions = this.props.suggestions
@@ -55,6 +59,12 @@ let EmptyItem = React.createClass({
 
     componentDidMount() {
         this.updateBrowserFocus()
+        let el = this.refs['form'].getElementsByClassName('emptyItemInput')[0]
+        el.addEventListener('keydown', (event)=>{
+            if (event.keyCode==27) {
+                el.blur();
+            }
+        })
     },
     componentDidUpdate(oldProps) {
         this.updateBrowserFocus()
@@ -76,29 +86,43 @@ let EmptyItem = React.createClass({
 
 function mapStateToProps(state, {canvasItemId}) {
     let itemState = getEmptyItemState(state, canvasItemId)
-    let inputValue = itemState !== undefined ? itemState.inputValue : ''
+    let inputValue = itemState !== undefined ? itemState.inputValue || '' : ''
     let suggestions = itemState !== undefined
         ? getAutoSuggestSuggestions(state, itemState.inputValueForSuggestions)
         : []
     return {
         suggestions,
-        inputValue
+        inputValue,
+        hideOnBlur: itemState && itemState.hideOnBlur,
     }
 }
 
 function mapDispatchToProps(dispatch, {canvasItemId}) {
     return {
         submitForm: userInput => {
-            dispatch(setEmptyItemValue({inputValue: '', itemId: canvasItemId}))
-            dispatch(navigateTo({userInput, itemId: canvasItemId}))
+            dispatch(actions.setEmptyItemState({
+                itemId: canvasItemId,
+                props: {inputValue: ''},
+            }))
+            dispatch(actions.navigateTo({userInput, itemId: canvasItemId}))
         },
         pickSuggestion: docId => {
-            dispatch(setEmptyItemValue({inputValue: '', itemId: canvasItemId}))
-            dispatch(navigateTo({docId, itemId: canvasItemId}))
+            dispatch(actions.setEmptyItemState({
+                itemId: canvasItemId,
+                props: {inputValue: ''},
+            }))
+            dispatch(actions.navigateTo({docId, itemId: canvasItemId}))
+        },
+        hide: () => {
+            dispatch(canvas.hideItem({itemId: canvasItemId}))
+            dispatch(actions.setEmptyItemState({itemId: canvasItemId, props: {inputValue: undefined, inputValueForSuggestions: undefined, hideOnBlur: undefined}}))
         },
         ...bindActionCreators({
-            changed: inputValue => setEmptyItemValue({inputValue, itemId: canvasItemId}),
-            updateAutoSuggest: () => updateAutoSuggest({itemId: canvasItemId})
+            changed: inputValue => actions.setEmptyItemState({
+                itemId: canvasItemId,
+                props: {inputValue}
+            }),
+            updateAutoSuggest: () => actions.updateAutoSuggest({itemId: canvasItemId}),
         }, dispatch)
     }
 }

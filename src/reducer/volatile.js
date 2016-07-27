@@ -16,8 +16,8 @@ let defaultState = {
 // 'manually entered' input value in inputValueForSuggestions. We then look up
 // this value in state.autoSuggestions, which acts as a cache for search results.
 
-function setEmptyItemValue(state, {itemId, inputValue}) {
-    let item = {...state.emptyItems[itemId], inputValue}
+function setEmptyItemState(state, {itemId, props}) {
+    let item = {...state.emptyItems[itemId], ...props}
     let emptyItems = {...state.emptyItems, [itemId]: item}
     return {...state, emptyItems}
 }
@@ -39,7 +39,7 @@ function setAutoSuggestSuggestions(state, {itemId, inputValue, suggestions}) {
 let reducer = createReducer(
     {
         [actions.setAutoSuggestSuggestions]: setAutoSuggestSuggestions,
-        [actions.setEmptyItemValue]: setEmptyItemValue,
+        [actions.setEmptyItemState]: setEmptyItemState,
         [actions.updateEmptyItemSuggestions]: updateEmptyItemSuggestions,
     },
     defaultState

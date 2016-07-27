@@ -20,8 +20,10 @@ let Canvas = React.createClass({
         })
 
         interact(this.refs['canvas']).on('tap', event => {
-            this.props.unexpand()
-            this.props.handleTap({x: event.pageX, y: event.pageY})
+            if (this.props.expandedItem)
+                this.props.unexpand()
+            else
+                this.props.handleTap({x: event.pageX, y: event.pageY})
             event.stopPropagation()
         })
 
@@ -69,6 +71,7 @@ function mapStateToProps(state) {
         canvasSize: state.canvasSize,
         visibleItems: state.visibleItems,
         edges: state.edges,
+        expandedItem: state.expandedItem
     }
 }
 

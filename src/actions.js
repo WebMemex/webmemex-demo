@@ -15,6 +15,7 @@ export function initCanvas() {
         {
             let props = {x: 100, y: 100, width: 400, height: 50}
             let itemId = dispatch(canvas.createItem({docId: 'emptyItem', props}))
+            dispatch(setEmptyItemState({itemId, props: {}}))
             dispatch(canvas.centerItem({itemId}))
             dispatch(canvas.focusItem({itemId}))
         }
@@ -153,6 +154,12 @@ export function handleTapCanvas({x, y}) {
         }
         let itemId = dispatch(canvas.createItem({docId: 'emptyItem', props}))
         dispatch(canvas.focusItem({itemId}))
+        dispatch(setEmptyItemState({
+            itemId,
+            props: {
+                hideOnBlur: true,
+            }
+        }))
     }
 }
 
@@ -217,5 +224,5 @@ export function updateAutoSuggest({itemId}) {
 }
 
 export let setAutoSuggestSuggestions = createAction()
-export let setEmptyItemValue = createAction()
+export let setEmptyItemState = createAction()
 export let updateEmptyItemSuggestions = createAction()
