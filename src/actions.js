@@ -59,9 +59,9 @@ export function navigateFromLink({url}) {
         if (expandedItem) {
             let expandedDocId = canvas.getItem(getState().canvas, expandedItem).docId
             dispatch(canvas.unexpand({animate: true}))
-            dispatch(storage.addLink({
+            dispatch(storage.findOrAddLink({
                 source: expandedDocId,
-                target: docId
+                target: docId,
             }))
         }
         dispatch(drawStar({itemId}))
