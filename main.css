@@ -116,6 +116,11 @@ svg#edges {
     font-family: monospace;
 }
 
+.autosuggestion_websearch::before {
+    padding-right: 5px;
+    content: url('https://duckduckgo.com/favicon.png')
+}
+
 .note {
     overflow: hidden;
     border-radius: 10px;

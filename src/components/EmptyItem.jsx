@@ -30,7 +30,12 @@ let EmptyItem = React.createClass({
             },
             onChange: (e, {newValue}) => this.props.changed(newValue),
         }
-        const suggestions = this.props.suggestions
+        let searchSuggestion = {
+            type: 'websearch',
+            webSearchQuery: this.props.inputValueForSuggestions,
+            inputValueCompletion: this.props.inputValueForSuggestions,
+        }
+        const suggestions = this.props.suggestions.concat(searchSuggestion)
         const renderSuggestion = suggestion => {
             let html = suggestion.inputValueCompletion
             let classes = `autosuggestion autosuggestion_${suggestion.type}`
@@ -39,7 +44,7 @@ let EmptyItem = React.createClass({
         const getSuggestionValue = s => s.inputValueCompletion
         const onSuggestionSelected = (event, {suggestion}) => {
             event.preventDefault()
-            this.props.pickSuggestion(suggestion.docId)
+            this.props.pickSuggestion(suggestion)
         }
         return (
             <div className='emptyItem'>
@@ -87,6 +92,7 @@ let EmptyItem = React.createClass({
 function mapStateToProps(state, {canvasItemId}) {
     let itemState = getEmptyItemState(state, canvasItemId)
     let inputValue = itemState !== undefined ? itemState.inputValue || '' : ''
+    let inputValueForSuggestions = itemState !== undefined ? itemState.inputValueForSuggestions : ''
     let suggestions = itemState !== undefined
         ? getAutoSuggestSuggestions(state, itemState.inputValueForSuggestions)
         : []
@@ -94,6 +100,7 @@ function mapStateToProps(state, {canvasItemId}) {
         suggestions,
         inputValue,
         hideOnBlur: itemState && itemState.hideOnBlur,
+        inputValueForSuggestions,
     }
 }
 
@@ -106,12 +113,18 @@ function mapDispatchToProps(dispatch, {canvasItemId}) {
             }))
             dispatch(actions.navigateTo({userInput, itemId: canvasItemId}))
         },
-        pickSuggestion: docId => {
+        pickSuggestion: suggestion => {
             dispatch(actions.setEmptyItemState({
                 itemId: canvasItemId,
                 props: {inputValue: ''},
             }))
-            dispatch(actions.navigateTo({docId, itemId: canvasItemId}))
+            if (suggestion.docId)
+                dispatch(actions.navigateTo({docId: suggestion.docId, itemId: canvasItemId}))
+            else if (suggestion.webSearchQuery) {
+                let url = 'https://duckduckgo.com/?kak=-1&k1=-1&kp=-1&kn=1&q='
+                    + window.encodeURIComponent(suggestion.webSearchQuery).replace(/(%20)+/g, '+')
+                dispatch(actions.navigateTo({userInput: url, itemId: canvasItemId}))
+            }
         },
         hide: () => {
             dispatch(canvas.hideItem({itemId: canvasItemId}))
