@@ -25,7 +25,7 @@ let EmptyItem = React.createClass({
             onFocus: () => this.props.focus(),
             onBlur: () => {
                 this.props.blur()
-                if (this.props.hideOnBlur)
+                if (this.props.hideOnBlur && this.props.inputValue==='')
                     this.props.hide()
             },
             onChange: (e, {newValue}) => this.props.changed(newValue),
