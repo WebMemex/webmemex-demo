@@ -32,7 +32,6 @@ export function drawStar({docId, itemId}) {
             docId = canvas.getItem(state.canvas, itemId).docId
         }
         let {targetDocIds, sourceDocIds} = storage.getFriends(state.storage, docId)
-        targetDocIds.push('emptyItem')
         dispatch(canvas.centerDocWithFriends({docId, itemId, targetDocIds, sourceDocIds, animate: true}))
 
         // Show second level friends
