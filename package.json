@@ -2,10 +2,11 @@
   "name": "webmemex",
   "version": "0.1.0",
   "description": "A read/write web browser",
-  "main": "main.html",
+  "main": "app/index.html",
   "scripts": {
-    "build": "browserify --extension 'jsx' src/main.jsx -o main.js",
-    "watch": "watchify -v --extension 'jsx' src/main.jsx -o main.js",
+    "build-prod": "NODE_ENV=production browserify -g uglifyify --extension 'jsx' src/main.jsx | uglifyjs -m -c warnings=false > app/assets/main.js",
+    "build-dev": "browserify --extension 'jsx' src/main.jsx -o app/assets/main.js",
+    "watch": "watchify -v --extension 'jsx' src/main.jsx -o app/assets/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gerben",
@@ -34,13 +35,15 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-1": "^6.5.0",
     "babelify": "^7.2.0",
+    "envify": "^3.4.1",
+    "uglify-js": "^2.7.3",
+    "uglifyify": "^3.0.3",
     "watchify": "^3.7.0"
   },
   "browserify": {
     "transform": [
-      [
-        "babelify"
-      ]
+      "babelify",
+      "envify"
     ]
   }
 }
