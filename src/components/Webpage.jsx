@@ -26,7 +26,7 @@ let Webpage = React.createClass({
                 <div className='webpage-iframe-scaling-container' style={scalingStyle}>
                     <iframe
                         className='webpage-iframe'
-                        src={this.props.url}
+                        src={'/replay-record/' + this.props.url}
                         // scrolling={expanded ? 'auto' : 'no'} // BUG in chromium? Scrollbar does not appear
                         scrolling = 'auto'
                         seamless
