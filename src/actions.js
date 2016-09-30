@@ -48,6 +48,30 @@ export function drawStar({docId, itemId}) {
     }
 }
 
+export function navigateFromLink({url}) {
+    return function (dispatch, getState) {
+        let docId = dispatch(storage.findOrAddUrl({url}))
+        let width = 200
+        let height = 150
+        let props = {x: 10, y: 10, width, height}
+        let itemId = dispatch(canvas.createItem({docId, props}))
+        let expandedItem = getState().canvas.expandedItem
+        if (expandedItem) {
+            let expandedDocId = canvas.getItem(getState().canvas, expandedItem).docId
+            dispatch(canvas.unexpand({animate: true}))
+            dispatch(storage.findOrAddLink({
+                source: expandedDocId,
+                target: docId,
+            }))
+        }
+        dispatch(drawStar({itemId}))
+        if (expandedItem) {
+            dispatch(canvas.expandItem({itemId}))
+        }
+        dispatch(canvas.focusItem({itemId}))
+    }
+}
+
 // Pass either docId or userInput
 export function navigateTo({itemId, docId, userInput}) {
     return function (dispatch, getState) {
