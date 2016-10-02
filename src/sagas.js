@@ -5,6 +5,7 @@ import { put } from 'redux-saga/effects'
 import canvas from './canvas'
 import * as actions from './actions'
 
+
 // Hook our local action handlers to actions defined in modules
 // (because just like reducers can handle actions, other actions should too)
 const hookedActions = {
@@ -12,6 +13,7 @@ const hookedActions = {
     [canvas.signalItemDraggedOut.getType()]: actions.handleDraggedOut,
     [canvas.signalDropOnCanvas.getType()]: actions.handleDropOnCanvas,
     [canvas.signalCanvasTapped.getType()]: actions.handleTapCanvas,
+    [canvas.signalReceivedDrop.getType()]: actions.handleReceivedDrop,
 }
 
 let sagas = []

@@ -383,6 +383,13 @@ function unfocus(state, {itemId}) {
     return state
 }
 
+function setProps(state, {itemId, props}) {
+    let item = getItem(state, itemId)
+    let newItem = {...item, ...props}
+    let visibleItems = {...state.visibleItems, [itemId]: newItem}
+    return {...state, visibleItems}
+}
+
 
 export default createReducer(
     {
@@ -404,6 +411,7 @@ export default createReducer(
         [actions.unexpand]: unexpand,
         [actions.focusItem]: focusItem,
         [actions.unfocus]: unfocus,
+        [actions.setProps]: setProps,
         [actions.setItemDragged]: setItemDragged,
     },
     defaultState
