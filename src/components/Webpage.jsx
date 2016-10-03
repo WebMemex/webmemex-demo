@@ -21,12 +21,14 @@ let Webpage = React.createClass({
             width: canvasItemWidth / scale,
             transform: 'scale('+scale+')',
         }
+
+        let iframeSrcPrefix = process.env.MEMEX_PROXY_URL_PREFIX || ''
         return (
             <div className='webpage-iframe-wrapper-container' style={wrapperStyle}>
                 <div className='webpage-iframe-scaling-container' style={scalingStyle}>
                     <iframe
                         className='webpage-iframe'
-                        src={'/replay-record/' + this.props.url}
+                        src={iframeSrcPrefix + this.props.url}
                         // scrolling={expanded ? 'auto' : 'no'} // BUG in chromium? Scrollbar does not appear
                         scrolling = 'auto'
                         seamless

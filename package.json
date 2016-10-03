@@ -4,8 +4,8 @@
   "description": "A read/write web browser",
   "main": "app/index.html",
   "scripts": {
-    "build-prod": "NODE_ENV=production browserify -g uglifyify --extension 'jsx' src/main.jsx | uglifyjs -m -c warnings=false > app/assets/main.js",
-    "build-dev": "browserify --extension 'jsx' src/main.jsx -o app/assets/main.js",
+    "build-prod": "NODE_ENV=production MEMEX_PROXY_URL_PREFIX=\"/replay-record/\" browserify -g uglifyify --extension 'jsx' src/main.jsx | uglifyjs -m -c warnings=false > app/assets/main.js",
+    "build-dev": "MEMEX_PROXY_URL_PREFIX=\"http://localhost:8080/replay-record/\" browserify --extension 'jsx' src/main.jsx -o app/assets/main.js",
     "watch": "watchify -v --extension 'jsx' src/main.jsx -o app/assets/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
