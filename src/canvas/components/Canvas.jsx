@@ -27,6 +27,8 @@ let Canvas = React.createClass({
             event.stopPropagation()
         })
 
+        this.refs['canvas'].addEventListener('touchstart', e=>e.preventDefault())
+
         this.enableDrop()
     },
 
