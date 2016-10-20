@@ -45,6 +45,9 @@ function deleteDoc(state, {docId}) {
 }
 
 function addLink(state, {linkId, source, target}, {generatedId}) {
+    // Refuse creating self-links
+    if (source === target)
+        return state
     let newLink = {source, target}
     if (linkId === undefined)
         linkId = ensureUnusedId(state.links, generatedId)
