@@ -14,7 +14,7 @@ export function initCanvas() {
         // Show empty item in center
         {
             let props = {x: 100, y: 100, width: 400, height: 50}
-            let itemId = dispatch(canvas.createItem({docId: 'emptyItem', props}))
+            let itemId = dispatch(canvas.createItem({docId: 'emptyItem_alone', props}))
             dispatch(setEmptyItemState({itemId, props: {}}))
             dispatch(canvas.centerItem({itemId}))
             dispatch(canvas.focusItem({itemId}))
@@ -32,7 +32,8 @@ export function drawStar({docId, itemId}) {
             docId = canvas.getItem(state.canvas, itemId).docId
         }
         let {targetDocIds, sourceDocIds} = storage.getFriends(state.storage, docId)
-        targetDocIds.push('emptyItem')
+        sourceDocIds.push('emptyItem_linkfrom')
+        targetDocIds.push('emptyItem_linkto')
         dispatch(canvas.centerDocWithFriends({docId, itemId, targetDocIds, sourceDocIds, animate: true}))
 
         // Show second level friends
@@ -185,7 +186,7 @@ export function handleTapItem({itemId}) {
         dispatch(canvas.focusItem({itemId}))
 
         let item = canvas.getItem(getState().canvas, itemId)
-        if (item.docId === 'emptyItem')
+        if (item.docId.startsWith('emptyItem'))
             return
         if (item.centered) {
             // Only expand iframe items (TODO make simple type test)

@@ -6,6 +6,12 @@ import Autosuggest from 'react-autosuggest'
 import * as actions from '../actions'
 import { getEmptyItemState, getAutoSuggestSuggestions } from '../selectors'
 
+const placeholders = {
+    'emptyItem_alone': 'Find or add...',
+    'emptyItem_linkto': 'Link to...',
+    'emptyItem_linkfrom': 'Link from...',
+}
+
 let EmptyItem = React.createClass({
 
     render() {
@@ -16,11 +22,11 @@ let EmptyItem = React.createClass({
                 this.props.submitForm(inputValue)
             }
         }
-
+        const placeholder = placeholders[this.props.docId]
         const inputProps = {
             value: this.props.inputValue,
             type: 'text',
-            placeholder: 'Find/add note or webpage..',
+            placeholder,
             className: 'emptyItemInput',
             onFocus: () => this.props.focus(),
             onBlur: () => {

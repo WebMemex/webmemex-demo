@@ -17,7 +17,7 @@ let StemItem = React.createClass({
 
     render() {
         // Return a different component, depending on the document's type
-        if (this.props.docId == 'emptyItem') {
+        if (this.props.docId.startsWith('emptyItem')) {
             return <EmptyItem {...this.props} />
         }
         else if (this.props.text !== undefined)
@@ -34,8 +34,7 @@ let StemItem = React.createClass({
 function mapStateToProps(state, {docId, canvasItemId}) {
     let doc = {}
     // Get the document from storage unless docId is not a real doc.
-    const specialDocIds = ['emptyItem']
-    if (!_.includes(specialDocIds, docId) && docId !== undefined) {
+    if (!docId.startsWith('emptyItem') && docId !== undefined) {
         doc = storage.getDoc(state.storage, docId)
     }
 
