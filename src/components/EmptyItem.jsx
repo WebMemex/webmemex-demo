@@ -8,8 +8,8 @@ import { getEmptyItemState, getAutoSuggestSuggestions } from '../selectors'
 
 const placeholders = {
     'emptyItem_alone': 'Find or add...',
-    'emptyItem_linkto': 'Link to...',
-    'emptyItem_linkfrom': 'Link from...',
+    'emptyItem_linkto': 'Create link to...',
+    'emptyItem_linkfrom': 'Create link from...',
 }
 
 let EmptyItem = React.createClass({
