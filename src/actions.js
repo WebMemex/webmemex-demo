@@ -32,8 +32,6 @@ export function drawStar({docId, itemId}) {
             docId = canvas.getItem(state.canvas, itemId).docId
         }
         let {targetDocIds, sourceDocIds} = storage.getFriends(state.storage, docId)
-        sourceDocIds.push('emptyItem_linkfrom')
-        targetDocIds.push('emptyItem_linkto')
         dispatch(canvas.centerDocWithFriends({docId, itemId, targetDocIds, sourceDocIds, animate: true}))
 
         // Show second level friends
@@ -47,6 +45,25 @@ export function drawStar({docId, itemId}) {
             let {targetDocIds, sourceDocIds} = storage.getFriends(getState().storage, docId)
             dispatch(canvas.showItemFriends({itemId, friendDocIds: sourceDocIds, side: 'left', animate:true}))
         })
+
+        // Add empty items for adding links to or from the centered item
+        {
+            let props = {x: 10, y: 10, width: 200, height: 50}
+            let itemId1 = dispatch(canvas.createItem({docId: 'emptyItem_linkfrom', props}))
+            dispatch(canvas.centerItem({itemId: itemId1, xPosition: 0.2, yPosition: 0.1}))
+            dispatch(canvas.showEdge({
+                linkId: 'link_emptyItem_linkfrom', // bogus
+                sourceItemId: itemId1,
+                targetItemId: itemId,
+            }))
+            let itemId2 = dispatch(canvas.createItem({docId: 'emptyItem_linkto', props}))
+            dispatch(canvas.centerItem({itemId: itemId2, xPosition: 0.8, yPosition: 0.1}))
+            dispatch(canvas.showEdge({
+                linkId: 'link_emptyItem_linkto', // bogus
+                sourceItemId: itemId,
+                targetItemId: itemId2,
+            }))
+        }
     }
 }
 
