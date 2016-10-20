@@ -32,7 +32,9 @@ export let hideItem = createAction()
 export let updateWindowSize = createActionWithMetaArgs({
     currentView: getCurrentView,
 })
-export let relocateItem = createAction()
+export let relocateItem = createActionWithMetaArgs({
+    currentView: getCurrentView,
+})
 export let resizeItem = createAction()
 export let setItemRatio = createAction()
 export let scaleItem = createAction()

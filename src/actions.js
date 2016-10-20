@@ -50,14 +50,14 @@ export function drawStar({docId, itemId}) {
         {
             let props = {x: 10, y: 10, width: 200, height: 50}
             let itemId1 = dispatch(canvas.createItem({docId: 'emptyItem_linkfrom', props}))
-            dispatch(canvas.centerItem({itemId: itemId1, xPosition: 0.2, yPosition: 0.1}))
+            dispatch(canvas.relocateItem({itemId: itemId1, xRelative: 0.2, yRelative: 0.1}))
             dispatch(canvas.showEdge({
                 linkId: 'link_emptyItem_linkfrom', // bogus
                 sourceItemId: itemId1,
                 targetItemId: itemId,
             }))
             let itemId2 = dispatch(canvas.createItem({docId: 'emptyItem_linkto', props}))
-            dispatch(canvas.centerItem({itemId: itemId2, xPosition: 0.8, yPosition: 0.1}))
+            dispatch(canvas.relocateItem({itemId: itemId2, xRelative: 0.8, yRelative: 0.1}))
             dispatch(canvas.showEdge({
                 linkId: 'link_emptyItem_linkto', // bogus
                 sourceItemId: itemId,
@@ -86,7 +86,7 @@ export function navigateFromLink({url}) {
         dispatch(drawStar({itemId}))
         if (expandedItem) {
             // Appear to move in from the right side
-            dispatch(canvas.centerItem({itemId, xPosition: 0.8}))
+            dispatch(canvas.relocateItem({itemId, xRelative: 0.8}))
             // Set end location at center (only relevant when unexpanding later)
             dispatch(canvas.centerItem({itemId, animate: true}))
             // Expand to fill whole canvas
@@ -100,11 +100,19 @@ export function navigateFromLink({url}) {
 // Pass either docId or userInput
 export function navigateTo({itemId, docId, userInput}) {
     return function (dispatch, getState) {
+        let centeredItem = getState().canvas.centeredItem
         dispatch(populateEmptyItem({itemId, docId, userInput}))
-        if (canvas.getItem(getState().canvas, itemId).centered)
+        if (centeredItem===itemId) {
+            // This empty was the centered item, draw its star around it
             dispatch(drawStar({itemId}))
+        }
         else {
             dispatch(canvas.setItemRatio({itemId, ratio: 4/3, keepFixed: 'width', animate: true}))
+            if (centeredItem) {
+                // Redraw the star to move the new item to the correct place,
+                // and pop up a new empty item.
+                dispatch(drawStar({itemId: centeredItem}))
+            }
         }
         dispatch(canvas.focusItem({itemId}))
     }
@@ -120,8 +128,6 @@ function populateEmptyItem({itemId, docId, userInput}) {
         dispatch(canvas.changeDoc({itemId, docId}))
         // Link the new doc to any items it has edges to
         dispatch(linkToConnectedItems({itemId, docId}))
-        // Center the new doc
-        dispatch(drawStar({itemId}))
     }
 }
 

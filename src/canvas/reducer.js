@@ -56,14 +56,10 @@ function changeDoc(state, {itemId, docId}) {
     return state
 }
 
-function centerItem(state, {itemId, xPosition=0.5, yPosition=0.5, animate}, {currentView}) {
-    let winWidth = state.windowSize.width
-    let winHeight = state.windowSize.height
-
+function centerItem(state, {itemId, animate}, {currentView}) {
+    state = relocateItem(state, {itemId, xRelative: 0.5, yRelative: 0.5, animate}, {currentView})
     let item = getItem(state, itemId)
-    let x = currentView.scrollX + winWidth*xPosition - item.width/2
-    let y = currentView.scrollY + winHeight*yPosition - item.height/2
-    let newItem = {...item, x, y, inTransition: animate, centered: true}
+    let newItem = {...item, inTransition: animate, centered: true}
 
     let visibleItems = {...state.visibleItems, [itemId]: newItem}
     return {...state, visibleItems, centeredItem: itemId}
@@ -252,8 +248,16 @@ function updateWindowSize(state, {height, width}, {currentView}) {
     return state
 }
 
-function relocateItem(state, {itemId, x, y, dx, dy, animate}) {
+function relocateItem(state, {itemId, x, y, dx, dy, xRelative, yRelative, animate}, {currentView}) {
     let item = getItem(state, itemId)
+    if (xRelative!==undefined) {
+        let winWidth = state.windowSize.width
+        x = currentView.scrollX + winWidth*xRelative - item.width/2
+    }
+    if (yRelative!==undefined) {
+        let winHeight = state.windowSize.height
+        y = currentView.scrollY + winHeight*yRelative - item.height/2
+    }
     if (x===undefined)
         x = item.x + dx
     if (y===undefined)
