@@ -20,7 +20,7 @@ let EmptyItem = React.createClass({
         const inputProps = {
             value: this.props.inputValue,
             type: 'text',
-            placeholder: '.....',
+            placeholder: 'Find/add note or webpage..',
             className: 'emptyItemInput',
             onFocus: () => this.props.focus(),
             onBlur: () => {

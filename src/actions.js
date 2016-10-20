@@ -32,6 +32,7 @@ export function drawStar({docId, itemId}) {
             docId = canvas.getItem(state.canvas, itemId).docId
         }
         let {targetDocIds, sourceDocIds} = storage.getFriends(state.storage, docId)
+        targetDocIds.push('emptyItem')
         dispatch(canvas.centerDocWithFriends({docId, itemId, targetDocIds, sourceDocIds, animate: true}))
 
         // Show second level friends
@@ -69,6 +70,7 @@ export function navigateFromLink({url}) {
             dispatch(canvas.expandItem({itemId}))
         }
         dispatch(canvas.focusItem({itemId}))
+
     }
 }
 
@@ -95,6 +97,8 @@ function populateEmptyItem({itemId, docId, userInput}) {
         dispatch(canvas.changeDoc({itemId, docId}))
         // Link the new doc to any items it has edges to
         dispatch(linkToConnectedItems({itemId, docId}))
+        // Center the new doc
+        dispatch(drawStar({itemId}))
     }
 }
 
@@ -167,22 +171,6 @@ export function handleDropOnCanvas({x, y, event}) {
 
 export function handleTapCanvas({x, y}) {
     return function (dispatch, getState) {
-        let width = 300
-        let height = 50
-        let props = {
-            x: x-width/2,
-            y: y-height/2,
-            width,
-            height,
-        }
-        let itemId = dispatch(canvas.createItem({docId: 'emptyItem', props}))
-        dispatch(canvas.focusItem({itemId}))
-        dispatch(setEmptyItemState({
-            itemId,
-            props: {
-                hideOnBlur: true,
-            }
-        }))
     }
 }
 

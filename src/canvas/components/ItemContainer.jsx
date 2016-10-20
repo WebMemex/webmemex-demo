@@ -67,11 +67,11 @@ let ItemContainer = React.createClass({
     },
 
     componentDidMount() {
-        this.makeDraggable()
+        //this.makeDraggable()
         //this.makeResizable() // impractical and buggy (bug in interactjs?)
-        this.makeScalable()
+        //this.makeScalable()
         this.makeTappable()
-        this.makeDropTarget()
+        //this.makeDropTarget()
 
         // disable dragging/scaling/resizing actions when expanded
         let element = this.refs['item-container']
