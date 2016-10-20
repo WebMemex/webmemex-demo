@@ -180,8 +180,12 @@ export function handleTapCanvas({x, y}) {
     }
 }
 
-export function handleTapItem({itemId}) {
+export function handleTapItem({itemId, event}) {
     return function (dispatch, getState) {
+        if (event.shiftKey) {
+            dispatch(disconnectAndRemoveItem({itemId}))
+            return
+        }
         // Focus on the item
         dispatch(canvas.focusItem({itemId}))
 
@@ -201,30 +205,35 @@ export function handleTapItem({itemId}) {
 
 export function handleDraggedOut({itemId, dir}) {
     return function (dispatch, getState) {
+        if (dir==='left' || dir==='right') { // No difference for now
+            dispatch(disconnectAndRemoveItem({itemId}))
+        }
+
+    }
+}
+
+export function disconnectAndRemoveItem({itemId}) {
+    return function (dispatch, getState) {
         let item = canvas.getItem(getState().canvas, itemId)
         let docId = item.docId
 
-        if (dir==='left' || dir==='right') { // No difference for now
+        // Remove the item's _visible_ links from storage
+        let connectedItemIds = canvas.getConnectedItemIds(getState().canvas, itemId)
+        connectedItemIds.forEach(connectedItemId => {
+            let connectedDocId = canvas.getItem(getState().canvas, connectedItemId).docId
+            dispatch(storage.deleteLink({
+                doc1: connectedDocId,
+                doc2: docId,
+            }))
+        })
 
-            // Remove the item's _visible_ links from storage
-            let connectedItemIds = canvas.getConnectedItemIds(getState().canvas, itemId)
-            connectedItemIds.forEach(connectedItemId => {
-                let connectedDocId = canvas.getItem(getState().canvas, connectedItemId).docId
-                dispatch(storage.deleteLink({
-                    doc1: connectedDocId,
-                    doc2: docId,
-                }))
-            })
+        // Hide the item from the canvas
+        dispatch(canvas.hideItem({itemId}))
 
-            // Hide the item from the canvas
-            dispatch(canvas.hideItem({itemId}))
-
-            // Delete jettisoned doc completely if it is left unconnected
-            if (!storage.hasFriends(getState().storage, docId)) {
-                dispatch(storage.deleteDoc({docId}))
-            }
+        // Delete jettisoned doc completely if it is left unconnected
+        if (!storage.hasFriends(getState().storage, docId)) {
+            dispatch(storage.deleteDoc({docId}))
         }
-
     }
 }
 

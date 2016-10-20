@@ -176,6 +176,7 @@ let ItemContainer = React.createClass({
         interact(element).on('tap', event => {
             this.props.tap({
                 itemId: this.props.itemId,
+                event,
             })
             event.stopPropagation()
         })
