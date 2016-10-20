@@ -149,6 +149,19 @@ function linkToConnectedItems({itemId, docId}) {
     }
 }
 
+export function openInNewTab({itemId, docId}) {
+    return function (dispatch, getState) {
+        let state = getState()
+        if (docId===undefined) {
+            docId = canvas.getItem(state.canvas, itemId).docId
+        }
+        let doc = storage.getDoc(state.storage, docId)
+        if (doc.url) {
+            window.open(doc.url, '_blank')
+        }
+    }
+}
+
 export function handleDropOnCanvas({x, y, event}) {
     return function (dispatch, getState) {
         let html = event.dataTransfer.getData('text/html')
@@ -184,6 +197,10 @@ export function handleTapItem({itemId, event}) {
     return function (dispatch, getState) {
         if (event.shiftKey) {
             dispatch(disconnectAndRemoveItem({itemId}))
+            return
+        }
+        if (event.ctrlKey) {
+            dispatch(openInNewTab({itemId}))
             return
         }
         // Focus on the item
