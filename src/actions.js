@@ -6,7 +6,7 @@ import { getEmptyItemState } from './selectors'
 import { asUrl, textToHtml } from './utils'
 
 // Clean the canvas and show an empty item
-export function initCanvas() {
+export function initCanvas({animate}={}) {
     return function(dispatch, getState) {
         // Clean canvas
         dispatch(canvas.removeAllItems())
@@ -16,7 +16,7 @@ export function initCanvas() {
             let props = {x: 100, y: 100, width: 400, height: 50}
             let itemId = dispatch(canvas.createItem({docId: 'emptyItem_alone', props}))
             dispatch(setEmptyItemState({itemId, props: {}}))
-            dispatch(canvas.centerItem({itemId}))
+            dispatch(canvas.centerItem({itemId, animate}))
             dispatch(canvas.focusItem({itemId}))
         }
 
@@ -311,4 +311,8 @@ export function handleReceivedDrop({itemId, droppedItemId}) {
             targetItemId: droppedItemId
         }))
     }
+}
+
+export function handleResetCanvas() {
+    return initCanvas({animate: true})
 }

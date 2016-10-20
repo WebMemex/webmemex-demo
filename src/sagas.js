@@ -14,6 +14,7 @@ const hookedActions = {
     [canvas.signalDropOnCanvas.getType()]: actions.handleDropOnCanvas,
     [canvas.signalCanvasTapped.getType()]: actions.handleTapCanvas,
     [canvas.signalReceivedDrop.getType()]: actions.handleReceivedDrop,
+    [canvas.signalResetCanvas.getType()]: actions.handleResetCanvas,
 }
 
 let sagas = []

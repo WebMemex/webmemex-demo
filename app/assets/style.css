@@ -59,6 +59,21 @@ svg#edges {
     z-index: 1;
 }
 
+.resetButton {
+    bottom: 0px;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    display: block;
+    margin: auto;
+}
+
+.resetButton:focus {
+    outline: none;
+    background-color: white;
+}
+
 .emptyItemForm {
     margin-top: 15px;
 }

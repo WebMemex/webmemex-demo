@@ -50,6 +50,11 @@ let Canvas = React.createClass({
                         />
                     ))
                 }
+                <button
+                    className="resetButton"
+                    onClick={e=>this.props.resetCanvas()}>
+                    Hide all
+                </button>
             </div>
         )
     },
@@ -92,6 +97,7 @@ function mapDispatchToProps(dispatch) {
             unfocus: actions.unfocus,
             handleDrop: actions.signalDropOnCanvas,
             handleTap: actions.signalCanvasTapped,
+            resetCanvas: actions.signalResetCanvas,
         }, dispatch)
     }
 }
