@@ -127,7 +127,7 @@ function mapDispatchToProps(dispatch, {canvasItemId}) {
             if (suggestion.docId)
                 dispatch(actions.navigateTo({docId: suggestion.docId, itemId: canvasItemId}))
             else if (suggestion.webSearchQuery) {
-                let url = 'https://duckduckgo.com/?kak=-1&k1=-1&kp=-1&kn=1&q='
+                let url = 'https://duckduckgo.com/html?kak=-1&k1=-1&kp=-1&kn=1&q='
                     + window.encodeURIComponent(suggestion.webSearchQuery).replace(/(%20)+/g, '+')
                 dispatch(actions.navigateTo({userInput: url, itemId: canvasItemId}))
             }
