@@ -67,7 +67,12 @@ export function navigateFromLink({url}) {
         }
         dispatch(drawStar({itemId}))
         if (expandedItem) {
-            dispatch(canvas.expandItem({itemId}))
+            // Appear to move in from the right side
+            dispatch(canvas.centerItem({itemId, xPosition: 0.8}))
+            // Set end location at center (only relevant when unexpanding later)
+            dispatch(canvas.centerItem({itemId, animate: true}))
+            // Expand to fill whole canvas
+            dispatch(canvas.expandItem({itemId, animate: true}))
         }
         dispatch(canvas.focusItem({itemId}))
 

@@ -56,13 +56,13 @@ function changeDoc(state, {itemId, docId}) {
     return state
 }
 
-function centerItem(state, {itemId, animate}, {currentView}) {
+function centerItem(state, {itemId, xPosition=0.5, yPosition=0.5, animate}, {currentView}) {
     let winWidth = state.windowSize.width
     let winHeight = state.windowSize.height
 
     let item = getItem(state, itemId)
-    let x = currentView.scrollX + winWidth/2 - item.width/2
-    let y = currentView.scrollY + winHeight/2 - item.height/2
+    let x = currentView.scrollX + winWidth*xPosition - item.width/2
+    let y = currentView.scrollY + winHeight*yPosition - item.height/2
     let newItem = {...item, x, y, inTransition: animate, centered: true}
 
     let visibleItems = {...state.visibleItems, [itemId]: newItem}
