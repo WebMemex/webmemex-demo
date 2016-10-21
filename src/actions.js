@@ -305,6 +305,11 @@ export function disconnectAndRemoveItem({itemId}) {
         if (!storage.hasFriends(getState().storage, docId)) {
             dispatch(storage.deleteDoc({docId}))
         }
+
+        let remainingItems = Object.keys(getState().canvas.visibleItems)
+        if (remainingItems.length === 1) {
+            dispatch(canvas.centerItem({itemId: remainingItems[0], animate: true}))
+        }
     }
 }
 
