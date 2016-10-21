@@ -232,7 +232,9 @@ export function handleTapCanvas({x, y}) {
 export function handleTapItem({itemId, event}) {
     return function (dispatch, getState) {
         if (event.shiftKey) {
-            dispatch(disconnectAndRemoveItem({itemId}))
+            if (window.confirm("Delete this item?")) {
+                dispatch(disconnectAndRemoveItem({itemId}))
+            }
             return
         }
         if (event.ctrlKey) {
