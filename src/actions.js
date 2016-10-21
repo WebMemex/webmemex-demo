@@ -64,6 +64,12 @@ export function drawStar({docId, itemId}) {
                 targetItemId: itemId2,
             }))
         }
+
+        {
+            let props = {x: 10, y: 10, width: 200, height: 50}
+            let itemId3 = dispatch(canvas.createItem({docId: 'emptyItem_alone', props}))
+            dispatch(canvas.relocateItem({itemId: itemId3, xRelative: 0.5, yRelative: 0.05}))
+        }
     }
 }
 
@@ -101,6 +107,7 @@ export function navigateFromLink({url}) {
 export function navigateTo({itemId, docId, userInput}) {
     return function (dispatch, getState) {
         let centeredItem = getState().canvas.centeredItem
+        let emptyItem = canvas.getItem(getState().canvas, itemId)
         dispatch(populateEmptyItem({itemId, docId, userInput}))
         if (centeredItem===itemId) {
             // This empty was the centered item, draw its star around it
@@ -108,10 +115,16 @@ export function navigateTo({itemId, docId, userInput}) {
         }
         else {
             dispatch(canvas.setItemRatio({itemId, ratio: 4/3, keepFixed: 'width', animate: true}))
-            if (centeredItem) {
+            if (centeredItem &&
+                (emptyItem.docId==='emptyItem_linkto' || emptyItem.docId==='emptyItem_linkfrom')
+            ) {
                 // Redraw the star to move the new item to the correct place,
                 // and pop up a new empty item.
                 dispatch(drawStar({itemId: centeredItem}))
+            }
+            else {
+                // This item becomes the new centered item
+                dispatch(drawStar({itemId}))
             }
         }
         dispatch(canvas.focusItem({itemId}))

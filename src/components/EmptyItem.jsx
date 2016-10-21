@@ -7,7 +7,7 @@ import * as actions from '../actions'
 import { getEmptyItemState, getAutoSuggestSuggestions } from '../selectors'
 
 const placeholders = {
-    'emptyItem_alone': 'Find or add...',
+    'emptyItem_alone': 'Find or add new...',
     'emptyItem_linkto': 'Create link to...',
     'emptyItem_linkfrom': 'Create link from...',
 }
