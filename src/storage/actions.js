@@ -42,6 +42,14 @@ export function findOrAddLink({source, target}) {
             let action = addLink({source, target})
             dispatch(action)
             linkId = readGeneratedId(action)
+
+            // Remove any link in the other direction, to keep things simple.
+            let revLinkId = _.findKey(getState().storage.links, // non-modular..
+                link => (link.source===target && link.target===source)
+            )
+            if (revLinkId) {
+                dispatch(deleteLink({linkId: revLinkId}))
+            }
         }
         return linkId
     }
