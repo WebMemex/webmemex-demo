@@ -152,20 +152,30 @@ function pruneEdges(state) {
 
 function showItemFriends(state, {itemId, friendDocIds, friendItemIds, side='right', animate}) {
     // If we were passed the docIds, show the docs and get the resulting itemIds
+    let friendsToRelocate = []
     if (friendItemIds === undefined) {
         friendItemIds = []
         friendDocIds.forEach((friendDocId) => {
-            let {state: newState, itemId: friendItemId} = createItem(state, {docId: friendDocId})
-            state = newState
+            // If the item is already in view, do not move it nor draw yet another one.
+            let friendItemId = _.findKey(state.visibleItems, item => (item.docId === friendDocId && !item.flaggedForRemoval))
+            if (!friendItemId) {
+                // Create the item, or reuse one about to be thrown away.
+                let {state: state_, itemId: friendItemId_} = createItem(state, {docId: friendDocId})
+                state = state_, friendItemId = friendItemId_
+                friendsToRelocate.push(friendItemId)
+            }
             friendItemIds.push(friendItemId)
         })
+    }
+    else {
+        friendsToRelocate = friendItemIds
     }
 
     // Position the friends besides the given item
     let newItems = {}
     let item = getItem(state, itemId)
     let nFriends = friendItemIds.length
-    friendItemIds.forEach((friendItemId, index) => {
+    friendsToRelocate.forEach((friendItemId, index) => {
         let friendItem = getItem(state, friendItemId)
         // Spacing between friends and item (and between other friends)
         let width = item.width/2
@@ -189,9 +199,9 @@ function showItemFriends(state, {itemId, friendDocIds, friendItemIds, side='righ
     })
 
     let newEdges = {} // TODO edges should know their linkId, and be drawn automatically?
-    for (let newItemId in newItems) {
-        newEdges[itemId+newItemId] = {sourceItemId: itemId, targetItemId: newItemId}
-    }
+    friendItemIds.forEach(friendItemId => {
+        newEdges[itemId+friendItemId] = {sourceItemId: itemId, targetItemId: friendItemId}
+    })
 
     let visibleItems = {...state.visibleItems, ...newItems}
     let edges = {...state.edges, ...newEdges}
