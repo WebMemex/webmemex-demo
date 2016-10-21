@@ -270,6 +270,24 @@ export function disconnectAndRemoveItem({itemId}) {
         let item = canvas.getItem(getState().canvas, itemId)
         let docId = item.docId
 
+        // Hide 'Create link to/from...' inputs if this was the centered item
+        let centeredItemId = getState().canvas.centeredItem
+        if (centeredItemId === itemId) {
+            let emptyItem1, emptyItem2
+            try {
+                emptyItem1 = canvas.getItemIdForDocId(getState().canvas, 'emptyItem_linkto')
+            } catch (e) {}
+            if (emptyItem1) {
+                dispatch(canvas.hideItem({itemId: emptyItem1}))
+            }
+            try {
+                emptyItem2 = canvas.getItemIdForDocId(getState().canvas, 'emptyItem_linkfrom')
+            } catch (e) {}
+            if (emptyItem2) {
+                dispatch(canvas.hideItem({itemId: emptyItem2}))
+            }
+        }
+
         // Remove the item's _visible_ links from storage
         let connectedItemIds = canvas.getConnectedItemIds(getState().canvas, itemId)
         connectedItemIds.forEach(connectedItemId => {
