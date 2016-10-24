@@ -357,3 +357,10 @@ export function handleReceivedDrop({itemId, droppedItemId}) {
 export function handleResetCanvas() {
     return initCanvas({animate: true})
 }
+
+export function handleEscape() {
+    return function (dispatch, getState) {
+        let itemId = canvas.getItemIdForDocId(getState().canvas, 'emptyItem_alone')
+        dispatch(canvas.focusItem({itemId}))
+    }
+}

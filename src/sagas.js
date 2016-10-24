@@ -16,6 +16,7 @@ const hookedActions = {
     [canvas.signalEdgeTapped.getType()]: actions.handleTapEdge,
     [canvas.signalReceivedDrop.getType()]: actions.handleReceivedDrop,
     [canvas.signalResetCanvas.getType()]: actions.handleResetCanvas,
+    [canvas.signalEscape.getType()]: actions.handleEscape,
 }
 
 let sagas = []

@@ -57,6 +57,7 @@ export let signalCanvasTapped = createAction()
 export let signalEdgeTapped = createAction()
 export let signalReceivedDrop = createAction()
 export let signalResetCanvas = createAction()
+export let signalEscape = createAction()
 
 // Utils
 

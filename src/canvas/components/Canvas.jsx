@@ -15,6 +15,10 @@ let Canvas = React.createClass({
         window.addEventListener('keydown', (event)=>{
             if (event.keyCode==27) {
                 this.props.unexpand()
+                if (event.target === this.refs['canvas']
+                 || event.target === document.body) {
+                    this.props.handleEscape()
+                }
             }
         })
 
@@ -90,6 +94,7 @@ function mapDispatchToProps(dispatch) {
             unfocus: actions.unfocus,
             handleDrop: actions.signalDropOnCanvas,
             handleTap: actions.signalCanvasTapped,
+            handleEscape: actions.signalEscape,
         }, dispatch)
     }
 }
