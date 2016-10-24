@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import interact from 'interact.js'
 
 import AnimatedItemContainer from './AnimatedItemContainer'
 import Edge from './Edge'
@@ -19,14 +18,6 @@ let Canvas = React.createClass({
             }
         })
 
-        interact(this.refs['canvas']).on('tap', event => {
-            if (this.props.expandedItem)
-                this.props.unexpand()
-            else
-                this.props.handleTap({x: event.pageX, y: event.pageY})
-            event.stopPropagation()
-        })
-
         this.refs['canvas'].addEventListener('touchstart', e=>e.preventDefault())
 
         this.enableDrop()
@@ -34,8 +25,15 @@ let Canvas = React.createClass({
 
     render() {
          let {ItemComponent, canvasSize, visibleItems, edges, unexpand} = this.props
+         let handleTap = event => {
+             if (this.props.expandedItem)
+                 this.props.unexpand()
+             else
+                 this.props.handleTap({x: event.pageX, y: event.pageY})
+             event.stopPropagation()
+         }
          return (
-            <div ref='canvas' id='canvas' style={canvasSize}>
+            <div ref='canvas' id='canvas' style={canvasSize} onClick={handleTap} onTouchStart={handleTap}>
                 <svg id='edges'>
                     {Object.keys(edges).map(edgeId => (
                         <Edge edgeId={edgeId} {...edges[edgeId]} key={edgeId} />

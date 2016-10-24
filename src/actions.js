@@ -236,7 +236,6 @@ export function handleTapItem({itemId, event}) {
                 if (window.confirm("Unlink this item?")) {
                     let connectedItems = (centeredItem in friends) ? [centeredItem] : friends
                     connectedItems.forEach(connectedItem => {
-                        console.log(connectedItem, itemId)
                         dispatch(storage.deleteLink({
                             doc1: canvas.getItem(getState().canvas, connectedItem).docId,
                             doc2: item.docId,

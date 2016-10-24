@@ -14,7 +14,6 @@
   "dependencies": {
     "babel-polyfill": "^6.9.1",
     "classnames": "^2.2.3",
-    "interact.js": "^1.2.6",
     "lodash": "^4.11.1",
     "pouchdb": "^5.3.1",
     "react": "^0.14.8",

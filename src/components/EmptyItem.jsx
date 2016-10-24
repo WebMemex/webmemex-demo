@@ -9,7 +9,7 @@ import { getEmptyItemState, getAutoSuggestSuggestions } from '../selectors'
 import { asUrl } from '../utils'
 
 const placeholders = {
-    'emptyItem_alone': 'Find or add new...',
+    'emptyItem_alone': 'Find or add new note/webpage...',
     'emptyItem_linkto': 'Create link to...',
     'emptyItem_linkfrom': 'Create link from...',
 }
