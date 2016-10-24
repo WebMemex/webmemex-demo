@@ -52,7 +52,7 @@ export function drawStar({docId, itemId}) {
         })
 
         {
-            let props = {x: 10, y: 10, width: 200, height: 50}
+            let props = {x: 10, y: 10, width: 400, height: 50}
             let itemId3 = dispatch(canvas.createItem({docId: 'emptyItem_alone', props}))
             dispatch(canvas.relocateItem({itemId: itemId3, xRelative: 0.5, yRelative: 0.05}))
         }
