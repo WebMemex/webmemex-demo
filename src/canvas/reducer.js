@@ -209,7 +209,14 @@ function showItemFriends(state, {itemId, friendDocIds, friendItemIds, side='righ
 }
 
 
-function hideEdge(state, {edgeId}) {
+function hideEdge(state, {edgeId, itemId1, itemId2}) {
+    if (edgeId === undefined) {
+        edgeId = _.findKey(state.edges, edge => (
+               (edge.sourceItemId === itemId1 && edge.targetItemId === itemId2)
+            || (edge.sourceItemId === itemId2 && edge.targetItemId === itemId1)
+        ))
+        console.log(edgeId)
+    }
     let edges = _.omit(state.edges, edgeId)
     return {...state, edges}
 }
