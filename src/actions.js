@@ -235,28 +235,8 @@ export function handleTapItem({itemId, event}) {
             let item = canvas.getItem(getState().canvas, itemId)
             let friends = canvas.getConnectedItemIds(getState().canvas, itemId)
             let centeredItem = getState().canvas.centeredItem
-            if (centeredItem === itemId || friends.length===0) {
-                if (item.docId.startsWith('emptyItem'))
-                    return
-                if (window.confirm("Delete this item?")) {
-                    dispatch(disconnectAndRemoveItem({itemId}))
-                }
-            }
-            else {
-                if (item.docId.startsWith('emptyItem')) {
-                    dispatch(disconnectAndRemoveItem({itemId}))
-                    return
-                }
-                if (window.confirm("Unlink this item?")) {
-                    let connectedItems = (centeredItem in friends) ? [centeredItem] : friends
-                    connectedItems.forEach(connectedItem => {
-                        dispatch(storage.deleteLink({
-                            doc1: canvas.getItem(getState().canvas, connectedItem).docId,
-                            doc2: item.docId,
-                        }))
-                        dispatch(canvas.hideEdge({itemId1: itemId, itemId2: connectedItem}))
-                    })
-                }
+            if (window.confirm("Delete this item?")) {
+                dispatch(disconnectAndRemoveItem({itemId}))
             }
             return
         }
