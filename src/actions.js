@@ -215,6 +215,20 @@ export function handleTapCanvas({x, y}) {
     }
 }
 
+export function handleTapEdge({event, sourceItemId, targetItemId}) {
+    return function (dispatch, getState) {
+        if (event.shiftKey) {
+            let sourceDocId = canvas.getItem(getState().canvas, sourceItemId).docId
+            let targetDocId = canvas.getItem(getState().canvas, targetItemId).docId
+            dispatch(canvas.hideEdge({itemId1: sourceItemId, itemId2: targetItemId}))
+            dispatch(storage.deleteLink({
+                doc1: sourceDocId,
+                doc2: targetDocId,
+            }))
+        }
+    }
+}
+
 export function handleTapItem({itemId, event}) {
     return function (dispatch, getState) {
         if (event.shiftKey) {

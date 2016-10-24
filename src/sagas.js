@@ -13,6 +13,7 @@ const hookedActions = {
     [canvas.signalItemDraggedOut.getType()]: actions.handleDraggedOut,
     [canvas.signalDropOnCanvas.getType()]: actions.handleDropOnCanvas,
     [canvas.signalCanvasTapped.getType()]: actions.handleTapCanvas,
+    [canvas.signalEdgeTapped.getType()]: actions.handleTapEdge,
     [canvas.signalReceivedDrop.getType()]: actions.handleReceivedDrop,
     [canvas.signalResetCanvas.getType()]: actions.handleResetCanvas,
 }

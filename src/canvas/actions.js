@@ -54,6 +54,7 @@ export let signalItemTapped = createAction()
 export let signalItemDraggedOut = createAction()
 export let signalDropOnCanvas = createAction()
 export let signalCanvasTapped = createAction()
+export let signalEdgeTapped = createAction()
 export let signalReceivedDrop = createAction()
 export let signalResetCanvas = createAction()
 

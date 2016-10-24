@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
+import * as actions from '../actions'
 import { getItem } from '../selectors'
 import { hasProps } from '../../utils'
 
@@ -10,8 +11,7 @@ let Edge = React.createClass({
     shouldComponentUpdate: hasProps('sourceItem', 'targetItem'),
 
     render() {
-        let sourceItem = this.props.sourceItem
-        let targetItem = this.props.targetItem
+        let { sourceItem, targetItem, signalEdgeTapped } = this.props
 
         let getItemCenterCoords = item => ({
             x: item.x + item.width/2,
@@ -21,7 +21,14 @@ let Edge = React.createClass({
         let targetCenter = getItemCenterCoords(targetItem)
         let edgeCoords =  'M ' + sourceCenter.x + ' ' + sourceCenter.y
                        + ' L ' + targetCenter.x + ' ' + targetCenter.y
-        return <path className='edge' d={edgeCoords} />
+        return (
+            <path
+                className='edge'
+                d={edgeCoords}
+                onClick={event => signalEdgeTapped(event)}
+                onTouchStart={event => signalEdgeTapped(event)}
+            />
+        )
     }
 })
 
@@ -34,4 +41,15 @@ function mapStateToProps(state, {sourceItemId, targetItemId}) {
     }
 }
 
-export default connect(mapStateToProps)(Edge)
+function mapDispatchToProps(dispatch, {sourceItemId, targetItemId}) {
+    let signalEdgeTapped = event => actions.signalEdgeTapped({
+        event,
+        sourceItemId, targetItemId,
+    })
+
+    return bindActionCreators({
+        signalEdgeTapped,
+    }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Edge)
