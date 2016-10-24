@@ -50,7 +50,7 @@ svg#edges {
 
 .item-container {
     border-radius: 10px;
-    background-color: white;
+    background: #fafafa;
     position: absolute;
     box-shadow: 3px 3px 10px #888;
 }
@@ -59,26 +59,21 @@ svg#edges {
     z-index: 1;
 }
 
-.resetButton {
-    bottom: 0px;
-    padding: 5px 10px 5px 10px;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-    background-color: whitesmoke;
-    display: block;
-    margin: auto;
-}
-
-.resetButton:focus {
-    outline: none;
-    background-color: white;
+.emptyItem {
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .emptyItemForm {
-    margin-top: 15px;
+    padding-top: 15px;
 }
 
 .emptyItemForm .emptyItemInput {
+    background-color: transparent;
     width: 90%;
     margin-left: 5%;
     box-sizing: border-box;
