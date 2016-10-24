@@ -219,8 +219,9 @@ export function handleTapItem({itemId, event}) {
     return function (dispatch, getState) {
         if (event.shiftKey) {
             let item = canvas.getItem(getState().canvas, itemId)
+            let friends = canvas.getConnectedItemIds(getState().canvas, itemId)
             let centeredItem = getState().canvas.centeredItem
-            if (centeredItem === itemId) {
+            if (centeredItem === itemId || friends.length===0) {
                 if (item.docId.startsWith('emptyItem'))
                     return
                 if (window.confirm("Delete this item?")) {
@@ -233,7 +234,6 @@ export function handleTapItem({itemId, event}) {
                     return
                 }
                 if (window.confirm("Unlink this item?")) {
-                    let friends = canvas.getConnectedItemIds(getState().canvas, itemId)
                     let connectedItems = (centeredItem in friends) ? [centeredItem] : friends
                     connectedItems.forEach(connectedItem => {
                         console.log(connectedItem, itemId)
