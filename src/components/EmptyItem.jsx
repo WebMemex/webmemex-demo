@@ -2,9 +2,11 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Autosuggest from 'react-autosuggest'
+import classNames from 'classnames'
 
 import * as actions from '../actions'
 import { getEmptyItemState, getAutoSuggestSuggestions } from '../selectors'
+import { asUrl } from '../utils'
 
 const placeholders = {
     'emptyItem_alone': 'Find or add new...',
@@ -52,8 +54,20 @@ let EmptyItem = React.createClass({
             event.preventDefault()
             this.props.pickSuggestion(suggestion)
         }
+
+        let hasInput = (this.props.inputValue && this.props.inputValue.length > 0)
+        let inputIsUrl = hasInput && (asUrl(this.props.inputValue) !== undefined)
+
+        let itemClass = classNames(
+            'emptyItem',
+            {
+                'urllike': inputIsUrl,
+                'notelike': hasInput && !inputIsUrl,
+            }
+        )
+
         return (
-            <div className='emptyItem'>
+            <div className={itemClass}>
                 <form ref='form' className='emptyItemForm' onSubmit={submitForm}>
                     <Autosuggest
                         suggestions={suggestions}

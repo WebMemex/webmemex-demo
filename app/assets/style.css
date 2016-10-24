@@ -69,18 +69,32 @@ svg#edges {
     height: 100%;
 }
 
+.emptyItem.notelike {
+    background-color: #FFD;
+}
+.emptyItem.notelike .emptyItemInput {
+    font-size: 18px;
+    font-family: Grundschrift, sans-serif;
+}
+
+.emptyItem.urllike .emptyItemInput {
+    font-family: mono;
+}
+
 .emptyItemForm {
-    padding-top: 15px;
+    padding-top: 17px;
 }
 
 .emptyItemForm .emptyItemInput {
     background-color: transparent;
     width: 90%;
+    height: 22px;
     margin-left: 5%;
     box-sizing: border-box;
     border: none;
     outline: none;
     font-family: mono;
+    font-size: 14px;
 }
 
 .emptyItemForm ul.react-autosuggest__suggestions-container {

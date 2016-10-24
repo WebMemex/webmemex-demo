@@ -13,7 +13,7 @@ export function initCanvas({animate}={}) {
 
         // Show empty item in center
         {
-            let props = {x: 100, y: 100, width: 400, height: 50}
+            let props = {x: 100, y: 100, width: 400, height: 55}
             let itemId = dispatch(canvas.createItem({docId: 'emptyItem_alone', props}))
             dispatch(setEmptyItemState({itemId, props: {}}))
             dispatch(canvas.centerItem({itemId, animate}))
@@ -52,7 +52,7 @@ export function drawStar({docId, itemId}) {
         })
 
         {
-            let props = {x: 10, y: 10, width: 400, height: 50}
+            let props = {x: 10, y: 10, width: 400, height: 55}
             let itemId3 = dispatch(canvas.createItem({docId: 'emptyItem_alone', props}))
             dispatch(canvas.relocateItem({itemId: itemId3, xRelative: 0.5, yRelative: 0.05}))
         }
