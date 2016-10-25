@@ -28,6 +28,21 @@ export function initCanvas({animate}={}) {
                 let props = {x: 50, y: 50, width: 500, height: 150}
                 dispatch(canvas.createItem({docId: docId0, props}))
             }
+
+            // Add some usage notes
+            {
+                const docIdUsageNotes = 'usageNotes'
+                const usageNotes = (
+                    '<u><b>Usage notes</b></u><br/>'
+                    + '- Try browsing blogs, articles, etcetera. Some interactive sites/webapps may sputter.<br/>'
+                    + '- Your notes and links are stored in your browser\'s local storage. Do not trust it to persist forever. Content of web pages is not stored (yet).<br/>'
+                    + '- Ctrl/Cmd+tap/click opens a webpage in a new tab.<br/>'
+                    + '- Shift+tap/click deletes an item or link. - Try drag some text, image or url onto the canvas to add it. Also works nicely for quotes selected from webpages!<br/>'
+                )
+                dispatch(storage.addNote({docId: docIdUsageNotes, 'text': usageNotes}))
+                dispatch(storage.findOrAddLink({source: docId0, target: docIdUsageNotes}))
+            }
+
             // Create some more documents and links as initial content
             {
                 let docId1 = dispatch(storage.findOrAddUrl({url: 'https://rwweb.org'}))
