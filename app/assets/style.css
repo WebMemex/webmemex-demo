@@ -45,7 +45,7 @@ svg#edges {
 
 .edge {
     stroke: #ccc;
-    stroke-width: 5px;
+    stroke-width: 10px;
 }
 
 .item-container {
