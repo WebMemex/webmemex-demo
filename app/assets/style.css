@@ -149,7 +149,7 @@ svg#edges {
 }
 
 .note {
-    overflow: hidden;
+    overflow: auto;
     border-radius: 10px;
     background-color: #FFD;
     width: 100%;
@@ -194,4 +194,18 @@ iframe[seamless] {
     border: 0px none transparent;
     padding: 0px;
     overflow: hidden;
+}
+
+.note::-webkit-scrollbar
+{
+  width: 4px;
+  height: 0px;
+}
+.note::-webkit-scrollbar-track
+{
+  background: transparent;
+}
+.note::-webkit-scrollbar-thumb
+{
+  background: rgba(255, 177, 0, 0.5);
 }
