@@ -13,61 +13,60 @@ export function initCanvas({animate}={}) {
 
         // Add and show welcome message + friends for demo purposes.
         {
-            // Add and show a note to introduce
-            let docId0 = 'welcomeMessage'
+            // Add a note for welcoming the user
+            const docIdWelcomeNote = 'welcomeMessage'
             {
                 const welcomeMessage = (
                     'Hi! This is a read/write web browser. '
                     + 'It lets you <i>create</i> notes and links, to organise the web your way. '
-                    + 'It is far from finished, but click this note to browse more info, '
-                    + 'or enter a URL or note in the bar below.'
+                    + 'It is far from finished, but go ahead and explore! '
+                    + 'For example, try type <small><tt>wikipedia.org</tt></small> in the bar above and press enter.'
                 )
                 // Store as note, specifying docId to overwrite any older one.
-                dispatch(storage.addNote({docId: docId0, text: welcomeMessage}))
-                // Display it
-                let props = {x: 50, y: 50, width: 500, height: 150}
-                dispatch(canvas.createItem({docId: docId0, props}))
+                dispatch(storage.addNote({docId: docIdWelcomeNote, text: welcomeMessage}))
             }
 
             // Add some usage notes
             {
                 const docIdUsageNotes = 'usageNotes'
                 const usageNotes = (
-                    '<u><b>Usage notes</b></u><br/>'
+                    '<u>Usage notes</u><br/>'
                     + '- Try browsing blogs, articles, etcetera. Some interactive sites/webapps may sputter.<br/>'
                     + '- Your notes and links are stored in your browser\'s local storage. Do not trust it to persist forever. Content of web pages is not stored (yet).<br/>'
                     + '- Ctrl/Cmd+tap/click opens a webpage in a new tab.<br/>'
                     + '- Shift+tap/click deletes an item or link. - Try drag some text, image or url onto the canvas to add it. Also works nicely for quotes selected from webpages!<br/>'
                 )
                 dispatch(storage.addNote({docId: docIdUsageNotes, 'text': usageNotes}))
-                dispatch(storage.findOrAddLink({source: docId0, target: docIdUsageNotes}))
+                dispatch(storage.findOrAddLink({source: docIdWelcomeNote, target: docIdUsageNotes}))
             }
 
             // Create some more documents and links as initial content
             {
+                const docIdAboutNote = 'aboutNote'
+                const aboutNote = (
+                    '<u>More about this project</u><br/>'
+                    + 'Have a look at the items linked to this note to read/watch the ideas behind it and the source code of this demo.'
+                )
+                dispatch(storage.addNote({docId: docIdAboutNote, 'text': aboutNote}))
+                dispatch(storage.findOrAddLink({source: docIdWelcomeNote, target: docIdAboutNote}))
+
                 let docId1 = dispatch(storage.findOrAddUrl({url: 'https://rwweb.org'}))
                 let docId1_1 = dispatch(storage.findOrAddUrl({url: 'https://www.w3.org/People/Berners-Lee/WorldWideWeb.html'}))
                 let docId1_2 = dispatch(storage.findOrAddUrl({url: 'https://www.w3.org/History/1989/proposal.html'}))
                 let docId1_3 = dispatch(storage.findOrAddUrl({url: 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/'}))
                 let docId2 = dispatch(storage.findOrAddUrl({url: 'https://www.youtube.com/embed/vKzYmDUydTw'}))
-                let docId3 = dispatch(storage.findOrAddUrl({url: 'http://iannotate.org'}))
+                let docId3 = dispatch(storage.findOrAddUrl({url: 'https://github.com/rwweb/webmemex'}))
 
-                dispatch(storage.findOrAddLink({source: docId0, target: docId1}))
+                dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId1}))
                 dispatch(storage.findOrAddLink({source: docId1, target: docId1_1}))
                 dispatch(storage.findOrAddLink({source: docId1, target: docId1_2}))
                 dispatch(storage.findOrAddLink({source: docId1, target: docId1_3}))
-                dispatch(storage.findOrAddLink({source: docId0, target: docId2}))
-                dispatch(storage.findOrAddLink({source: docId2, target: docId3}))
+                dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId2}))
+                dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId3}))
             }
-        }
 
-        // Show empty item in center
-        {
-            let props = {x: 100, y: 100, width: 400, height: 55}
-            let itemId = dispatch(canvas.createItem({docId: 'emptyItem_alone', props}))
-            dispatch(setEmptyItemState({itemId, props: {}}))
-            dispatch(canvas.centerItem({itemId, animate}))
-            dispatch(canvas.focusItem({itemId}))
+            // Start with the welcome message.
+            dispatch(drawStar({docId: docIdWelcomeNote}))
         }
 
     }
