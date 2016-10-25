@@ -23,6 +23,12 @@ let Webpage = React.createClass({
         }
 
         let iframeSrcPrefix = process.env.MEMEX_PROXY_URL_PREFIX || ''
+
+        // Hard-code exception for included youtube video to reduce proxy load.
+        if (this.props.url.startsWith('https://www.youtube.com/embed')) {
+            iframeSrcPrefix = ''
+        }
+
         return (
             <div className='webpage-iframe-wrapper-container' style={wrapperStyle}>
                 <div className='webpage-iframe-scaling-container' style={scalingStyle}>
