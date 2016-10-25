@@ -206,6 +206,14 @@ export function handleDropOnCanvas({x, y, event}) {
             let height = 150
             let props = {x: x-width/2, y: y-height/2, width, height}
             let itemId = dispatch(canvas.createItem({docId, props}))
+            let centeredItemId = getState().canvas.centeredItem
+            if (centeredItemId) {
+                let onLeftHalf = x < getState().canvas.windowSize.width/2
+                let sourceItemId = onLeftHalf ? itemId : centeredItemId
+                let targetItemId = onLeftHalf ? centeredItemId : itemId
+                dispatch(connectItems({sourceItemId, targetItemId}))
+                dispatch(drawStar({itemId: centeredItemId}))
+            }
         }
     }
 }
@@ -334,23 +342,29 @@ export let setAutoSuggestSuggestions = createAction()
 export let setEmptyItemState = createAction()
 export let updateEmptyItemSuggestions = createAction()
 
-export function handleReceivedDrop({itemId, droppedItemId}) {
-    return function (dispatch, getState) {
-        let item = canvas.getItem(getState().canvas, itemId)
-        let droppedItem = canvas.getItem(getState().canvas, droppedItemId)
+export function connectItems({sourceItemId, targetItemId}) {
+    return function(dispatch, getState) {
+        let sourceItem = canvas.getItem(getState().canvas, sourceItemId)
+        let targetItem = canvas.getItem(getState().canvas, targetItemId)
 
         // Create link in storage
         let linkId = dispatch(storage.findOrAddLink({
-            source: item.docId,
-            target: droppedItem.docId,
+            source: sourceItem.docId,
+            target: targetItem.docId,
         }))
 
         // Display edge
         dispatch(canvas.showEdge({
             linkId,
-            sourceItemId: itemId,
-            targetItemId: droppedItemId
+            sourceItemId,
+            targetItemId,
         }))
+    }
+}
+
+export function handleReceivedDrop({itemId, droppedItemId}) {
+    return function (dispatch, getState) {
+        dispatch(connectItems({sourceItemId: itemId, targetItemId: droppedItemId}))
     }
 }
 
