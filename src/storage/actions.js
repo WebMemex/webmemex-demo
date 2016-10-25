@@ -1,7 +1,8 @@
 import _ from 'lodash'
 import { createAction } from 'redux-act'
-import { createActionWithMetaArgs } from '../utils'
-import { getDocWithUrl, getDocWithText, readGeneratedId } from './selectors'
+
+import { createActionWithMetaArgs, ensureUnusedId } from '../utils'
+import { getDocWithUrl, getDocWithText } from './selectors'
 
 export function findOrAddUrl({url}) {
     return function (dispatch, getState) {
@@ -9,9 +10,8 @@ export function findOrAddUrl({url}) {
         let docId = getDocWithUrl(getState().storage, url) // XXX non-modular: We'd want to get state.storage from getState().
         // If not, create a new document
         if (!docId) {
-            let action = addUrl({url})
-            dispatch(action)
-            docId = readGeneratedId(action)
+            docId = ensureUnusedId(getState().storage.docs, generateIdentifier())
+            dispatch(addUrl({docId, url}))
         }
         return docId
     }
@@ -23,9 +23,8 @@ export function findOrAddNote({text}) {
         let docId = getDocWithText(getState().storage, text) // XXX non-modular: We'd want to get state.storage from getState().
         // If not, create a new document
         if (!docId) {
-            let action = addNote({text})
-            dispatch(action)
-            docId = readGeneratedId(action)
+            docId = ensureUnusedId(getState().storage.docs, generateIdentifier())
+            dispatch(addNote({docId, text}))
         }
         return docId
     }
@@ -39,9 +38,8 @@ export function findOrAddLink({source, target}) {
         )
         // If not, create a new link
         if (!linkId) {
-            let action = addLink({source, target})
-            dispatch(action)
-            linkId = readGeneratedId(action)
+            linkId = ensureUnusedId(getState().storage.links, generateIdentifier())
+            dispatch(addLink({linkId, source, target}))
 
             // Remove any link in the other direction, to keep things simple.
             let revLinkId = _.findKey(getState().storage.links, // non-modular..
@@ -55,17 +53,11 @@ export function findOrAddLink({source, target}) {
     }
 }
 
-export let addUrl = createActionWithMetaArgs({
-    generatedId: generateIdentifier,
-})
-export let addNote = createActionWithMetaArgs({
-    generatedId: generateIdentifier,
-})
+export let addUrl = createAction()
+export let addNote = createAction()
 export let updateNoteText = createAction()
 export let deleteDoc = createAction()
-export let addLink = createActionWithMetaArgs({
-    generatedId: generateIdentifier,
-})
+export let addLink = createAction()
 export let deleteLink = createAction()
 export let importFromDump = createAction()
 

@@ -139,14 +139,7 @@ function findOrCreateDoc({userInput}) {
             docId = dispatch(storage.findOrAddUrl({url}))
         }
         else {
-            // Search if we have the text as a note/tag
-            docId = storage.getDocWithText(getState().storage, userInput)
-            // If not, create a new note
-            if (!docId) {
-                let action = storage.addNote({text: userInput})
-                dispatch(action)
-                docId = storage.readGeneratedId(action)
-            }
+            docId = dispatch(storage.findOrAddNote({text: userInput}))
         }
         return docId
     }

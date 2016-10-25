@@ -42,12 +42,6 @@ export function getDocWithText(state, text) {
     return docId
 }
 
-// A helper to read a value from an action.. should we just use thunks instead?
-// FIXME this fails if the reducer changed the generated id. Need other solution.
-export function readGeneratedId(action) {
-    return action.meta.generatedId
-}
-
 export function autoSuggestSearch(state, {inputValue, maxSuggestions=5}) {
     let lowText = inputValue.toLowerCase()
     let words = lowText.split(' ')

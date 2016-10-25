@@ -16,17 +16,13 @@ let defaultState = {
     },
 }
 
-function addUrl(state, {docId, url}, {generatedId}) {
+function addUrl(state, {docId, url}) {
     let newDoc = {url: url}
-    if (docId === undefined)
-        docId = ensureUnusedId(state.docs, generatedId)
     return {...state, docs: {...state.docs, [docId]: newDoc}}
 }
 
-function addNote(state, {docId, text}, {generatedId}) {
+function addNote(state, {docId, text}) {
     let newDoc = {text}
-    if (docId === undefined)
-        docId = ensureUnusedId(state.docs, generatedId)
     return {...state, docs: {...state.docs, [docId]: newDoc}}
 }
 
@@ -44,13 +40,11 @@ function deleteDoc(state, {docId}) {
     return {...state, docs, links}
 }
 
-function addLink(state, {linkId, source, target}, {generatedId}) {
+function addLink(state, {linkId, source, target}) {
     // Refuse creating self-links
     if (source === target)
         return state
     let newLink = {source, target}
-    if (linkId === undefined)
-        linkId = ensureUnusedId(state.links, generatedId)
     return {...state, links: {...state.links, [linkId]: newLink}}
 }
 
