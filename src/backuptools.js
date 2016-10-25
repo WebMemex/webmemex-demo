@@ -9,8 +9,12 @@ function dumpStorage({asFile=true}={}) {
 function importFromDump({storageDump, deleteCurrent=false}={}) {
     if (storageDump === undefined)
         storageDump = prompt('Paste your JSON storage dump here (obtained from dumpStorage())')
-    if (typeof storageDump === 'string')
+    if (typeof storageDump === 'string') {
+        if (storageDump === '') {
+            storageDump = '{"docs": {}, "links": {}}'
+        }
         storageDump = JSON.parse(storageDump)
+    }
 
     let docCount = Object.keys(storageDump.docs).length
     let message = deleteCurrent
