@@ -254,8 +254,8 @@ function updateWindowSize(state, {height, width}, {currentView}) {
     // Reflect new window size in our state.
     let newWindowSize = {height, width}
     let newCanvasSize = {
-        height: newWindowSize.height,
-        width: newWindowSize.width,
+        height: newWindowSize.height-1, // -1 to prevent scrollbars in Firefox. A rounding issue?
+        width: newWindowSize.width-1,
     }
     state = {...state, windowSize: newWindowSize, canvasSize: newCanvasSize}
     // Update expanded item, if any.
