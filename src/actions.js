@@ -248,7 +248,7 @@ export function handleTapItem({itemId, event}) {
             }
             return
         }
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             dispatch(openInNewTab({itemId}))
             return
         }
