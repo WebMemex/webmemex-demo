@@ -1,7 +1,7 @@
 IMAGE_NAME = webmemex-local
 CONTAINER_NAME = webmemex
 DOCKER_ARGS =  -p 8086:8086 --link pywb-webrecorder --name ${CONTAINER_NAME} ${IMAGE_NAME}
-ENV = MEMEX_PROXY_URL_PREFIX=/replay-record/
+ENV = MEMEX_PROXY_URL_PREFIX=/live/
 
 .PHONY: run
 run:
