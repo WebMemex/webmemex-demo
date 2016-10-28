@@ -27,8 +27,8 @@ export function initCanvas({animate}={}) {
             }
 
             // Add some usage notes
+            const docIdUsageNotes = 'usageNotes'
             {
-                const docIdUsageNotes = 'usageNotes'
                 const usageNotes = (
                     '<u>Usage notes</u><br/>'
                     + '- Try browsing blogs, articles, etcetera. Some interactive sites/webapps may sputter.<br/>'
@@ -56,6 +56,7 @@ export function initCanvas({animate}={}) {
                 let docId1_3 = dispatch(storage.findOrAddUrl({url: 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/'}))
                 let docId2 = dispatch(storage.findOrAddUrl({url: 'https://www.youtube.com/embed/vKzYmDUydTw'}))
                 let docId3 = dispatch(storage.findOrAddUrl({url: 'https://github.com/rwweb/webmemex'}))
+                let docId4 = dispatch(storage.findOrAddUrl({url: 'http://webmemex.org/assets/demovideo.html'}))
 
                 dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId1}))
                 dispatch(storage.findOrAddLink({source: docId1, target: docId1_1}))
@@ -63,6 +64,7 @@ export function initCanvas({animate}={}) {
                 dispatch(storage.findOrAddLink({source: docId1, target: docId1_3}))
                 dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId2}))
                 dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId3}))
+                dispatch(storage.findOrAddLink({source: docIdUsageNotes, target: docId4}))
             }
 
             // Start with the welcome message.
