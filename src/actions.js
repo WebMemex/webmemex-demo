@@ -205,7 +205,17 @@ export function handleDropOnCanvas({x, y, event}) {
                 let sourceItemId = onLeftHalf ? itemId : centeredItemId
                 let targetItemId = onLeftHalf ? centeredItemId : itemId
                 dispatch(connectItems({sourceItemId, targetItemId}))
-                dispatch(drawStar({itemId: centeredItemId}))
+                setTimeout(()=>{
+                    // Give user a moment to click the dropped item; if they do not,
+                    // move it to its place in the star (but keep any expanded item expanded).
+                    if (getState().canvas.centeredItem === centeredItemId) {
+                        let expandedItem = getState().canvas.expandedItem
+                        dispatch(drawStar({itemId: centeredItemId}))
+                        if (expandedItem) {
+                            dispatch(canvas.expandItem({itemId: expandedItem, animate: false}))
+                        }
+                    }
+                }, 1000)
             }
         }
     }
