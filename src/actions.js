@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { createAction } from 'redux-act'
 
 import canvas from './canvas'
@@ -14,7 +15,6 @@ export function initCanvas({animate}={}) {
         // Add and show welcome message + friends for demo purposes.
         {
             // Add a note for welcoming the user
-            const docIdWelcomeNote = 'welcomeMessage'
             {
                 const welcomeMessage = (
                     'Hi! This is a read/write web browser. '
@@ -23,11 +23,10 @@ export function initCanvas({animate}={}) {
                     + 'For example, try type <small><tt>wikipedia.org</tt></small> in the bar above and press enter.'
                 )
                 // Store as note, specifying docId to overwrite any older one.
-                dispatch(storage.addNote({docId: docIdWelcomeNote, text: welcomeMessage}))
+                dispatch(storage.addNote({docId: 'welcomeMessage', text: welcomeMessage}))
             }
 
             // Add some usage notes
-            const docIdUsageNotes = 'usageNotes'
             {
                 const usageNotes = (
                     '<u>Usage notes</u><br/>'
@@ -36,39 +35,51 @@ export function initCanvas({animate}={}) {
                     + '- Ctrl/Cmd+tap/click opens a webpage in a new tab.<br/>'
                     + '- Shift+tap/click deletes an item or link. - Try drag some text, image or url onto the canvas to add it. Also works nicely for quotes selected from webpages!<br/>'
                 )
-                dispatch(storage.addNote({docId: docIdUsageNotes, 'text': usageNotes}))
-                dispatch(storage.findOrAddLink({source: docIdWelcomeNote, target: docIdUsageNotes}))
+                dispatch(storage.addNote({docId: 'usageNotes', 'text': usageNotes}))
+                dispatch(storage.addLink({source: 'welcomeMessage', target: 'usageNotes', linkId: 'demoLink_welcomeMessage_usageNotes'}))
             }
 
             // Create some more documents and links as initial content
             {
-                const docIdAboutNote = 'aboutNote'
                 const aboutNote = (
                     '<u>More about this project</u><br/>'
                     + 'Have a look at the items linked to this note to read/watch the ideas behind it and the source code of this demo.'
                 )
-                dispatch(storage.addNote({docId: docIdAboutNote, 'text': aboutNote}))
-                dispatch(storage.findOrAddLink({source: docIdWelcomeNote, target: docIdAboutNote}))
+                dispatch(storage.addNote({docId: 'aboutNote', 'text': aboutNote}))
+                dispatch(storage.addLink({source: 'welcomeMessage', target: 'aboutNote', linkId: 'demoLink_welcomeMessage_aboutNote'}))
 
-                let docId1 = dispatch(storage.findOrAddUrl({url: 'https://rwweb.org'}))
-                let docId1_1 = dispatch(storage.findOrAddUrl({url: 'https://www.w3.org/People/Berners-Lee/WorldWideWeb.html'}))
-                let docId1_2 = dispatch(storage.findOrAddUrl({url: 'https://www.w3.org/History/1989/proposal.html'}))
-                let docId1_3 = dispatch(storage.findOrAddUrl({url: 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/'}))
-                let docId2 = dispatch(storage.findOrAddUrl({url: 'https://www.youtube.com/embed/vKzYmDUydTw'}))
-                let docId3 = dispatch(storage.findOrAddUrl({url: 'https://github.com/rwweb/webmemex'}))
-                let docId4 = dispatch(storage.findOrAddUrl({url: 'http://webmemex.org/assets/demovideo.html'}))
+                const demoDocs = {
+                    'demoDoc_rwweb': 'https://rwweb.org',
+                    'demoDoc_www': 'https://www.w3.org/People/Berners-Lee/WorldWideWeb.html',
+                    'demoDoc_proposal': 'https://www.w3.org/History/1989/proposal.html',
+                    'demoDoc_aswemaythink': 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/',
+                    'demoDoc_iannotatetalk': 'https://www.youtube.com/embed/vKzYmDUydTw',
+                    'demoDoc_webmemexsource': 'https://github.com/rwweb/webmemex',
+                    'demoDoc_screencast': 'http://webmemex.org/assets/demovideo.html',
+                }
+                const demoLinks = [
+                    {source: 'aboutNote', target: 'demoDoc_rwweb'},
+                    {source: 'demoDoc_rwweb', target: 'demoDoc_www'},
+                    {source: 'demoDoc_rwweb', target: 'demoDoc_proposal'},
+                    {source: 'demoDoc_rwweb', target: 'demoDoc_aswemaythink'},
+                    {source: 'aboutNote', target: 'demoDoc_iannotatetalk'},
+                    {source: 'aboutNote', target: 'demoDoc_webmemexsource'},
+                    {source: 'usageNotes', target: 'demoDoc_screencast'},
+                ]
 
-                dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId1}))
-                dispatch(storage.findOrAddLink({source: docId1, target: docId1_1}))
-                dispatch(storage.findOrAddLink({source: docId1, target: docId1_2}))
-                dispatch(storage.findOrAddLink({source: docId1, target: docId1_3}))
-                dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId2}))
-                dispatch(storage.findOrAddLink({source: docIdAboutNote, target: docId3}))
-                dispatch(storage.findOrAddLink({source: docIdUsageNotes, target: docId4}))
+                _.forEach(demoDocs, (url, docId) => {
+                    dispatch(storage.addUrl({url, docId}))
+                })
+                _.forEach(demoLinks, link => {
+                    dispatch(storage.addLink({
+                        linkId: `demoLink_${link.source}_${link.target}`,
+                        ...link,
+                    }))
+                })
             }
 
             // Start with the welcome message.
-            dispatch(drawStar({docId: docIdWelcomeNote}))
+            dispatch(drawStar({docId: 'welcomeMessage'}))
         }
 
     }
