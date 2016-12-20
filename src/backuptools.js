@@ -1,6 +1,6 @@
 // Functions for manual storage backup and restoration
 function dumpStorage({asFile=true}={}) {
-    let dump = JSON.stringify(store.getState().storage)
+    let dump = JSON.stringify(store.getState().storage, null, 2)
     if (asFile)
         window.open( "data:text/json;charset=utf-8," + window.escape(dump))
     else
