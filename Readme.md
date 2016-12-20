@@ -2,22 +2,26 @@
 
 A web browser that lets you save and organise the pages you visit.
 
-Current project state: Embryonic. Play with it, do not rely on it.
+Current project state: proof of concept; kept alive as a demo but not developed further in this form. New forms are being worked on!
 
 ### Idea ###
 
-See [here](https://rwweb.org).
+Described [here](https://rwweb.org).
 
 ### Try out ###
 
-1. Open [webmemex.org](https://webmemex.org) in a modern browser. At least Chromium (and its family) should work.
+1. Open [webmemex.org](https://webmemex.org) in a modern browser (which runs the [demo branch](https://github.com/rwweb/webmemex/tree/demo)). At least Chromium (and its family) should work.
 2. Tell us what you think!
 
 ### Build ###
 
-1. Install [Node/NPM][Node].
-2. Run `make`.
-3. Open `main.html` in a modern browser.
+Building and running this demo is currently a bit of a hassle. The setup consists of two containers: this app itself, and a [`pywb-webrecorder`](https://github.com/Treora/pywb-webrecorder/tree/webmemex) instance, which is used to proxy viewed webpages while inserting some extra code into them to detect and report link clicks (because the application should open clicked links in a new iframe).
+
+To run things yourself:
+1. Get [Docker](http://docker.com) and [Node/NPM][Node].
+2. Clone and run `pywb-webrecorder` (`make rebuild start`, or something).
+3. Clone and run `webmemex` (`make build run`). Then visit `localhost:8086` in your browser.
+4. Tell us if it works.
 
 ### Code tour ###
 
