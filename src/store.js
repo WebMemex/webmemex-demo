@@ -15,9 +15,8 @@ export default function makeStore() {
     const sagaMiddleware = createSagaMiddleware()
 
     const applyMiddlewares = compose(
-        applyMiddleware(sagaMiddleware),
-        applyMiddleware(thunk),
         persistentStore(db),
+        applyMiddleware(sagaMiddleware, thunk),
     )
 
     const store = createStore(rootReducer, undefined, applyMiddlewares)

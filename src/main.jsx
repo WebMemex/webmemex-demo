@@ -16,10 +16,6 @@ ReactDOM.render(
     document.getElementById('app-container')
 )
 
-// Place our initial content
-// (delay to wait for redux-pouchdb to read storage state) // TODO neaten
-window.setTimeout(()=>store.dispatch(actions.initCanvas()), 200)
-
 // Listen for link clicks
 window.addEventListener('message', function (m) {
     let url = m.data.url

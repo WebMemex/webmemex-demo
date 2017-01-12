@@ -1,6 +1,7 @@
 import 'babel-polyfill' // required for using generators
 import { takeEvery } from 'redux-saga'
 import { put } from 'redux-saga/effects'
+import { INIT as reduxPouchInit} from 'redux-pouchdb'
 
 import canvas from './canvas'
 import * as actions from './actions'
@@ -17,6 +18,9 @@ const hookedActions = {
     [canvas.signalReceivedDrop.getType()]: actions.handleReceivedDrop,
     [canvas.signalResetCanvas.getType()]: actions.handleResetCanvas,
     [canvas.signalEscape.getType()]: actions.handleEscape,
+
+    // Initialise the canvas when stored state has been loaded from PouchDB
+    [reduxPouchInit]: actions.initCanvas,
 }
 
 let sagas = []
