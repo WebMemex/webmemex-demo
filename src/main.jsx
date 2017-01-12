@@ -16,6 +16,10 @@ ReactDOM.render(
     document.getElementById('app-container')
 )
 
+// Fallback to initialise the canvas content; redux-pouchdb should trigger this
+// after loading persisted data, but if that fails we do it manually here.
+window.setTimeout(()=>store.dispatch(actions.initCanvas()), 3000)
+
 // Listen for link clicks
 window.addEventListener('message', function (m) {
     let url = m.data.url
