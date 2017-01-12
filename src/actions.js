@@ -55,7 +55,7 @@ export function initCanvas({animate}={}) {
                     'demoDoc_aswemaythink': 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/',
                     'demoDoc_iannotatetalk': 'https://www.youtube.com/embed/vKzYmDUydTw',
                     'demoDoc_webmemexsource': 'https://github.com/rwweb/webmemex',
-                    'demoDoc_screencast': 'http://webmemex.org/assets/demovideo.html',
+                    'demoDoc_screencast': 'http://demo.webmemex.org/assets/demovideo.html',
                 }
                 const demoLinks = [
                     {source: 'aboutNote', target: 'demoDoc_rwweb'},
