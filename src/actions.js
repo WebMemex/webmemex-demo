@@ -14,39 +14,42 @@ export function initCanvas({animate}={}) {
 
         // Add and show welcome message + friends for demo purposes.
         {
-            // Add a note for welcoming the user
+            // Add some notes, pages and links
             {
                 const welcomeMessage = (
                     'Hi! This is a read/write web browser. '
                     + 'It lets you <i>create</i> notes and links, to organise the web your way. '
-                    + 'It is far from finished, but go ahead and explore! '
-                    + 'For example, try type <small><tt>wikipedia.org</tt></small> in the bar above and press enter.'
+                    + 'Watch the video linked to this note, or just try it out!'
+                    + '<br/><br/>'
+                    + 'Try enter a URL in the bar above to load a webpage, '
+                    + 'or enter text to create a note. '
+                    + 'Or use it to find back any of your pages&amp;notes.'
+                    + '<br/><br/>'
+                    + 'To add links to an item, use the input boxes besides it. '
+                    + 'Also, try following a normal link inside a web page: it is added automatically!'
                 )
-                // Store as note, specifying docId to overwrite any older one.
-                dispatch(storage.addNote({docId: 'welcomeMessage', text: welcomeMessage}))
-            }
 
-            // Add some usage notes
-            {
                 const usageNotes = (
                     '<u>Usage notes</u><br/>'
-                    + '- Try browsing blogs, articles, etcetera. Some interactive sites/webapps may sputter.<br/>'
-                    + '- Your notes and links are stored in your browser\'s local storage. Do not trust it to persist forever. Content of web pages is not stored (yet).<br/>'
+                    + '- Try browsing blogs, Wikipedia, etcetera; interactive sites/webapps may sputter.<br/>'
+                    + '- Your notes and links are stored in your browser\'s local storage. Do not trust it to persist forever.<br/>'
                     + '- Ctrl/Cmd+tap/click opens a webpage in a new tab.<br/>'
-                    + '- Shift+tap/click deletes an item or link. - Try drag some text, image or url onto the canvas to add it. Also works nicely for quotes selected from webpages!<br/>'
+                    + '- Shift+tap/click deletes an item or link.<br/>'
+                    + '- Try drag some text, image or url onto the canvas to add it. Also works nicely for quotes selected from webpages!<br/>'
                 )
-                dispatch(storage.addNote({docId: 'usageNotes', 'text': usageNotes}))
-                dispatch(storage.addLink({source: 'welcomeMessage', target: 'usageNotes', linkId: 'demoLink_welcomeMessage_usageNotes'}))
-            }
 
-            // Create some more documents and links as initial content
-            {
                 const aboutNote = (
                     '<u>More about this project</u><br/>'
-                    + 'Have a look at the items linked to this note to read/watch the ideas behind it and the source code of this demo.'
+                    + 'Have a look at the items linked to this note to read/watch the ideas behind it, and to find the source code of this demo.'
+                    + '<br/><br/>'
+                    + 'This particular experiment (a "browser in a browser") is no longer developed, '
+                    + 'but the next incarnation of the idea is in full progress!'
                 )
+
+                // Store as notes, specifying docId to overwrite any older ones.
+                dispatch(storage.addNote({docId: 'welcomeMessage', text: welcomeMessage}))
+                dispatch(storage.addNote({docId: 'usageNotes', 'text': usageNotes}))
                 dispatch(storage.addNote({docId: 'aboutNote', 'text': aboutNote}))
-                dispatch(storage.addLink({source: 'welcomeMessage', target: 'aboutNote', linkId: 'demoLink_welcomeMessage_aboutNote'}))
 
                 const demoDocs = {
                     'demoDoc_rwweb': 'https://rwweb.org',
@@ -56,15 +59,20 @@ export function initCanvas({animate}={}) {
                     'demoDoc_iannotatetalk': 'https://www.youtube.com/embed/vKzYmDUydTw',
                     'demoDoc_webmemexsource': 'https://github.com/rwweb/webmemex',
                     'demoDoc_screencast': 'http://demo.webmemex.org/assets/demovideo.html',
+                    'demoDoc_webmemex': 'https://webmemex.org',
                 }
+
                 const demoLinks = [
+                    {source: 'welcomeMessage', target: 'demoDoc_screencast'},
+                    {source: 'welcomeMessage', target: 'usageNotes'},
+                    {source: 'welcomeMessage', target: 'aboutNote'},
                     {source: 'aboutNote', target: 'demoDoc_rwweb'},
                     {source: 'demoDoc_rwweb', target: 'demoDoc_www'},
                     {source: 'demoDoc_rwweb', target: 'demoDoc_proposal'},
                     {source: 'demoDoc_rwweb', target: 'demoDoc_aswemaythink'},
                     {source: 'aboutNote', target: 'demoDoc_iannotatetalk'},
                     {source: 'aboutNote', target: 'demoDoc_webmemexsource'},
-                    {source: 'usageNotes', target: 'demoDoc_screencast'},
+                    {source: 'aboutNote', target: 'demoDoc_webmemex'},
                 ]
 
                 _.forEach(demoDocs, (url, docId) => {
