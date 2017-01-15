@@ -10,7 +10,7 @@ Described [here](https://rwweb.org).
 
 ### Try out ###
 
-1. Open [webmemex.org](https://webmemex.org) in a modern browser (which runs the [demo branch](https://github.com/rwweb/webmemex/tree/demo)). At least Chromium (and its family) should work.
+1. Open [webmemex.org](https://webmemex.org) in a modern browser (which runs the [demo branch](https://github.com/rwweb/webmemex/tree/demo)). At least Chrome/Chromium (and its family) should work.
 2. Tell us what you think!
 
 ### Build ###
