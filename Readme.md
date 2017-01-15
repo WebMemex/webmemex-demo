@@ -6,6 +6,8 @@ This experiment was designed to run as a web app, so effectively you run a brows
 
 This project is kept alive as a demo but is not developed further in this form. New forms are being worked on, see [webmemex.org](http://webmemex.org) for the current status.
 
+![(screenshot)](screenshot.jpg)
+
 ## Idea
 
 Described [here](https://rwweb.org).
