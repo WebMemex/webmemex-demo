@@ -58,7 +58,7 @@ export function initCanvas({animate}={}) {
                     'demoDoc_proposal': 'https://www.w3.org/History/1989/proposal.html',
                     'demoDoc_aswemaythink': 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/',
                     'demoDoc_iannotatetalk': 'https://www.youtube.com/embed/vKzYmDUydTw',
-                    'demoDoc_webmemexsource': 'https://github.com/rwweb/webmemex',
+                    'demoDoc_webmemexsource': 'https://github.com/WebMemex/webmemex-demo',
                     'demoDoc_screencast': 'http://demo.webmemex.org/assets/demovideo.html',
                     'demoDoc_webmemex': 'https://webmemex.org',
                 }
