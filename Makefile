@@ -9,7 +9,7 @@ run:
 
 .PHONY: rund
 rund:
-	docker run -d ${DOCKER_ARGS}
+	docker run --restart=on-failure -d ${DOCKER_ARGS}
 
 .PHONY: stopd
 stopd:
