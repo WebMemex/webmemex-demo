@@ -36,7 +36,7 @@ export function initCanvas() {
                     + '- Try browsing blogs, Wikipedia, etcetera; interactive sites/webapps may sputter.<br/>'
                     + '- Your notes and links are stored in your browser\'s local storage. Do not trust it to persist forever.<br/>'
                     + '- Ctrl/Cmd+tap/click opens a webpage in a new tab.<br/>'
-                    + '- Shift+tap/click deletes an item or link.<br/>'
+                    + '- Ctrl+Shift+tap/click deletes an item or link.<br/>'
                     + '- Try drag some text, image or url onto the canvas to add it. Also works nicely for quotes selected from webpages!<br/>'
                 )
 
@@ -345,7 +345,7 @@ export function handleTapEdge({event, sourceItemId, targetItemId}) {
 
 export function handleTapItem({itemId, event}) {
     return function (dispatch, getState) {
-        if (event.shiftKey) {
+        if (event.shiftKey && (event.ctrlKey || event.metaKey)) {
             let item = canvas.getItem(getState().canvas, itemId)
             let friends = canvas.getConnectedItemIds(getState().canvas, itemId)
             let centeredItem = getState().canvas.centeredItem
