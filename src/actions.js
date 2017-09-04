@@ -138,19 +138,22 @@ export function drawStar({docId, itemId}) {
         targetDocIds.push('emptyItem_linkto')
         sourceDocIds.push('emptyItem_linkfrom')
 
-        dispatch(canvas.centerDocWithFriends({docId, itemId, targetDocIds, sourceDocIds, animate: true}))
 
         // Show second level friends
+        const targetsTargets = {}
         targetDocIds.forEach(docId => {
-            let itemId = canvas.getItemIdForDocId(getState().canvas, docId)
-            let {targetDocIds, sourceDocIds} = storage.getFriends(getState().storage, docId)
-            dispatch(canvas.showItemFriends({itemId, friendDocIds: targetDocIds, side: 'right', animate:true}))
+            targetsTargets[docId] = storage.getFriends(getState().storage, docId).targetDocIds
         })
+        const sourcesSources = {}
         sourceDocIds.forEach(docId => {
-            let itemId = canvas.getItemIdForDocId(getState().canvas, docId)
-            let {targetDocIds, sourceDocIds} = storage.getFriends(getState().storage, docId)
-            dispatch(canvas.showItemFriends({itemId, friendDocIds: sourceDocIds, side: 'left', animate:true}))
+            sourcesSources[docId] = storage.getFriends(getState().storage, docId).sourceDocIds
         })
+
+        dispatch(canvas.centerDocWithFriends({
+            docId, itemId, targetDocIds, sourceDocIds,
+            targetsTargets, sourcesSources, animate: true
+        }))
+
 
         {
             let props = {x: 10, y: 10, width: 400, height: 55}

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { createReducer } from 'redux-act'
 
 import * as actions from './actions'
-import { getItem } from './selectors'
+import { getItem, getItemIdForDocId } from './selectors'
 import { reuseOrGenerateItemId } from './utils'
 
 const defaultState = {
@@ -65,7 +65,10 @@ function centerItem(state, {itemId, animate}, {currentView}) {
     return {...state, visibleItems, centeredItem: itemId}
 }
 
-function centerDocWithFriends(state, {docId, itemId, targetDocIds, sourceDocIds, animate}, {currentView}) {
+function centerDocWithFriends(state, {
+    docId, itemId, targetDocIds, sourceDocIds, targetsTargets,
+    sourcesSources, animate
+}, {currentView}) {
     // Flag all items, so items not reused will be removed further below.
     state = flagAllItemsForRemoval(state)
     // Do not keep old edges, remove them.
@@ -105,6 +108,25 @@ function centerDocWithFriends(state, {docId, itemId, targetDocIds, sourceDocIds,
         side: 'left',
         animate,
     }, {currentView})
+
+    _.forEach(targetDocIds, (docId) => {
+        let itemId = getItemIdForDocId(state, docId)
+        state = showItemFriends(state, {
+            itemId,
+            friendDocIds: targetsTargets[docId] || [],
+            side: 'right',
+            animate
+        })
+    })
+    _.forEach(sourceDocIds, (docId) => {
+        let itemId = getItemIdForDocId(state, docId)
+        state = showItemFriends(state, {
+            itemId,
+            friendDocIds: sourcesSources[docId] || [],
+            side: 'left',
+            animate
+        })
+    })
 
     // Remove the items that have not been reused.
     state = removeFlaggedItems(state)
