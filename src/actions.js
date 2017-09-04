@@ -8,8 +8,11 @@ import { asUrl, textToHtml } from './utils'
 
 // Clean the canvas and show an empty item
 export function initCanvas({animate}={}) {
-    // Prevent running this more than once (to ignore fallback - see main.jsx)
-    return _.once(function(dispatch, getState) {
+    return function(dispatch, getState) {
+        // Only run when canvas is still empty (to ignore second, fallback invocation - see main.jsx)
+        if (!_.isEmpty(getState().canvas.visibleItems))
+            return
+
         // Clean canvas
         dispatch(canvas.removeAllItems())
 
@@ -91,7 +94,7 @@ export function initCanvas({animate}={}) {
             dispatch(drawStar({docId: 'welcomeMessage'}))
         }
 
-    })
+    }
 }
 
 // Put a doc in the center of view, with its linked docs around it.
