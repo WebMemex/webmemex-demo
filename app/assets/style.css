@@ -164,6 +164,17 @@ svg#edges {
     outline: none;
 }
 
+.webpage-placeholder {
+    box-sizing: border-box;
+    overflow: hidden;
+    max-height: 100%;
+    max-width: 100%;
+    padding: 2px;
+    color: lightgrey;
+    font-family: sans-serif;
+    font-size: small;
+}
+
 .webpage-iframe-wrapper-container {
     border-radius: 10px;
     position: relative;
