@@ -289,7 +289,7 @@ export function handleDropOnCanvas({x, y, event}) {
         let docId
         if (url) {
             // Quick fix for removing proxy prefix from links and images dragged from our own iframes
-            url = url.replace(new RegExp(`^(https?:)?\/\/${window.location.host}\/live\/(im_\/)?`), '')
+            url = url.replace(new RegExp(`^(https?:)?\/\/${window.location.host}\/[a-z-]+\/(im_\/)?`), '')
             docId = dispatch(storage.findOrAddUrl({url}))
         }
         else if (html) {
