@@ -17,8 +17,7 @@ stopd:
 
 .PHONY: dev
 dev:
-	${ENV} npm run watch &
-	docker run --rm -it -v `pwd`/app:/app ${DOCKER_ARGS}
+	${ENV} npm run watch | : | docker run --rm -t -v `pwd`/app:/app ${DOCKER_ARGS}
 
 .PHONY: build
 build: build-prod build-image
