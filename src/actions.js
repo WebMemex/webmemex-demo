@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { createAction } from 'redux-act'
+import ReduxQuerySync from 'redux-query-sync'
 
 import canvas from './canvas'
 import storage from './storage'
@@ -7,14 +8,11 @@ import { getEmptyItemState } from './selectors'
 import { asUrl, textToHtml } from './utils'
 
 // Clean the canvas and show an empty item
-export function initCanvas({animate}={}) {
+export function initCanvas() {
     return function(dispatch, getState) {
         // Only run when canvas is still empty (to ignore second, fallback invocation - see main.jsx)
         if (!_.isEmpty(getState().canvas.visibleItems))
             return
-
-        // Clean canvas
-        dispatch(canvas.removeAllItems())
 
         // Add and show welcome message + friends for demo purposes.
         {
@@ -90,10 +88,39 @@ export function initCanvas({animate}={}) {
                 })
             }
 
-            // Start with the welcome message.
-            dispatch(drawStar({docId: 'welcomeMessage'}))
+            // Keep centered item in sync with URL query parameter.
+            const getCurrentDocId = state => {
+                const currentItem = canvas.getCenteredItem(state.canvas)
+                return currentItem ? currentItem.docId : undefined
+            }
+            ReduxQuerySync({
+                store: window.store, // XXX Using a global variable to access redux store. How to do this instead?
+                initialTruth: 'location',
+                params: {
+                    page: {
+                        selector: getCurrentDocId,
+                        action: docId => showDocIfExists({docId}),
+                    },
+                }
+            })
+
+            // If no page was requested, show the welcome message.
+            if (!canvas.getCenteredItem(getState().canvas)) {
+                dispatch(drawStar({docId: 'welcomeMessage'}))
+            }
         }
 
+    }
+}
+
+function showDocIfExists({docId}) {
+    return function (dispatch, getState) {
+        try {
+            storage.getDoc(getState().storage, docId)
+        } catch (err) {
+            return
+        }
+        dispatch(drawStar({docId}))
     }
 }
 

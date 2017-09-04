@@ -25,6 +25,7 @@
     "redux": "^3.3.1",
     "redux-act": "^0.4.0",
     "redux-pouchdb": "^0.1.1",
+    "redux-query-sync": "^0.1.6",
     "redux-saga": "^0.10.4",
     "redux-thunk": "^2.1.0"
   },

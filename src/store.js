@@ -14,12 +14,12 @@ export default function makeStore() {
 
     const sagaMiddleware = createSagaMiddleware()
 
-    const applyMiddlewares = compose(
+    const enhancer = compose(
         persistentStore(db),
         applyMiddleware(sagaMiddleware, thunk),
     )
 
-    const store = createStore(rootReducer, undefined, applyMiddlewares)
+    const store = createStore(rootReducer, undefined, enhancer)
 
     for (let saga in sagas) {
         sagaMiddleware.run(sagas[saga])

@@ -29,8 +29,10 @@ window.addEventListener('message', function (m) {
     }
 })
 
-// TESTING
+// XXX Global variable passing to enable us to subscribe to the store in the initCanvas action.
 window.store=store
+
+// TESTING
 import storage from './storage'
 window.storage=storage
 import canvas from './canvas'
