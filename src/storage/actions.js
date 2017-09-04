@@ -30,7 +30,7 @@ export function findOrAddNote({text}) {
     }
 }
 
-export function findOrAddLink({source, target}) {
+export function findOrAddLink({source, target, type}) {
     return function (dispatch, getState) {
         // Search if we have it already
         let linkId = _.findKey(getState().storage.links, // non-modular..
@@ -39,7 +39,7 @@ export function findOrAddLink({source, target}) {
         // If not, create a new link
         if (!linkId) {
             linkId = ensureUnusedId(getState().storage.links, generateIdentifier())
-            dispatch(addLink({linkId, source, target}))
+            dispatch(addLink({linkId, source, target, type}))
 
             // Remove any link in the other direction, to keep things simple.
             let revLinkId = _.findKey(getState().storage.links, // non-modular..

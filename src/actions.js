@@ -177,6 +177,7 @@ export function navigateFromLink({url}) {
             dispatch(storage.findOrAddLink({
                 source: expandedDocId,
                 target: docId,
+                type: 'followed',
             }))
         }
         dispatch(drawStar({itemId}))
@@ -263,6 +264,7 @@ function linkToConnectedItems({itemId, docId}) {
             dispatch(storage.findOrAddLink({
                 source: docIsLeft ? docId : connectedItem.docId,
                 target: docIsLeft ? connectedItem.docId : docId,
+                type: 'manual',
             }))
         })
     }
@@ -460,6 +462,7 @@ export function connectItems({sourceItemId, targetItemId}) {
         let linkId = dispatch(storage.findOrAddLink({
             source: sourceItem.docId,
             target: targetItem.docId,
+            type: 'manual',
         }))
 
         // Display edge

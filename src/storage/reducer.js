@@ -40,11 +40,11 @@ function deleteDoc(state, {docId}) {
     return {...state, docs, links}
 }
 
-function addLink(state, {linkId, source, target}) {
+function addLink(state, {linkId, source, target, type}) {
     // Refuse creating self-links
     if (source === target)
         return state
-    let newLink = {source, target}
+    let newLink = {source, target, type}
     return {...state, links: {...state.links, [linkId]: newLink}}
 }
 
