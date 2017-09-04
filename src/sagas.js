@@ -35,7 +35,11 @@ for (let sourceAction in hookedActions) {
 function bindHandler(sourceAction, actionHandler) {
     return function* actionListener() {
         yield* takeEvery(sourceAction, function* (actionObject) {
-            yield put(actionHandler(actionObject.payload))
+            try {
+                yield put(actionHandler(actionObject.payload))
+            } catch (err) {
+                console.error(`Error in saga handling ${sourceAction}: ${err}`)
+            }
         })
     }
 }

@@ -35,7 +35,12 @@ function mapStateToProps(state, {docId, canvasItemId}) {
     let doc = {}
     // Get the document from storage unless docId is not a real doc.
     if (!docId.startsWith('emptyItem') && docId !== undefined) {
-        doc = storage.getDoc(state.storage, docId)
+        try {
+            doc = storage.getDoc(state.storage, docId)
+        } catch (err) {
+            console.error(err)
+            return {}
+        }
     }
 
     let canvasItem
