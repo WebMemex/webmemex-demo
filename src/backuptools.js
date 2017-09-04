@@ -1,10 +1,18 @@
 // Functions for manual storage backup and restoration
 function dumpStorage({asFile=true}={}) {
     let dump = JSON.stringify(store.getState().storage, null, 2)
-    if (asFile)
-        window.open( "data:text/json;charset=utf-8," + window.escape(dump))
-    else
+    if (asFile) {
+        const dataUrl = "data:text/json;charset=utf-8," + window.escape(dump)
+        var link = document.createElement("a")
+        link.download = 'webmemex-backup.json'
+        link.href = dataUrl
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    }
+    else {
         return dump
+    }
 }
 function importFromDump({storageDump, deleteCurrent=false}={}) {
     if (storageDump === undefined)
