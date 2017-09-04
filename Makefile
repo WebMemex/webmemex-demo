@@ -16,7 +16,7 @@ stopd:
 	docker rm -f ${CONTAINER_NAME}
 
 .PHONY: dev
-dev:
+dev: stopd
 	${ENV} npm run watch | : | docker run --rm -t -v `pwd`/app:/app ${DOCKER_ARGS}
 
 .PHONY: build
