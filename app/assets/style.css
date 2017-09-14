@@ -57,6 +57,11 @@ svg#edges {
 
 .item-container.expanded {
     z-index: 1;
+    transition: transform 0.4s;
+    transform-origin: left;
+}
+#canvas.showDropSpace .item-container.expanded {
+    transform: scale(0.7, 1);
 }
 
 .emptyItem {

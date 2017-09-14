@@ -46,10 +46,15 @@ let Note = React.createClass({
     },
 
     enableDrop() {
-        this.refs['content'].htmlEl.ondragover = event => event.preventDefault()
-        this.refs['content'].htmlEl.ondrop = event => {
+        const el = this.refs['content'].htmlEl
+        const dragLeave = () => {el.style.backgroundColor = ''}
+        el.ondragleave = dragLeave
+        el.ondragenter = () => {el.style.backgroundColor = 'yellow'}
+        el.ondragover = event => event.preventDefault()
+        el.ondrop = event => {
             event.stopPropagation()
             event.preventDefault()
+            dragLeave()
             let html = event.dataTransfer.getData('text/html')
             let text = event.dataTransfer.getData('text')
             let url = event.dataTransfer.getData('URL') || asUrl(text)

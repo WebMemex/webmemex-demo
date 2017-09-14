@@ -26,6 +26,7 @@ const defaultState = {
     expandedItem: undefined, // itemId
     centeredItem: undefined, // itemId
     focussedItem: undefined, // itemId
+    showDropSpace: false,
 }
 
 const ITEM_MIN_WIDTH = 100
@@ -415,6 +416,13 @@ function setItemDragged(state, {itemId, value}) {
     return {...state, visibleItems}
 }
 
+function handleDragEnter(state, {}) {
+    return {...state, showDropSpace: true}
+}
+function handleDragLeave(state, {}) {
+    return {...state, showDropSpace: false}
+}
+
 function focusItem(state, {itemId}) {
     return {...state, focussedItem: itemId}
 }
@@ -434,7 +442,7 @@ function setProps(state, {itemId, props}) {
 }
 
 
-export default createReducer(
+const reducer = createReducer(
     {
         [actions.createItemWithId]: createItemWithId,
         [actions.changeDoc]: changeDoc,
@@ -456,6 +464,18 @@ export default createReducer(
         [actions.unfocus]: unfocus,
         [actions.setProps]: setProps,
         [actions.setItemDragged]: setItemDragged,
+        [actions.handleDragEnter]: handleDragEnter,
+        [actions.handleDragLeave]: handleDragLeave,
     },
     defaultState
 )
+
+export default function canvasReducer(state, action) {
+    state = reducer(state, action)
+    // Hacky workaround: after any action that is not dragging, we stop dragging.
+    // (because it seems hard to reliably notice when dragging has ended).
+    if (action.type !== actions.handleDragEnter.getType()) {
+        state = {...state, showDropSpace: false}
+    }
+    return state
+}

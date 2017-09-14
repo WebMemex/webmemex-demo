@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import classNames from 'classnames'
 
 import AnimatedItemContainer from './AnimatedItemContainer'
 import Edge from './Edge'
@@ -28,7 +29,7 @@ let Canvas = React.createClass({
     },
 
     render() {
-         let {ItemComponent, canvasSize, visibleItems, edges, unexpand} = this.props
+         let {ItemComponent, canvasSize, visibleItems, edges, showDropSpace, unexpand} = this.props
          let handleTap = event => {
              if (this.props.expandedItem)
                  this.props.unexpand()
@@ -36,8 +37,9 @@ let Canvas = React.createClass({
                  this.props.handleTap({x: event.pageX, y: event.pageY})
              event.stopPropagation()
          }
+         const className = classNames({showDropSpace})
          return (
-            <div ref='canvas' id='canvas' style={canvasSize} onClick={handleTap} onTouchStart={handleTap}>
+            <div ref='canvas' id='canvas' className={className} style={canvasSize} onClick={handleTap} onTouchStart={handleTap}>
                 <svg id='edges'>
                     {Object.keys(edges).map(edgeId => (
                         <Edge edgeId={edgeId} {...edges[edgeId]} key={edgeId} />
@@ -57,13 +59,23 @@ let Canvas = React.createClass({
     },
 
     enableDrop() {
-        this.refs['canvas'].ondragover = event => event.preventDefault()
-        this.refs['canvas'].ondrop = event => {
+        const canvasEl = this.refs['canvas']
+        canvasEl.ondragover = event => event.preventDefault()
+
+        canvasEl.ondragenter = event => {
+            event.preventDefault()
+            let x = event.clientX
+            let y = event.clientY
+            this.props.handleDragEnter({x, y, event})
+        }
+
+        canvasEl.ondrop = event => {
             event.stopPropagation()
             event.preventDefault()
             let x = event.clientX // TODO compute coordinates relative to canvas
             let y = event.clientY
             this.props.handleDrop({x, y, event})
+            this.props.handleDragLeave({x, y, event})
         }
     },
 })
@@ -75,7 +87,8 @@ function mapStateToProps(state) {
         canvasSize: state.canvasSize,
         visibleItems: state.visibleItems,
         edges: state.edges,
-        expandedItem: state.expandedItem
+        expandedItem: state.expandedItem,
+        showDropSpace: state.showDropSpace,
     }
 }
 
@@ -93,6 +106,8 @@ function mapDispatchToProps(dispatch) {
         ...bindActionCreators({
             unfocus: actions.unfocus,
             handleDrop: actions.signalDropOnCanvas,
+            handleDragEnter: actions.handleDragEnter,
+            handleDragLeave: actions.handleDragLeave,
             handleTap: actions.signalCanvasTapped,
             handleEscape: actions.signalEscape,
         }, dispatch)
