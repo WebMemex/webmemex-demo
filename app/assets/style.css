@@ -64,6 +64,22 @@ svg#edges {
     transform: scale(0.7, 1);
 }
 
+.item-container > .button {
+    border: 1px solid lightgrey;
+    cursor: pointer;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    padding: 2px;
+    opacity: 0.4;
+}
+
+.item-container > .button:hover {
+    opacity: 1;
+}
+
 .emptyItem {
     border: 2px solid #ddd;
     box-sizing: border-box;

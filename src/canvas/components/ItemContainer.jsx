@@ -27,11 +27,18 @@ let ItemContainer = React.createClass({
         )
 
         let handleTap = event => {
-            this.props.tap({
-                itemId: this.props.itemId,
-                event,
-            })
+            this.props.tap(event)
             event.stopPropagation()
+        }
+
+        const toggleExpand = event => {
+            event.stopPropagation()
+            if (!this.props.expanded) {
+                this.props.expandItem()
+            }
+            else {
+                this.props.unexpand()
+            }
         }
 
         return (
@@ -48,6 +55,14 @@ let ItemContainer = React.createClass({
                     width={this.props.width}
                     height={this.props.height}
                 />
+                {this.props.centered && (
+                    <button
+                        className="button"
+                        onClick={toggleExpand}
+                    >
+                        ⛶
+                    </button>
+                )}
             </div>
         )
     },
@@ -75,17 +90,11 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, {itemId}) {
     return bindActionCreators({
-        relocate: actions.relocateItem,
-        resize: actions.resizeItem,
-        scale: actions.scaleItem,
-        expand: actions.expandItem,
-        setItemDragged: actions.setItemDragged,
-        tap: actions.signalItemTapped,
-        draggedOut: actions.signalItemDraggedOut,
-        receivedDrop: actions.signalReceivedDrop,
-        setProps: actions.setProps,
+        expandItem: () => actions.expandItem({itemId, animate: true}),
+        unexpand: () => actions.unexpand({animate: true}),
+        tap: (event) => actions.signalItemTapped({itemId, event}),
     }, dispatch)
 }
 
