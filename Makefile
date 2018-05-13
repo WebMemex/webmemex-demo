@@ -13,7 +13,7 @@ rund:
 
 .PHONY: stopd
 stopd:
-	docker rm -f ${CONTAINER_NAME}
+	docker rm -f ${CONTAINER_NAME} || true
 
 .PHONY: dev
 dev: stopd
