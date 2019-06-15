@@ -65,19 +65,20 @@ svg#edges {
 }
 
 .item-container > .button {
-    border: 1px solid lightgrey;
+    border: none;
     cursor: pointer;
     position: absolute;
     bottom: 2px;
     right: 2px;
-    background-color: #fff;
-    border-radius: 2px;
-    padding: 2px;
+    background: transparent;
+    border-radius: 4px;
+    padding: 4px;
     opacity: 0.4;
 }
 
 .item-container > .button:hover {
     opacity: 1;
+    background-color: #fff;
 }
 
 .emptyItem {

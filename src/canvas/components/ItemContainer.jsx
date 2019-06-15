@@ -59,8 +59,9 @@ let ItemContainer = React.createClass({
                     <button
                         className="button"
                         onClick={toggleExpand}
+                        title="Expand"
                     >
-                        ⛶
+                        ↘
                     </button>
                 )}
             </div>
