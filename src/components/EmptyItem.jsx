@@ -38,12 +38,6 @@ let EmptyItem = React.createClass({
             },
             onChange: (e, {newValue}) => this.props.changed(newValue),
         }
-        let searchSuggestion = {
-            type: 'websearch',
-            webSearchQuery: this.props.inputValueForSuggestions,
-            inputValueCompletion: this.props.inputValueForSuggestions,
-        }
-        const suggestions = this.props.suggestions.concat(searchSuggestion)
         const renderSuggestion = suggestion => {
             let html = suggestion.inputValueCompletion
             let classes = `autosuggestion autosuggestion_${suggestion.type}`
@@ -70,7 +64,7 @@ let EmptyItem = React.createClass({
             <div className={itemClass}>
                 <form ref='form' className='emptyItemForm' onSubmit={submitForm}>
                     <Autosuggest
-                        suggestions={suggestions}
+                        suggestions={this.props.suggestions}
                         onSuggestionsUpdateRequested={this.props.updateAutoSuggest}
                         onSuggestionSelected={onSuggestionSelected}
                         getSuggestionValue={getSuggestionValue}
@@ -138,12 +132,8 @@ function mapDispatchToProps(dispatch, {canvasItemId}) {
                 itemId: canvasItemId,
                 props: {inputValue: ''},
             }))
-            if (suggestion.docId)
+            if (suggestion.docId) {
                 dispatch(actions.navigateTo({docId: suggestion.docId, itemId: canvasItemId}))
-            else if (suggestion.webSearchQuery) {
-                let url = 'https://duckduckgo.com/html?kak=-1&k1=-1&kp=-1&kn=1&q='
-                    + window.encodeURIComponent(suggestion.webSearchQuery).replace(/(%20)+/g, '+')
-                dispatch(actions.navigateTo({userInput: url, itemId: canvasItemId}))
             }
         },
         hide: () => {
