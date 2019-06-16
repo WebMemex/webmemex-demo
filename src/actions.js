@@ -54,7 +54,7 @@ export function initCanvas() {
                 dispatch(storage.addNote({docId: 'aboutNote', 'text': aboutNote}))
 
                 const demoDocs = {
-                    'demoDoc_rwweb': 'https://rwweb.org',
+                    'demoDoc_rwweb': 'https://web.archive.org/web/20160303135717id_/http://read-write-web.org/',
                     'demoDoc_www': 'https://www.w3.org/People/Berners-Lee/WorldWideWeb.html',
                     'demoDoc_proposal': 'https://www.w3.org/History/1989/proposal.html',
                     'demoDoc_aswemaythink': 'http://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/',

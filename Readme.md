@@ -10,7 +10,7 @@ This project is kept alive as a demo but is not developed further in this form. 
 
 ## Idea
 
-Described [here](https://rwweb.org).
+Described [here](https://web.archive.org/web/20160303135717/http://read-write-web.org/).
 
 ## Try out
 
@@ -46,7 +46,7 @@ The code is designed somewhat modular, and could be seen as three repos in one: 
 * Knows nothing of an item's content, except its `docId` given by the top level app. It simply passes this `docId` to the configured component (`StemItem` in this app), so the top level app decides what to draw inside an item.
 
 ### Storage ([`src/storage`](src/storage))
-* Keeps a persistent collection of documents (currently just simple webmarks and text notes, e.g. `{url: 'https://rwweb.org'}`), and a collection links between them (simple `{sourceDocId, targetDocId}` pairs).
+* Keeps a persistent collection of documents (currently just simple webmarks and text notes, e.g. `{url: 'https://webmemex.org'}`), and a collection links between them (simple `{sourceDocId, targetDocId}` pairs).
 * Not to be confused with the Redux store (`src/store.js`), which manages the application state, and thus also contains the (non-persistent) canvas state.
 * Storage is currently implemented as part of the redux store, using [`redux-pouchdb`](https://github.com/vicentedealencar/redux-pouchdb) for synchronising its state in Redux with a [PouchDB] database in the browser's offline storage.
 
